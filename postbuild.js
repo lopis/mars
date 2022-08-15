@@ -1,7 +1,7 @@
 const fs = require('fs')
 const archiver = require('archiver')
 
-let output = fs.createWriteStream('./dist/build.zip')
+let output = fs.createWriteStream('./public.zip')
 let archive = archiver('zip', {
   zlib: { level: 9 } // set compression to best
 })
@@ -32,8 +32,9 @@ archive.on('error', function (err) {
 })
 
 archive.pipe(output)
-archive.append(fs.createReadStream('./dist/index.html'), { name: 'index.html' })
-archive.append(fs.createReadStream('./dist/index.js'), { name: 'index.js' })
+archive.append(fs.createReadStream('./public/index.html'), { name: 'index.html' })
+archive.append(fs.createReadStream('./public/server.js'), { name: 'server.js' })
+archive.append(fs.createReadStream('./public/client.js'), { name: 'client.js' })
 // fs.unlinkSync('./dist/index.html')
 // fs.unlinkSync('./dist/index.js')
 // fs.unlinkSync('./dist/main.css')

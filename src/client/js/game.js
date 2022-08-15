@@ -23,7 +23,6 @@ export const initLoop = () => {
     },
     render: function () { // render the game state
       try {
-        console.log('render')
         renderPlanet()
         renderStatus()
       } catch (error) {

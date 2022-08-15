@@ -5,25 +5,25 @@ import {
   on,
   emit,
   unbindKeys,
-} from 'kontra';
+} from 'kontra'
 import './constants'
 import {
   initContext,
 } from './js/graphics'
 import { initLoop, loop } from './js/game'
 
-initContext();
-initLoop();
-initKeys();
-initPointer();
-
 on('halt', () => {
   loop.stop()
 })
 
 on('ready', () => {
-  console.log('ready')
-  loop.start();
+  loop.start()
 })
 
-emit('ready')
+export const initGame = () => {
+  initContext()
+  initLoop()
+  initKeys()
+  initPointer()
+  emit('ready')
+}
