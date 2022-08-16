@@ -19,7 +19,6 @@
     "chalk": "^4.1.2",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
-    "kontra": "^7.3.1",
     "mysql2": "^2.3.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",

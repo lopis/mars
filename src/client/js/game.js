@@ -1,34 +1,33 @@
-import {
-  GameLoop,
-  emit,
-} from 'kontra'
-import {
-  renderStatus,
-} from './graphics'
+import {} from './graphics'
 import {
   renderPlanet,
   tick,
 } from './draw-planet'
 
-export let loop
+
+const render = () => {
+  try {
+    renderPlanet()
+  } catch (error) {
+    console.error(error)
+    emit('halt')
+  }
+}
+
+const update = (dt) => {
+  tick(dt)
+
+  const time = Date.now()
+  requestAnimationFrame(() => update(Date.now - time))
+}
+
 export const initLoop = () => {
-  loop = GameLoop({  // create the main game loop
-    update: function (dt) { // update the game state
-      try {
-        tick()
-      } catch (error) {
-        console.error(error)
-        emit('halt')
-      }
-    },
-    render: function () { // render the game state
-      try {
-        renderPlanet()
-        renderStatus()
-      } catch (error) {
-        console.error(error)
-        emit('halt')
-      }
-    }
+  setInterval(e=>{
+    canvas.width=innerWidth, canvas.height=innerHeight
+    render()
+  },16) // 60FPS
+
+  requestAnimationFrame(() => {
+    update(0)
   })
 }
