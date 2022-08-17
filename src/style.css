@@ -1,0 +1,89 @@
+:root {
+  --hex-width: 2;
+  --hex-size-height: 1.1547;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  image-rendering: crisp-edges;
+  image-rendering: optimizespeed;
+  background: black;
+  overflow: hidden;
+}
+
+canvas {
+  position: absolute;
+}
+
+#tileset {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  box-sizing: border-box;
+  transform: rotate(20deg);
+}
+
+.hex {
+  --tile-color: #460000;
+  --hex-size: 2.8vh;
+  --fade-time: 100ms;
+  font-size: 1.4vh;
+  position: relative;
+  display: inline-flex;
+  width: calc(var(--hex-width) * var(--hex-size));
+  height: calc(var(--hex-size-height) * var(--hex-size));
+  margin: 0.8vh 0.3vh;
+  opacity: 0.6;
+}
+.night {
+  --tile-color: #000000;
+}
+.hex::before, .hex::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: rotate(60deg);
+  transform-origin: center;
+}
+.hex::after {
+  content: attr(data-n);
+  color: rgb(0, 0, 0);
+  transform: rotate(-60deg);
+  text-align: center;
+}
+.hex, .hex::after, .hex::before {
+  transition: background var(--fade-time) ease;
+  background: var(--tile-color);
+  box-sizing: border-box;
+}
+.hex:hover {
+  --tile-color: rgb(233, 167, 69);
+  cursor: pointer;
+}
+.hex:active {
+  --fade-time: 50ms;
+  --tile-color: rgb(255, 253, 253);
+  cursor: pointer;
+}
+
+svg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.noise {
+  z-index: 1;
+  opacity: 0.15;
+  pointer-events: none;
+}

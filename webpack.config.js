@@ -8,18 +8,31 @@ const webpackClientConfig = (isProduction) => ({
     filename: 'client.js',
   },
   watch: !isProduction,
-  // module: {
-  //   rules: [
-  //     {
-  //       test: /\.(png|jpe?g|gif|svg)$/i,
-  //       use: [
-  //         {
-  //           loader: 'file-loader',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  module: {
+    rules: [
+      // {
+      //   test: /\.(png|jpe?g|gif|svg)$/i,
+      //   use: [
+      //     {
+      //       loader: 'file-loader',
+      //     },
+      //   ],
+      // },
+      {
+        test: /\.css$/i,
+        use: [
+          // The `injectType`  option can be avoided because it is default behaviour
+          {
+            loader: "style-loader",
+            options: { 
+              insert: 'head', // insert style tag inside of <head>
+            },
+          },
+          "css-loader",
+        ],
+      },
+    ],
+  },
   optimization: {
     usedExports: true,
   },
@@ -29,6 +42,7 @@ const webpackClientConfig = (isProduction) => ({
       minify: isProduction && {
         collapseWhitespace: true
       },
+      minifyCSS: true,
       inlineSource: isProduction && '\.(js|css)$'
     })
   ],

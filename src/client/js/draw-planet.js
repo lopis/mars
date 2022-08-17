@@ -87,7 +87,8 @@ const drawSun = (phase) => {
   }
 }
 
-let phase = initialPhase;
+export let phase = initialPhase;
+
 export const tick = () => {
   phase += speed / 1000
   while (phase > 1) phase -= 1

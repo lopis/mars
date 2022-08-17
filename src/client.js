@@ -1,4 +1,5 @@
 import { initGame } from './client/index.js'
+import './style.css';
 
 (function () {
 
