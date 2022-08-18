@@ -23,8 +23,10 @@ import './style.css';
      * Client module init
      */
     function init() {
-        socket = io({ upgrade: false, transports: ["websocket"] });
-        bind();
+        if (typeof io != "undefined") {
+            socket = io({ upgrade: false, transports: ["websocket"] });
+            bind();
+        }
         initGame();
     }
 

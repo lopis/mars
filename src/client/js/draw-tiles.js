@@ -38,7 +38,7 @@ export const renderTiles = () => {
       tiles.push({
         $tile,
         id,
-        col: col + Math.random() * 2 - 1,
+        col: col + Math.random(),
       })
     }
     tileset.appendChild($group)

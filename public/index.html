@@ -1,46 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Planet B</title>
-  <link rel="stylesheet" href="style.css">
-<script defer src="client.js"></script></head>
-
-<body>
-  <canvas id="canvas"></canvas>
-  <svg id="stars" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" >
-    <filter id="filter">
-        <feTurbulence baseFrequency="0.1"/>
-        <feColorMatrix values="0 0 0 7 -4
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Planet B</title><link rel="stylesheet" href="style.css"><script defer="defer" src="client.js"></script></head><body><canvas id="canvas"></canvas><svg id="stars" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="filter"><feTurbulence baseFrequency="0.1"/><feColorMatrix values="0 0 0 7 -4
                                0 0 0 7 -4
                                0 0 0 7 -4
-                               0 0 0 0 1"/>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#filter)"/>
-  </svg>
-  <div id="tileset"></div>
-  <svg class="noise" width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id='noise'>
-        <feTurbulence 
-          type='fractalNoise' 
-          baseFrequency='6.29' 
-          numOctaves='2' 
-          stitchTiles='stitch'/>
-        <feColorMatrix
-          values="0 0 0 1 -0.6
+                               0 0 0 0 1"/></filter><rect width="100%" height="100%" filter="url(#filter)"/></svg><div id="tileset"></div><svg class="noise" width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="6.29" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 1 -0.6
                   0 0 0 1 -0.6
                   0 0 0 1 -0.6
-                  0 0 0 0 1 " />
-      </filter>
-    </defs>
-    <rect width="100%" height="100%" fill="indianred" filter="url(#noise)"/>
-  </svg>
-  
-  <script src="/socket.io/socket.io.js"></script>
-</body>
-
-</html>
+                  0 0 0 0 1 "/></filter></defs><rect width="100%" height="100%" fill="indianred" filter="url(#noise)"/></svg><script src="/socket.io/socket.io.js"></script></body></html>
