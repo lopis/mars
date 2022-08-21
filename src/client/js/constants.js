@@ -1,7 +1,7 @@
 RED = "#881f1a"
 BLACK = "#0f0b0b"
 tilt = 0.43
-planetSize = 0.4
+planetScale = 0.4
 speed = 1.2
 initialPhase = 0.0
 

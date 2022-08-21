@@ -1,5 +1,11 @@
 import { context } from './graphics'
 
+export let planetSize = planetScale * canvas.clientHeight
+
+export const updatePlanetSize = () => {
+  planetSize = planetScale * Math.min(canvas.clientWidth, canvas.clientHeight)
+}
+
 const drawCircle = (x, y, radius) => {
   context.beginPath()
   context.arc(x, y, radius, 0,Math.PI * 2, true)
@@ -10,7 +16,7 @@ const drawBase = (color) => {
   drawCircle(
     canvas.width / 2,
     canvas.height / 2,
-    canvas.height * planetSize
+    planetSize
   )
   context.fill()
 }
@@ -20,7 +26,7 @@ const drawRim = () => {
   drawCircle(
     canvas.width / 2,
     canvas.height / 2,
-    canvas.height * planetSize
+    planetSize
   )
   context.stroke()
 }
@@ -30,8 +36,8 @@ const halfCircle = (radius, start, end) => {
   context.ellipse(
     canvas.width / 2, // x
     canvas.height / 2, // y
-    canvas.height * planetSize, // radius x
-    canvas.height * planetSize * radius, // radiux y
+    planetSize, // radius x
+    planetSize * radius, // radiux y
     Math.PI / 2 + tilt, // rotation
     Math.PI * end, // start angle
     Math.PI * start // end angle

@@ -1,5 +1,9 @@
-import { initGame } from './client/index.js'
-import './style.css';
+import './style.css'
+import './client/js/constants'
+import { initContext } from './client/js/graphics'
+import { initLoop } from './client/js/game'
+import { renderTiles } from './client/js/draw-tiles'
+import initInput from './client/js/input'
 
 (function () {
 
@@ -27,7 +31,11 @@ import './style.css';
             socket = io({ upgrade: false, transports: ["websocket"] });
             bind();
         }
-        initGame();
+        
+        initContext()
+        renderTiles()
+        initInput()
+        initLoop()
     }
 
     window.addEventListener("load", init, false);

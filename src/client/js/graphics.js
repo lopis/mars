@@ -1,13 +1,15 @@
+import { updatePlanetSize } from "./draw-planet"
+
 export let context
 export const initContext = () => {
   context = canvas.getContext('2d')
 
   canvas.height = canvasHeight
   canvas.width = canvasWidth
+  updatePlanetSize()
 
   window.addEventListener('resize', () => {
-    canvas.height = canvas.clientHeight
-    canvas.width = canvas.clientWidth
+    updatePlanetSize()
   })
 }
 

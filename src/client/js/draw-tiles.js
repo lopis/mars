@@ -3,26 +3,20 @@ import { phase } from './draw-planet'
 const tiles = []
 const rows = 13
 
-setInterval(() => {
-  console.log('phase', parseInt(phase * 100) / 100);
-}, 500)
-
+const nightThreshold = 0.1
+const dayThreshold = 0.2
 export const updateTiles = () => {
   tiles.forEach((tile) => {
-    if (phase * 2 > 1 - ((tile.col + 3) / rows)) {
+    if (phase * 2 - nightThreshold > 1 - ((tile.col))) {
       tile.$tile.classList.add('night')
     }
-    if ((phase - 0.5) * 2 >= 1 - ((tile.col + 2) / rows)) {
+    if ((phase - 0.5) * 2 + dayThreshold >= 1 - ((tile.col))) {
       tile.$tile.classList.remove('night')
     }
   })
 }
 
 export const renderTiles = () => {
-  document.body.addEventListener('click', ({target}) => {
-    console.log(target.dataset.n)
-  })
-
   let cols = Math.floor(rows / 2)
   for(let row=0; row < rows; row++) {
     const $group = document.createElement('div')
@@ -38,7 +32,8 @@ export const renderTiles = () => {
       tiles.push({
         $tile,
         id,
-        col: col + Math.random(),
+        // A little math to adjust the day/night cycle of the tiles
+        col: (col + 2/cols) / cols, // + Math.random() * 0.1,
       })
     }
     tileset.appendChild($group)

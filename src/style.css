@@ -11,6 +11,7 @@ body {
   image-rendering: optimizespeed;
   background: black;
   overflow: hidden;
+  font-family: DejaVu Sans Mono, Consolas, SF Mono, Roboto Mono;
 }
 
 canvas {
@@ -28,23 +29,23 @@ canvas {
   align-items: center;
   margin: 0;
   box-sizing: border-box;
-  transform: rotate(20deg);
+  transform: rotate(25deg);
 }
 
 .hex {
-  --tile-color: #460000;
-  --hex-size: 2.8vh;
+  --tile-color: #000000;
+  --hex-size: 2.8vmin;
   --fade-time: 100ms;
-  font-size: 1.4vh;
+  font-size: 1.4vmin;
   position: relative;
   display: inline-flex;
   width: calc(var(--hex-width) * var(--hex-size));
   height: calc(var(--hex-size-height) * var(--hex-size));
-  margin: 0.8vh 0.3vh;
+  margin: 0.8vmin 0.3vmin;
   opacity: 0.6;
 }
 .night {
-  --tile-color: #000000;
+  --tile-color: #b39007;
 }
 .hex::before, .hex::after {
   content: "";
@@ -55,10 +56,11 @@ canvas {
   transform-origin: center;
 }
 .hex::after {
-  content: attr(data-n);
+  content: attr(data-icon);
   color: rgb(0, 0, 0);
   transform: rotate(-60deg);
   text-align: center;
+  font-size: 3vmin;
 }
 .hex, .hex::after, .hex::before {
   transition: background var(--fade-time) ease;
@@ -69,7 +71,7 @@ canvas {
   --tile-color: rgb(233, 167, 69);
   cursor: pointer;
 }
-.hex:active {
+.hex.selected {
   --fade-time: 50ms;
   --tile-color: rgb(255, 253, 253);
   cursor: pointer;
@@ -86,4 +88,93 @@ svg {
   z-index: 1;
   opacity: 0.15;
   pointer-events: none;
+}
+
+
+/* EARTH */
+#earth {
+	padding: 1vmin;
+	background-color: black;
+	width: 20vmin;
+  height: 10vmin;
+	border: solid #063680;
+	border-width: 0 3px 3px 0;
+	border-bottom-right-radius: 3vmin;
+}
+
+#earth .icon,
+#earth .icon::before,
+#earth .icon::after {
+  position: relative;
+	height: 5vmin;
+	width: 5vmin;
+  border-radius: 5vmin;
+	background: radial-gradient(circle at top left, #bcbebf 30%, #063680 31%);
+  overflow: hidden;
+}
+
+#earth .icon::before,
+#earth .icon::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+	background: #b68929;
+  top: 60%;
+  width: 4vmin;
+}
+
+#earth .icon::after {
+  top: -60%;
+  right: 10%;
+  width: 2vmin;
+}
+
+/* DIALOG */
+
+#dialog {
+	background: #131212;
+	color: #999;
+	position: fixed;
+	padding: 1vmin;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(2, 0);
+  transition: all 100ms ease-out, top 0s 100ms;
+  top: -999px;
+  left: 50%;
+}
+
+#dialog.show {
+  opacity: 1;
+  top: 50%;
+  transition: all 100ms ease-out, top 0s;
+  transform: translate(-50%, -50%) scale(1, 1);
+}
+
+#dialog div {
+	display: inline-block;
+}
+
+.close {
+  margin-left: 1vmin;
+}
+
+ul {
+  padding: 0;
+}
+
+.button {
+	padding: 0.7vmin;
+	list-style: none;
+	border: 1px solid;
+	margin-bottom: 0.8vmin;
+}
+
+.button:hover {
+  background: #999;
+  color: #131212;
+  cursor: pointer;
+}
+
+.button, #dialog {
+  border-radius: 3px;
 }
