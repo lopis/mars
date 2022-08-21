@@ -54,6 +54,10 @@ const webpackServerConfig = (isProduction) => ({
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'server.js',
+    library: {
+      // Export an nmp module with proper exports
+      type: 'commonjs',
+    },
   },
   watch: !isProduction,
 })

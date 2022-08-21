@@ -1,2 +1,5 @@
 node_modules/
 public/
+index.js
+lib/
+Procfile

@@ -5,7 +5,6 @@ planetScale = 0.4
 speed = 1.2
 initialPhase = 0.0
 
-canvasHeight = window.innerHeight
-canvasWidth = window.innerWidth
-
 statusRefreshDelay = 10
+
+phase = initialPhase;

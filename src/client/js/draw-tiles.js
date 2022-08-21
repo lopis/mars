@@ -1,5 +1,3 @@
-import { phase } from './draw-planet'
-
 const tiles = []
 const rows = 13
 
@@ -33,7 +31,7 @@ export const renderTiles = () => {
         $tile,
         id,
         // A little math to adjust the day/night cycle of the tiles
-        col: (col + 2/cols) / cols, // + Math.random() * 0.1,
+        col: (col + 2/colNum) / colNum, // + Math.random() * 0.1,
       })
     }
     tileset.appendChild($group)

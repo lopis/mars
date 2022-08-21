@@ -25,7 +25,6 @@ const update = (dt) => {
 
 export const initLoop = () => {
   setInterval(e=>{
-    canvas.width=innerWidth, canvas.height=innerHeight
     render()
   }, 16) // 60FPS
 

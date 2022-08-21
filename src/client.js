@@ -21,6 +21,11 @@ import initInput from './client/js/input'
 
         socket.on("error", () => {
         });
+
+
+        socket.on("users", (users) => {
+            console.log(users);
+        });
     }
 
     /**

@@ -3,7 +3,7 @@ import { context } from './graphics'
 export let planetSize = planetScale * canvas.clientHeight
 
 export const updatePlanetSize = () => {
-  planetSize = planetScale * Math.min(canvas.clientWidth, canvas.clientHeight)
+  planetSize = planetScale * Math.min(canvas.width, canvas.height)
 }
 
 const drawCircle = (x, y, radius) => {
@@ -92,8 +92,6 @@ const drawSun = (phase) => {
     context.fill()
   }
 }
-
-export let phase = initialPhase;
 
 export const tick = () => {
   phase += speed / 1000
