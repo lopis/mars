@@ -2,7 +2,7 @@ const tiles = []
 const rows = 13
 
 const nightThreshold = 0.1
-const dayThreshold = 0.2
+const dayThreshold = 0.1
 export const updateTiles = () => {
   tiles.forEach((tile) => {
     if (phase * 2 - nightThreshold > 1 - ((tile.col))) {

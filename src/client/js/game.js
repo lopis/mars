@@ -7,6 +7,7 @@ import { updateTiles } from './draw-tiles'
 
 export let userList = []
 export let commsList = []
+let solCount = 0
 
 const render = () => {
   try {
@@ -22,7 +23,7 @@ const update = (dt) => {
   updateTiles()
 
   const time = Date.now()
-  requestAnimationFrame(() => update(Date.now - time))
+  requestAnimationFrame(() => update(Date.now() - time))
 }
 
 export const updateUsers = (users) => {
@@ -33,7 +34,15 @@ export const updateChat = (user, msg) => {
   commsList.push({user, msg})
 }
 
+export const updateSol = (currentSol) => {
+  if (currentSol) solCount = currentSol
+  else solCount += solDuration
+  _sol.dataset.count = Math.ceil(solCount / solDuration)
+}
+
 export const initLoop = () => {
+  if (phase === null) null
+
   setInterval(e=>{
     render()
   }, 16) // 60FPS

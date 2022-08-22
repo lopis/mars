@@ -37,7 +37,7 @@ canvas {
 .hex {
   --tile-color: #000000;
   --hex-size: 2.8vmin;
-  --fade-time: 100ms;
+  --fade-time: 300ms;
   font-size: 1.4vmin;
   position: relative;
   display: inline-flex;
@@ -65,8 +65,8 @@ canvas {
   font-size: 3vmin;
 }
 .hex, .hex::after, .hex::before {
-  transition: background var(--fade-time) ease;
-  background: var(--tile-color);
+  transition: background-image var(--fade-time) ease;
+  background-color: var(--tile-color);
   box-sizing: border-box;
 }
 .hex:hover {
@@ -209,13 +209,13 @@ ul {
 	top: 0;
 	right: 0;
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 	padding: 1vh;
 	gap: 1vh;
 }
 
 [data-count]::after {
-  content: ' (' attr(data-count) ')';
+  content: ' ' attr(data-count);
 }
 
 [data-new]::after {

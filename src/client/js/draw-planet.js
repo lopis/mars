@@ -1,3 +1,4 @@
+import { updateSol } from './game'
 import { context } from './graphics'
 
 export let planetSize = planetScale * canvas.clientHeight
@@ -93,9 +94,12 @@ const drawSun = (phase) => {
   }
 }
 
-export const tick = () => {
-  phase += speed / 1000
-  while (phase > 1) phase -= 1
+export const tick = (dt) => {
+  phase += dt / solDuration
+  while (phase > 1) {
+    phase -= 1
+    updateSol()
+  }
 }
 
 export const renderPlanet = () => {

@@ -56,9 +56,9 @@ export const showComms = () => {
   _choices.innerHTML = ''
   const ul = _choices.appendChild(document.createElement('ul'))
   ul.id = 'chatlist'
-  ul.innerHTML = commsList.map(({user, msg}) => {
+  ul.innerHTML = commsList.length > 0 ? commsList.map(({user, msg}) => {
     return `<li><b>${user}:</b> ${msg}</li>`
-  }).join('')
+  }).join('') : '<b>No messages</b>'
   _choices.innerHTML += `<input maxlength="22" id="_input" />`
   _dialog.classList.add('show')
   _input.focus()

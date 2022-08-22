@@ -6,6 +6,15 @@
  */
 const users = []
 const tiles = []
+let solCount = 0
+let lastTime = Date.now()
+
+const getSol = () => {
+	solCount += Date.now() - lastTime
+	lastTime = Date.now()
+
+	return solCount
+}
 
 /**
  * Remove user session
@@ -60,31 +69,44 @@ module.exports = {
 
 	io: (socket) => {
 		const user = new User(socket, names.pop())
+		if (users.length === 0) {
+			lastTime = Date.now()
+		}
 		users.push(user)
 
 		socket.on('disconnect', () => {
-			console.log('Disconnected: ' + socket.id)
+			console.info('Disconnected: ' + user.name)
 			names.unshift(user.name)
 			removeUser(user)
+			if (users.length === 0) {
+				solCount += Date.now() - lastTime
+				lastTime = Date.now()
+			}
 		})
 
 		socket.on('msg', (msg) => {
 			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
-			console.log(`# ${user.name}: ${safeString}`)
+			console.info(`# ${user.name}: ${safeString}`)
 			users.forEach(user => {
 				user.socket.emit('msg', {user: user.name, msg: safeString})
 			})
 		})
 
-		console.log('Connected: ' + socket.id)
+		console.info('Connected: ' + socket.id)
 		users.forEach(user => {
 			user.socket.emit('users', users.map(user => user.name))
 		})
+
+		user.socket.emit('sol', getSol())
 	},
 
 	stat: (req, res) => {
 		storage.get('games', 0).then(games => {
-			res.send(`${users.length} Player(s): ${users.map(user => user.name).join(',')}`)
+			res.send(
+				`${users.length} Player(s): ${users.map(user => user.name).join(', ')}
+				<br>
+				Sol: ${getSol()}`
+			)
 		})
 	}
 }

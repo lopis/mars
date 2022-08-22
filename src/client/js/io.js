@@ -1,4 +1,4 @@
-import { updateUsers, updateChat } from './game'
+import { updateUsers, updateChat, updateSol } from './game'
 import { showComms } from './ui';
 
 let socket //Socket.IO client
@@ -29,6 +29,12 @@ function bind() {
     } else {
       comms.dataset.new = true
     }
+  });
+
+  socket.on("sol", (solCount) => {
+    console.log(solCount, (solCount % solDuration) / solDuration);
+    phase = (solCount % solDuration) / solDuration
+    updateSol(solCount)
   });
 }
 

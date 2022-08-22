@@ -19,5 +19,4 @@ import { bindIo } from './client/js/io'
     }
 
     window.addEventListener("load", init, false);
-
 })();
