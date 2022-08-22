@@ -51,6 +51,7 @@ const webpackClientConfig = (isProduction) => ({
 
 const webpackServerConfig = (isProduction) => ({
   entry: './src/server.js',
+  mode: 'production',
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'server.js',
@@ -59,7 +60,8 @@ const webpackServerConfig = (isProduction) => ({
       type: 'commonjs',
     },
   },
-  watch: !isProduction,
+  devtool: false,
+  watch: false,
 })
 
 module.exports = (env, argv) => {

@@ -42,30 +42,17 @@
   <div id="earth">
     <div class="icon"></div>
   </div>
-  <div id="dialog">
-    <div>Choose build</div>
-    <div id="close" class="button">
+  <div id="_dialog">
+    <div id="_prompt"></div>
+    <div id="dismiss" class="button">
       Close (Esc)
     </div>
-    <ul>
-      <li class="button" id="greenhouse">
-        Greenhouse
-      </li>
-      <li class="button" id="minery">
-        Minery
-      </li>
-      <li class="button" id="solar">
-        Solar plant
-      </li>
-      <li class="button" id="nuclear">
-        Nuclear plant
-      </li>
-      <li class="button" id="housing">
-        Housing
-      </li>
-    </ul>
+    <section id="_choices"></section>
   </div>
-  <div id="sidebar"></div>
+  <div id="toolbar">
+    <div id="users" class="button">👥 Players</div>
+    <div id="comms" class="button">💬 Comms</div>
+  </div>
   <script src="/socket.io/socket.io.js"></script>
 </body>
 

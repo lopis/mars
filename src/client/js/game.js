@@ -5,6 +5,8 @@ import {
 } from './draw-planet'
 import { updateTiles } from './draw-tiles'
 
+export let userList = []
+export let commsList = []
 
 const render = () => {
   try {
@@ -21,6 +23,14 @@ const update = (dt) => {
 
   const time = Date.now()
   requestAnimationFrame(() => update(Date.now - time))
+}
+
+export const updateUsers = (users) => {
+  userList = users
+}
+
+export const updateChat = (user, msg) => {
+  commsList.push({user, msg})
 }
 
 export const initLoop = () => {

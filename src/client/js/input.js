@@ -1,37 +1,34 @@
-let selectedTile
-
-const buildingEmoji = {
-  greenhouse: '🍀',
-  minery: '🏭',
-  solar: '🪟',
-  nuclear: '☢️',
-  housing: '🏢',
-}
-
-function choiceListener ({target: choice}) {
-  console.log(choice.id);
-  if (choice.id === 'close') {
-    document.body.removeEventListener('click', choiceListener)
-    dialog.classList.remove('show')
-    selectedTile.classList.remove('selected')
-    selectedTile = null
-  }
-  if (buildingEmoji[choice.id]) {
-    document.body.removeEventListener('click', choiceListener)
-    selectedTile.dataset.icon = buildingEmoji[choice.id]
-    dialog.classList.remove('show')
-    selectedTile.classList.remove('selected')
-    selectedTile = null
-  }
-}
+import { sendMessage } from './io'
+import { showUsers, showComms, showBuildDialog, dismissDialog } from './ui'
 
 export default () => {
-  document.addEventListener('click', ({target: tile}) => {
-    if(!selectedTile && tile?.dataset?.n) {
-      dialog.classList.add('show')
-      selectedTile = tile
-      tile.classList.add('selected')
-      dialog.addEventListener('click', choiceListener)
+  document.addEventListener('keyup', ({target, key}) => {
+    if (key === 'Escape') {
+      dismissDialog()
     }
+    if (key === 'Enter' && target === _input) {
+      if (target.value?.length > 0) {
+        sendMessage(target.value)
+        target.value = ''
+      }
+    }
+  })
+
+  document.addEventListener('click', ({target}) => {
+    if(target?.dataset?.n) {
+      showBuildDialog(target)
+      return
+    }
+
+    const listener = ({
+      users: showUsers,
+      comms: showComms,
+      dismiss: ()=>{},
+    })[target.id]
+    if (listener) {
+      dismissDialog()
+      listener()
+    }
+
   })
 }

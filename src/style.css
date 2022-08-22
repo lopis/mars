@@ -12,6 +12,8 @@ body {
   background: black;
   overflow: hidden;
   font-family: DejaVu Sans Mono, Consolas, SF Mono, Roboto Mono;
+	color: white;
+  user-select: none;
 }
 
 canvas {
@@ -131,27 +133,32 @@ svg {
 
 /* DIALOG */
 
-#dialog {
+#_dialog {
 	background: #131212;
-	color: #999;
 	position: fixed;
 	padding: 1vmin;
   opacity: 0;
-  transform: translate(-50%, -50%) scale(2, 0);
+  transform: scale(2, 0);
   transition: all 100ms ease-out, top 0s 100ms;
   top: -999px;
-  left: 50%;
+  right: 5vh;
+  max-width: 30vh;
+  overflow: auto;
 }
 
-#dialog.show {
+#_dialog.show {
   opacity: 1;
-  top: 50%;
+  top: 10vh;
   transition: all 100ms ease-out, top 0s;
-  transform: translate(-50%, -50%) scale(1, 1);
+  transform: scale(1, 1);
 }
 
-#dialog div {
+#_dialog div {
 	display: inline-block;
+}
+
+#_dialog b {
+  opacity: 0.5;
 }
 
 .close {
@@ -160,11 +167,13 @@ svg {
 
 ul {
   padding: 0;
+  list-style: none;
+  max-height: 50vh;
+  overflow: auto;
 }
 
 .button {
 	padding: 0.7vmin;
-	list-style: none;
 	border: 1px solid;
 	margin-bottom: 0.8vmin;
 }
@@ -175,8 +184,15 @@ ul {
   cursor: pointer;
 }
 
-.button, #dialog {
+.button, #_dialog {
   border-radius: 3px;
+}
+
+#_input {
+	display: block;
+	width: 80%;
+	margin: 5%;
+	padding: 5%;
 }
 
 
@@ -186,4 +202,23 @@ ul {
   right: 0;
   height: 100vh;
   background: #131212;
+}
+
+#toolbar {
+	position: fixed;
+	top: 0;
+	right: 0;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	padding: 1vh;
+	gap: 1vh;
+}
+
+[data-count]::after {
+  content: ' (' attr(data-count) ')';
+}
+
+[data-new]::after {
+  content: '🔴';
+  float: right;
 }

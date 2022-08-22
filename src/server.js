@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 /**
  * User sessions
@@ -35,12 +35,22 @@ class User {
 	/**
 	 * @param {Socket} socket
 	 */
-	constructor(socket) {
+	constructor(socket, name) {
 		this.socket = socket
-		this.game = null
+		this.name = name
 	}
 
 }
+
+const names = [
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+	'Sunday',
+]
 
 /**
  * Socket.IO on connect event
@@ -49,24 +59,32 @@ class User {
 module.exports = {
 
 	io: (socket) => {
-		const user = new User(socket)
+		const user = new User(socket, names.pop())
 		users.push(user)
 
-		socket.on("disconnect", () => {
-			console.log("Disconnected: " + socket.id)
+		socket.on('disconnect', () => {
+			console.log('Disconnected: ' + socket.id)
+			names.unshift(user.name)
 			removeUser(user)
 		})
 
-		console.log("Connected: " + socket.id)
+		socket.on('msg', (msg) => {
+			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
+			console.log(`# ${user.name}: ${safeString}`)
+			users.forEach(user => {
+				user.socket.emit('msg', {user: user.name, msg: safeString})
+			})
+		})
+
+		console.log('Connected: ' + socket.id)
 		users.forEach(user => {
-			user.socket.emit('users', users.length)
+			user.socket.emit('users', users.map(user => user.name))
 		})
 	},
 
 	stat: (req, res) => {
 		storage.get('games', 0).then(games => {
-			res.send(`WIP`)
+			res.send(`${users.length} Player(s): ${users.map(user => user.name).join(',')}`)
 		})
 	}
-
 }
