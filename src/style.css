@@ -161,6 +161,10 @@ svg {
   opacity: 0.5;
 }
 
+#_prompt {
+	margin-right: 2vh;
+}
+
 .close {
   margin-left: 1vmin;
 }

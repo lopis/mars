@@ -6,7 +6,7 @@
   "author": "lopis",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack --mode=production --config webpack.config.js",
+    "dev": "webpack --mode=development --config webpack.config.js",
     "build": "webpack --mode=production --config webpack.config.js",
     "postbuild": "node postbuild.js",
     "test": "node tests/index.js",

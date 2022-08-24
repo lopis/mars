@@ -92,6 +92,18 @@ module.exports = {
 			})
 		})
 
+		socket.on('build', ({id, choice}, callback) => {
+			// const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
+			console.info(id + ' ' + choice)
+			// users.forEach(user => {
+			// 	user.socket.emit('msg', {user: user.name, msg: safeString})
+			// })
+
+			callback({
+				status: 'ok'
+			})
+		})
+
 		console.info('Connected: ' + socket.id)
 		users.forEach(user => {
 			user.socket.emit('users', users.map(user => user.name))

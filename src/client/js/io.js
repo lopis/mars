@@ -48,3 +48,15 @@ export const bindIo = () => {
 export const sendMessage = msg => {
   socket.emit('msg', msg)
 }
+
+export const buildAction = (id, choice) => {
+  return new Promise((resolve, reject) => {
+    socket.emit('build', { id, choice }, (response) => {
+      if (response.status = 'ok') {
+        resolve()
+      } else {
+        reject()
+      }
+    })
+  })
+}

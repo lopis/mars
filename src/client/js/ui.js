@@ -1,4 +1,5 @@
 import { userList, commsList } from './game'
+import { buildAction } from './io'
 
 let selectedTile
 
@@ -10,19 +11,22 @@ const buildingEmoji = [
   ['housing', 'Housing', '🏢'],
 ]
 
-function choiceListener ({target}) {
+function onBuildChoice ({target}) {
   let choice
   if (choice = buildingEmoji.find(c => c[0] === target.id)) {
-    document.body.removeEventListener('click', choiceListener)
-    selectedTile.dataset.icon = choice[2]
-    _dialog.classList.remove('show')
-    selectedTile.classList.remove('selected')
-    selectedTile = null
+    document.body.removeEventListener('click', onBuildChoice)
+    buildAction(choice)
+    .then(() => {
+      selectedTile.dataset.icon = choice[2]
+      _dialog.classList.remove('show')
+      selectedTile.classList.remove('selected')
+      selectedTile = null
+    })
   }
 }
 
 export const dismissDialog = () => {
-  document.body.removeEventListener('click', choiceListener)
+  document.body.removeEventListener('click', onBuildChoice)
   _dialog.classList.remove('show')
   selectedTile?.classList.remove('selected')
   selectedTile = null
@@ -41,7 +45,7 @@ export const showBuildDialog = (target) => {
   _dialog.classList.add('show')
   selectedTile = target
   target.classList.add('selected')
-  _dialog.addEventListener('click', choiceListener)
+  _dialog.addEventListener('click', onBuildChoice)
 }
 
 export const showUsers = () => {
