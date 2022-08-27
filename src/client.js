@@ -1,5 +1,5 @@
 import './style.css'
-import './client/js/constants'
+import './client/js/data'
 import { initContext } from './client/js/graphics'
 import { initLoop, updateUsers } from './client/js/game'
 import { renderTiles } from './client/js/draw-tiles'

@@ -1,5 +1,5 @@
 import { updateUsers, updateChat, updateSol } from './game'
-import { showComms } from './ui';
+import { showComms, setTile } from './ui';
 
 let socket //Socket.IO client
 
@@ -7,22 +7,22 @@ let socket //Socket.IO client
    * Binds Socket.IO and button events
    */
 function bind() {
-  socket.on("start", () => {
+  socket.on('start', () => {
   });
 
-  socket.on("disconnect", () => {
+  socket.on('disconnect', () => {
   });
 
-  socket.on("error", () => {
+  socket.on('error', () => {
   });
 
 
-  socket.on("users", (userList) => {
+  socket.on('users', (userList) => {
     updateUsers(userList)
     users.dataset.count = userList.length
   });
 
-  socket.on("msg", ({user, msg}) => {
+  socket.on('msg', ({user, msg}) => {
     updateChat(user, msg)
     if (typeof _input !== 'undefined') {
       showComms()
@@ -31,16 +31,26 @@ function bind() {
     }
   });
 
-  socket.on("sol", (solCount) => {
-    console.log(solCount, (solCount % solDuration) / solDuration);
+  socket.on('sol', (solCount) => {
     phase = (solCount % solDuration) / solDuration
     updateSol(solCount)
   });
+
+  socket.on('world', (tiles) => {
+    Object.entries(tiles).forEach(([id, {build}]) => {
+      if (build) {
+        setTile(null, id, build)
+      }
+    })
+    document.body.classList.remove('hidden')
+  })
+
+  socket.on('build', ({user, id, building}) => setTile(user, id, building))
 }
 
 export const bindIo = () => {
   if (io) {
-    socket = io?.({ upgrade: false, transports: ["websocket"] });
+    socket = io?.({ upgrade: false, transports: ['websocket'] });
     bind();
   }
 }
@@ -50,13 +60,5 @@ export const sendMessage = msg => {
 }
 
 export const buildAction = (id, choice) => {
-  return new Promise((resolve, reject) => {
-    socket.emit('build', { id, choice }, (response) => {
-      if (response.status = 'ok') {
-        resolve()
-      } else {
-        reject()
-      }
-    })
-  })
+  socket.emit('build', { id, choice })
 }

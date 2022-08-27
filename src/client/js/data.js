@@ -9,3 +9,5 @@ initialPhase = 0.0
 statusRefreshDelay = 10
 
 phase = null;
+tiles = {}
+

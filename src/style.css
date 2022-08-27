@@ -16,6 +16,16 @@ body {
   user-select: none;
 }
 
+body.hidden canvas,
+body.hidden #tileset {
+  transition: opacity 0s;
+  opacity: 0;
+}
+
+canvas, .tileset {
+  transition: opacity 700ms ease-out;
+}
+
 canvas {
   position: absolute;
 }
@@ -78,9 +88,13 @@ canvas {
   --fade-time: 50ms;
   --tile-color: rgb(255, 253, 253);
   transform: rotate(35deg) scale(8) translate(-30%,10%);
-  transition-duration: 500ms;
   opacity: 1;
   z-index: 1;
+}
+.hex.selected,
+.hex.selected::after,
+.hex.selected::before {
+  transition-duration: 500ms;
 }
 
 svg {

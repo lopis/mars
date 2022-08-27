@@ -3,25 +3,40 @@ import { buildAction } from './io'
 
 let selectedTile
 
-const buildingEmoji = [
-  ['greenhouse', 'Greenhouse', '🍀'],
-  ['minery', 'Minery', '🏭'],
-  ['solar', 'Solar Plant', '🪟'],
-  ['nuclear', 'Nuclear Plant', '☢️'],
-  ['housing', 'Housing', '🏢'],
-]
+const buildingEmoji = {
+  greenhouse: {
+    label: 'Greenhouse',
+    icon: '🍀',
+  },
+  minery: {
+    label: 'Minery',
+    icon: '🏭',
+  },
+  solar: {
+    label: 'Solar Plant',
+    icon: '🪟',
+  },
+  nuclear: {
+    label: 'Nuclear Plant',
+    icon: '☢️',
+  },
+  housing: {
+    label: 'Housing',
+    icon: '🏢',
+  },
+}
+
+export const setTile = (user, tileId, building) => {
+  tiles[tileId].$tile.dataset.icon = buildingEmoji[building].icon
+  _dialog.classList.remove('show')
+  selectedTile?.classList.remove('selected')
+  selectedTile = null
+}
 
 function onBuildChoice ({target}) {
-  let choice
-  if (choice = buildingEmoji.find(c => c[0] === target.id)) {
+  if (buildingEmoji[target.id]) {
     document.body.removeEventListener('click', onBuildChoice)
-    buildAction(choice)
-    .then(() => {
-      selectedTile.dataset.icon = choice[2]
-      _dialog.classList.remove('show')
-      selectedTile.classList.remove('selected')
-      selectedTile = null
-    })
+    buildAction(selectedTile.dataset.n, target.id)
   }
 }
 
@@ -38,8 +53,8 @@ export const showBuildDialog = (target) => {
 
   _prompt.innerText = 'Choose build'
   _choices.innerHTML = `<ul>${
-    buildingEmoji.map(type => {
-    return `<li class="button" id="${type[0]}">${type[1]}</li>`
+    Object.entries(buildingEmoji).map(type => {
+    return `<li class="button" id="${type[0]}">${type[1].label}</li>`
   }).join('')
   }</ul>`
   _dialog.classList.add('show')

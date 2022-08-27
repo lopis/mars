@@ -5,7 +5,7 @@
  * @param {Array} users
  */
 const users = []
-const tiles = []
+const tiles = {}
 let solCount = 0
 let lastTime = Date.now()
 
@@ -22,6 +22,13 @@ const getSol = () => {
  */
 function removeUser(user) {
 	users.splice(users.indexOf(user), 1)
+}
+
+class Tile {
+	constructor(row, col) {
+		this.row = row
+		this.col = col
+	}
 }
 
 /**
@@ -61,6 +68,19 @@ const names = [
 	'Sunday',
 ]
 
+for (let row = 0; row < 13; row++) {
+	for (let col = 0; col < 13; col++) {
+		const id = `${String.fromCharCode(65 + row)}${col}`
+		tiles[id] = new Tile(row, col)
+	}	
+}
+
+const broadcast = (event, data) => {
+	users.forEach(user => {
+		user.socket.emit(event, data)
+	})
+}
+
 /**
  * Socket.IO on connect event
  * @param {Socket} socket
@@ -87,21 +107,17 @@ module.exports = {
 		socket.on('msg', (msg) => {
 			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
 			console.info(`# ${user.name}: ${safeString}`)
-			users.forEach(user => {
-				user.socket.emit('msg', {user: user.name, msg: safeString})
-			})
+			broadcast('msg', {user: user.name, msg: 'poop'})
 		})
 
-		socket.on('build', ({id, choice}, callback) => {
-			// const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
-			console.info(id + ' ' + choice)
-			// users.forEach(user => {
-			// 	user.socket.emit('msg', {user: user.name, msg: safeString})
-			// })
-
-			callback({
-				status: 'ok'
-			})
+		socket.on('build', ({id, choice}) => {
+			console.info(`>> ${id}: ${choice}`)
+			if (tiles[id] && !tiles[id].build) {
+				tiles[id].build = choice
+				broadcast('build', {user: user.name, id, building: choice})
+			} else {
+				user.socket.emit('build-fail')	
+			}
 		})
 
 		console.info('Connected: ' + socket.id)
@@ -110,6 +126,7 @@ module.exports = {
 		})
 
 		user.socket.emit('sol', getSol())
+		user.socket.emit('world', tiles)
 	},
 
 	stat: (req, res) => {
@@ -117,7 +134,9 @@ module.exports = {
 			res.send(
 				`${users.length} Player(s): ${users.map(user => user.name).join(', ')}
 				<br>
-				Sol: ${getSol()}`
+				Sol: ${getSol()}
+				<br>
+				${Object.keys(tiles)}`
 			)
 		})
 	}
