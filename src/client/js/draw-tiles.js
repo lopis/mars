@@ -1,6 +1,6 @@
 const rows = 13
 
-const nightThreshold = 0.1
+const nightThreshold = 0
 const dayThreshold = 0.1
 export const updateTiles = () => {
   Object.values(tiles).forEach((tile) => {

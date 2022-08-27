@@ -14,11 +14,11 @@ const buildingEmoji = {
   },
   solar: {
     label: 'Solar Plant',
-    icon: '🪟',
+    icon: '📀',
   },
   nuclear: {
     label: 'Nuclear Plant',
-    icon: '☢️',
+    icon: '🔋',
   },
   housing: {
     label: 'Housing',
@@ -26,8 +26,14 @@ const buildingEmoji = {
   },
 }
 
+export const bumpTile = (tileId) => {
+  console.log(tileId, 'bump');
+  tiles[tileId].$tile.classList.add('new')
+}
+
 export const setTile = (user, tileId, building) => {
   const $icon = document.createElement('span')
+  $icon.style.animationDelay = -700 * Math.random() + 'ms'
   $icon.innerText = buildingEmoji[building].icon
   tiles[tileId].$tile.appendChild($icon)
   _dialog.classList.remove('show')

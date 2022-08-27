@@ -3,7 +3,8 @@ import {
   renderPlanet,
   tick,
 } from './draw-planet'
-import { updateTiles } from './draw-tiles'
+import { renderTiles, updateTiles } from './draw-tiles'
+import { bindIo } from './io'
 
 export let userList = []
 export let commsList = []
@@ -38,6 +39,18 @@ export const updateSol = (currentSol) => {
   if (currentSol) solCount = currentSol
   else solCount += solDuration
   _sol.dataset.count = Math.ceil(solCount / solDuration)
+}
+
+export const playOffline = () => {
+  intro.classList.add('gone')
+  bindIo()
+  renderTiles()
+}
+
+export const playGlobal = () => {
+  intro.classList.add('gone')
+  bindIo()
+  renderTiles()
 }
 
 export const initLoop = () => {

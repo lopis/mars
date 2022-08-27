@@ -25,9 +25,19 @@ function removeUser(user) {
 }
 
 class Tile {
-	constructor(row, col) {
+	constructor(row, col, id) {
 		this.row = row
 		this.col = col
+		this.id = id
+		this.stock = 0
+	}
+
+	setBuild(build) {
+		this.build = build
+		setInterval(() => {
+			this.stock++
+			broadcast('bump', this.id)
+		}, 5 * 60 * 1000)
 	}
 }
 
@@ -71,7 +81,7 @@ const names = [
 for (let row = 0; row < 13; row++) {
 	for (let col = 0; col < 13; col++) {
 		const id = `${String.fromCharCode(65 + row)}${col}`
-		tiles[id] = new Tile(row, col)
+		tiles[id] = new Tile(row, col, id)
 	}	
 }
 
@@ -111,9 +121,8 @@ module.exports = {
 		})
 
 		socket.on('build', ({id, choice}) => {
-			console.info(`>> ${id}: ${choice}`)
 			if (tiles[id] && !tiles[id].build) {
-				tiles[id].build = choice
+				tiles[id].setBuild(choice)
 				broadcast('build', {user: user.name, id, building: choice})
 			} else {
 				user.socket.emit('build-fail')	

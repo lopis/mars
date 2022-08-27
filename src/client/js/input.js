@@ -1,3 +1,4 @@
+import { playGlobal, playOffline } from './game'
 import { sendMessage } from './io'
 import { showUsers, showComms, showBuildDialog, dismissDialog } from './ui'
 
@@ -21,6 +22,8 @@ export default () => {
     }
 
     const listener = ({
+      offline: playOffline,
+      global: playGlobal,
       users: showUsers,
       comms: showComms,
       dismiss: ()=>{},

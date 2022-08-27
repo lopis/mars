@@ -1,5 +1,5 @@
 import { updateUsers, updateChat, updateSol } from './game'
-import { showComms, setTile } from './ui';
+import { showComms, setTile, bumpTile } from './ui';
 
 let socket //Socket.IO client
 
@@ -44,6 +44,8 @@ function bind() {
     })
     document.body.classList.remove('hidden')
   })
+
+  socket.on('bump', (id) => bumpTile(id))
 
   socket.on('build', ({user, id, building}) => setTile(user, id, building))
 }

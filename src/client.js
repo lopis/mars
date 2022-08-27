@@ -11,9 +11,7 @@ import { bindIo } from './client/js/io'
      * Client module init
      */
     function init() {
-        bindIo()        
         initContext()
-        renderTiles()
         initInput()
         initLoop()
     }
