@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const path = require('path');
 
 const webpackClientConfig = (isProduction) => ({
@@ -44,7 +45,7 @@ const webpackClientConfig = (isProduction) => ({
       },
       minifyCSS: true,
       inlineSource: isProduction && '\.(js|css)$'
-    })
+    }),
   ],
   // stats: 'errors-warnings',
 })
@@ -61,7 +62,25 @@ const webpackServerConfig = (isProduction) => ({
     },
   },
   devtool: false,
-  watch: false,
+  watch: true,
+  plugins: [
+    new WebpackShellPluginNext({
+      onDoneWatch:{
+        scripts: [
+          'echo "Shutting server down"',
+          'kill $(ps aux | grep "\\--game" | cut -d " " -f6)',
+          'echo "Starting server"',
+          'node index.js --game'
+        ],
+        parallel: true
+      }, 
+      // onBuildExit:{
+      //   scripts: ['echo "Starting server"; node index.js --game'],
+      //   blocking: false,
+      //   parallel: true
+      // }
+    })
+  ]
 })
 
 module.exports = (env, argv) => {

@@ -1,7 +1,7 @@
-node_modules/
-public/
+node_modules
+public
 index.js
-lib/
+lib
 Procfile
 public.zip
 dist.zip
