@@ -87,7 +87,7 @@ canvas {
 .hex.selected {
   --fade-time: 50ms;
   --tile-color: rgb(255, 253, 253);
-  transform: rotate(35deg) scale(8) translate(-30%,10%);
+  /* transform: rotate(35deg) scale(8) translate(-30%,10%); */
   opacity: 1;
   z-index: 1;
 }
@@ -95,6 +95,28 @@ canvas {
 .hex.selected::after,
 .hex.selected::before {
   transition-duration: 500ms;
+}
+
+.hex span {
+  position: absolute;
+  font-size: 2.3em;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  text-align: center;
+  transform-origin: bottom;
+  animation: bounce 700ms alternate infinite;
+  transform: rotate(-25deg) translateY(-16%) scale(1, 1);
+  animation-timing-function: ease-in;
+}
+
+@keyframes bounce {
+  from {
+    transform: translate(10%,-20%) rotate(-25deg) scale(1, 1);
+  }
+  to {
+    transform: translate(10%,-20%) rotate(-25deg) scale(1.2, 0.8);
+  }
 }
 
 svg {

@@ -50,6 +50,20 @@ const webpackClientConfig = (isProduction) => ({
   // stats: 'errors-warnings',
 })
 
+const serverPlugins = [
+  new WebpackShellPluginNext({
+    onDoneWatch:{
+      scripts: [
+        'echo "Shutting server down"',
+        'pkill -f "\\--game"',
+        'echo "Starting server"',
+        'node index.js --game'
+      ],
+      parallel: true
+    },
+  })
+]
+
 const webpackServerConfig = (isProduction) => ({
   entry: './src/server.js',
   mode: 'production',
@@ -61,26 +75,9 @@ const webpackServerConfig = (isProduction) => ({
       type: 'commonjs',
     },
   },
-  devtool: false,
-  watch: true,
-  plugins: [
-    new WebpackShellPluginNext({
-      onDoneWatch:{
-        scripts: [
-          'echo "Shutting server down"',
-          'kill $(ps aux | grep "\\--game" | cut -d " " -f6)',
-          'echo "Starting server"',
-          'node index.js --game'
-        ],
-        parallel: true
-      }, 
-      // onBuildExit:{
-      //   scripts: ['echo "Starting server"; node index.js --game'],
-      //   blocking: false,
-      //   parallel: true
-      // }
-    })
-  ]
+  devtool: isProduction ? false : 'source-map',
+  watch: !isProduction,
+  plugins: isProduction ? [] : serverPlugins
 })
 
 module.exports = (env, argv) => {

@@ -27,7 +27,9 @@ const buildingEmoji = {
 }
 
 export const setTile = (user, tileId, building) => {
-  tiles[tileId].$tile.dataset.icon = buildingEmoji[building].icon
+  const $icon = document.createElement('span')
+  $icon.innerText = buildingEmoji[building].icon
+  tiles[tileId].$tile.appendChild($icon)
   _dialog.classList.remove('show')
   selectedTile?.classList.remove('selected')
   selectedTile = null
