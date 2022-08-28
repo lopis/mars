@@ -1,74 +1,99 @@
 import { userList, commsList } from './game'
 import { buildAction } from './io'
 
-let selectedTile
-
 const buildingEmoji = {
   greenhouse: {
     label: 'Greenhouse',
     icon: '🍀',
+    out: 'oxygen 🫁',
   },
   minery: {
     label: 'Minery',
     icon: '🏭',
+    out: 'minerals 🪨'
   },
   solar: {
     label: 'Solar Plant',
-    icon: '📀',
+    icon: '🔲',
+    out: 'energy 🔋'
   },
   nuclear: {
     label: 'Nuclear Plant',
-    icon: '🔋',
+    icon: '⚛️',
+    out: 'energy 🔋',
   },
   housing: {
     label: 'Housing',
     icon: '🏢',
+    out: 'waste 💩'
   },
 }
 
-export const bumpTile = (tileId) => {
-  console.log(tileId, 'bump');
-  tiles[tileId].$tile.classList.add('new')
-}
-
-export const setTile = (user, tileId, building) => {
-  const $icon = document.createElement('span')
-  $icon.style.animationDelay = -700 * Math.random() + 'ms'
-  $icon.innerText = buildingEmoji[building].icon
-  tiles[tileId].$tile.appendChild($icon)
+export const updateTile = ({id, build, stock}) => {
+  if (!tiles[id]) return
+  if (build != tiles[id].build) {
+    const $icon = document.createElement('span')
+    $icon.style.animationDelay = -700 * Math.random() + 'ms'
+    tiles[id].$tile.appendChild($icon)
+    $icon.innerText = buildingEmoji[build].icon
+    tiles[id].build = build
+  }
+  if (stock > tiles[id].stock) {
+    tiles[id].$tile.classList.add('new')
+  } else {
+    tiles[id].$tile.classList.remove('new')
+  }
+  tiles[id].stock = stock
   _dialog.classList.remove('show')
-  selectedTile?.classList.remove('selected')
-  selectedTile = null
+  $selectedTile?.classList.remove('selected')
+  $selectedTile = null
 }
 
 function onBuildChoice ({target}) {
   if (buildingEmoji[target.id]) {
     document.body.removeEventListener('click', onBuildChoice)
-    buildAction(selectedTile.dataset.n, target.id)
+    buildAction($selectedTile.dataset.n, target.id)
   }
 }
 
 export const dismissDialog = () => {
   document.body.removeEventListener('click', onBuildChoice)
   _dialog.classList.remove('show')
-  selectedTile?.classList.remove('selected')
-  selectedTile = null
+  $selectedTile?.classList.remove('selected')
+  $selectedTile = null
   _choices.innerHTML = ''
 }
 
-export const showBuildDialog = (target) => {
-  if (selectedTile) dismissDialog()
+export const showTileDialog = (target) => {
+  if ($selectedTile) dismissDialog()
 
-  _prompt.innerText = 'Choose build'
-  _choices.innerHTML = `<ul>${
-    Object.entries(buildingEmoji).map(type => {
-    return `<li class="button" id="${type[0]}">${type[1].label}</li>`
-  }).join('')
-  }</ul>`
+  $selectedTile = target
+  const tile = tiles[target.dataset.n]
+
+  if (tile.build) {
+    // RESOURCE DIALOG
+
+    _prompt.innerHTML = `<b>${tile.id}</b><br>${buildingEmoji[tile.build].label}`
+    const resource = buildingEmoji[tile.build].out
+    _choices.innerHTML = `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
+      [`Collect 1`, 'getone'],
+      [`Collect all`, 'getall'],
+    ].map(([label, id]) => `<li class="button" id="${id}">${label}</li>`).join('')}</ul>`
+
+  } else {
+    // BUILD DIALOG
+
+    _prompt.innerHTML = `<b>${tile.id}</b><br>Choose build`
+    _choices.innerHTML = `<ul>${
+      Object.entries(buildingEmoji).map(type => {
+      return `<li class="button" id="${type[0]}">${type[1].label}</li>`
+    }).join('')
+    }</ul>`
+    _dialog.addEventListener('click', onBuildChoice)
+  }
+
   _dialog.classList.add('show')
-  selectedTile = target
   target.classList.add('selected')
-  _dialog.addEventListener('click', onBuildChoice)
 }
 
 export const showUsers = () => {

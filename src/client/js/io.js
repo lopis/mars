@@ -1,5 +1,5 @@
 import { updateUsers, updateChat, updateSol } from './game'
-import { showComms, setTile, bumpTile } from './ui';
+import { showComms, updateTile } from './ui';
 
 let socket //Socket.IO client
 
@@ -37,17 +37,16 @@ function bind() {
   });
 
   socket.on('world', (tiles) => {
-    Object.entries(tiles).forEach(([id, {build}]) => {
-      if (build) {
-        setTile(null, id, build)
-      }
+    console.log('world', tiles);
+    Object.entries(tiles).forEach(([id, tile]) => {
+      updateTile(tile)
     })
     document.body.classList.remove('hidden')
   })
 
-  socket.on('bump', (id) => bumpTile(id))
+  socket.on('tile', updateTile)
 
-  socket.on('build', ({user, id, building}) => setTile(user, id, building))
+  socket.on('build', updateTile)
 }
 
 export const bindIo = () => {
@@ -63,4 +62,12 @@ export const sendMessage = msg => {
 
 export const buildAction = (id, choice) => {
   socket.emit('build', { id, choice })
+}
+
+export const collect = (count) => () => {
+  const id = $selectedTile.dataset.n
+  socket.emit('collect', { 
+    id,
+    count,
+   })
 }

@@ -89,7 +89,7 @@ canvas {
 .hex.selected {
   --fade-time: 50ms;
   --tile-color: rgb(255, 253, 253);
-  /* transform: rotate(35deg) scale(8) translate(-30%,10%); */
+  transform: scale(3);
   opacity: 1;
   z-index: 1;
 }
@@ -110,10 +110,12 @@ canvas {
   animation: bounce 700ms alternate infinite;
   transform: rotate(-25deg) translateY(-16%) scale(1, 1);
   animation-timing-function: ease-in;
+  pointer-events: none;
+  text-shadow: 0 0 1px black;
 }
 
 .new span::after {
-  content: "✨";
+  content: "🔷";
   position: absolute;
   top: -50%;
   right: 0px;
@@ -205,6 +207,7 @@ svg {
 
 #_dialog div {
 	display: inline-block;
+  vertical-align: top;
 }
 
 #_dialog b {
@@ -295,14 +298,17 @@ ul {
   justify-content: center;
   align-items: center;
   font-size: 2em;
-  text-shadow: #ff6363 0 0 2vh;
   opacity: 1;
+}
+
+h1 {
+  text-shadow: #ff6363 0 0 2vh;
 }
 
 #intro span {
   text-shadow: #fffe63 0 0 2vh;
   display: inline-block;
-  filter: brightness(0.5) hue-rotate(-55deg);
+  filter: brightness(0.6) hue-rotate(-55deg) contrast(1.4) saturate(1.4);
   transform: rotate(25deg);
 }
 

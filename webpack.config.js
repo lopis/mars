@@ -11,14 +11,18 @@ const webpackClientConfig = (isProduction) => ({
   watch: !isProduction,
   module: {
     rules: [
-      // {
-      //   test: /\.(png|jpe?g|gif|svg)$/i,
-      //   use: [
-      //     {
-      //       loader: 'file-loader',
-      //     },
-      //   ],
-      // },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+            },
+          },
+        ],
+        
+      },
       {
         test: /\.css$/i,
         use: [
@@ -44,7 +48,8 @@ const webpackClientConfig = (isProduction) => ({
         collapseWhitespace: true
       },
       minifyCSS: true,
-      inlineSource: isProduction && '\.(js|css)$'
+      inlineSource: isProduction && '\.(js|css)$',
+      favicon: path.resolve(__dirname, 'src/client/assets/favicon.svg'),
     }),
   ],
   // stats: 'errors-warnings',

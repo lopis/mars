@@ -32,11 +32,15 @@ class Tile {
 		this.stock = 0
 	}
 
+	broadcast() {
+		broadcast('tile', this)
+	}
+
 	setBuild(build) {
 		this.build = build
 		setInterval(() => {
 			this.stock++
-			broadcast('bump', this.id)
+			this.broadcast()
 		}, 5 * 60 * 1000)
 	}
 }
@@ -123,9 +127,18 @@ module.exports = {
 		socket.on('build', ({id, choice}) => {
 			if (tiles[id] && !tiles[id].build) {
 				tiles[id].setBuild(choice)
-				broadcast('build', {user: user.name, id, building: choice})
+				broadcast('build', tiles[id])
 			} else {
 				user.socket.emit('build-fail')	
+			}
+		})
+
+		socket.on('collect', ({id, count}) => {
+			if (tiles[id] && tiles[id].stock > 0) {
+				tiles[id].stock -= count || tiles[id].stock
+				tiles[id].broadcast()
+			} else {
+				user.socket.emit('collect-fail')
 			}
 		})
 

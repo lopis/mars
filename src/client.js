@@ -1,10 +1,8 @@
 import './style.css'
 import './client/js/data'
 import { initContext } from './client/js/graphics'
-import { initLoop, updateUsers } from './client/js/game'
-import { renderTiles } from './client/js/draw-tiles'
+import { initLoop } from './client/js/game'
 import initInput from './client/js/input'
-import { bindIo } from './client/js/io'
 
 (function () {
     /**

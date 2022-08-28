@@ -1,6 +1,6 @@
 import { playGlobal, playOffline } from './game'
-import { sendMessage } from './io'
-import { showUsers, showComms, showBuildDialog, dismissDialog } from './ui'
+import { collect, sendMessage } from './io'
+import { showUsers, showComms, showTileDialog, dismissDialog } from './ui'
 
 export default () => {
   document.addEventListener('keyup', ({target, key}) => {
@@ -17,7 +17,7 @@ export default () => {
 
   document.addEventListener('click', ({target}) => {
     if(target?.dataset?.n) {
-      showBuildDialog(target)
+      showTileDialog(target)
       return
     }
 
@@ -26,11 +26,13 @@ export default () => {
       global: playGlobal,
       users: showUsers,
       comms: showComms,
+      getone: collect(1),
+      getall: collect(),
       dismiss: ()=>{},
     })[target.id]
     if (listener) {
-      dismissDialog()
       listener()
+      dismissDialog()
     }
 
   })

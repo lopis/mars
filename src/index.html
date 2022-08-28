@@ -12,11 +12,11 @@
 <body class="hidden">
   <div id="intro">
     <h1>Planet B <span>🌓</span></h1>
-    <div class="button" id="offline">Play Offline</div>
-    <div class="button" id="global">Play Global Co-Op</div>
+    <div class="button" id="offline">Play Solo 👤</div>
+    <div class="button" id="global">Play Global Co-Op 👥</div>
   </div>
   <canvas id="canvas"></canvas>
-  <svg id="stars" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" >
+  <svg id="stars" width="100%" height="100%" >
     <filter id="filter">
         <feTurbulence baseFrequency="0.1"/>
         <feColorMatrix values="0 0 0 7 -4
@@ -27,7 +27,7 @@
     <rect width="100%" height="100%" filter="url(#filter)"/>
   </svg>
   <div id="tileset"></div>
-  <svg class="noise" width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <svg class="noise" width="100%" height="100%" version="1.1">
     <defs>
       <filter id='noise'>
         <feTurbulence 
