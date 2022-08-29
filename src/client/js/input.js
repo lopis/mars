@@ -16,47 +16,45 @@ export default () => {
     }
   })
 
-  let zoom = 1
-  let translate = [0, 0]
-  let isMoving = false // Avoid computations inside the scroll event handler
+  // let zoom = 1
+  // let translate = [0, 0]
+  // let isMoving = false // Avoid computations inside the scroll event handler
 
-  addEventListener('wheel', ({ wheelDelta }) => {
-    zoom = Math.min(MAX_ZOOM, Math.max(1, zoom + (SCROLL_SPEED * Math.sign(wheelDelta))))
-    if (!isMoving) {
-      window.requestAnimationFrame(() => {
-        updateMap(translate, zoom)
-        isMoving = false
-      })
+  // addEventListener('wheel', ({ wheelDelta }) => {
+  //   zoom = Math.min(MAX_ZOOM, Math.max(1, zoom + (SCROLL_SPEED * Math.sign(wheelDelta))))
+  //   if (!isMoving) {
+  //     window.requestAnimationFrame(() => {
+  //       updateMap(translate, zoom)
+  //       isMoving = false
+  //     })
   
-      isMoving = true
-    }
-  })
+  //     isMoving = true
+  //   }
+  // })
   
-  let isDragging, dragPos = [0,0], initialPos
-  wrapper.addEventListener('mousedown', ({ pageX, pageY }) => {
-    dragPos = [pageX, pageY]
-    initialPos = [...translate]
-    isDragging = true
-  });
-  document.addEventListener('mouseup', (e) => {
-    isDragging = false
-  });
-  document.addEventListener('mousemove', ({ pageX, pageY }) => {
-    if (isDragging) {
-      console.log(initialPos[0] - (dragPos[0] - pageX) / 5);
-      if (Math.abs(dragPos[0] - pageX) > 10) {
-        translate[0] = initialPos[0] - (dragPos[0] - pageX)
-        translate[1] = initialPos[1] - (dragPos[1] - pageY)
-        window.requestAnimationFrame(() => {
-          updateMap()
-          isMoving = false
-        });
-        isMoving = true
-      }
-    }
-  });
-
-  addEventListener('drag', (event) => {});
+  // let isDragging, dragPos = [0,0], initialPos
+  // wrapper.addEventListener('mousedown', ({ pageX, pageY }) => {
+  //   dragPos = [pageX, pageY]
+  //   initialPos = [...translate]
+  //   isDragging = true
+  // });
+  // document.addEventListener('mouseup', (e) => {
+  //   isDragging = false
+  // });
+  // document.addEventListener('mousemove', ({ pageX, pageY }) => {
+  //   if (isDragging) {
+  //     console.log(initialPos[0] - (dragPos[0] - pageX) / 5);
+  //     if (Math.abs(dragPos[0] - pageX) > 10) {
+  //       translate[0] = initialPos[0] - (dragPos[0] - pageX)
+  //       translate[1] = initialPos[1] - (dragPos[1] - pageY)
+  //       window.requestAnimationFrame(() => {
+  //         updateMap()
+  //         isMoving = false
+  //       });
+  //       isMoving = true
+  //     }
+  //   }
+  // });
 
   addEventListener('click', ({target}) => {
     if(target?.dataset?.n) {

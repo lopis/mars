@@ -43,6 +43,10 @@ export const updateSol = (currentSol) => {
 
 export const updateStats = (newStats) => {
   stats = newStats
+  Object.keys(newStats).forEach(key => {
+    console.log(key, document.getElementById(key), newStats[key]);
+    document.getElementById(key).dataset.count = newStats[key]
+  })
 }
 
 export const playOffline = () => {

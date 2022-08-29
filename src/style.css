@@ -329,7 +329,7 @@ h1 {
 
 /* STATS */
 
-#stats {
+#_stats {
   position: fixed;
   bottom: 0;
   display: grid;
@@ -340,7 +340,7 @@ h1 {
   grid-template-rows: repeat(4, 1fr);
 }
 
-#stats div {
+#_stats div {
 	background: rgba(255, 255, 255, 0.078);
 	padding: 1px 12px;
 	border-radius: 99px;
