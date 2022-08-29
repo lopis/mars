@@ -1,41 +1,15 @@
 import { userList, commsList } from './game'
 import { buildAction } from './io'
 
-const buildingEmoji = {
-  greenhouse: {
-    label: 'Greenhouse',
-    icon: '🍀',
-    out: 'oxygen 🫁',
-  },
-  minery: {
-    label: 'Minery',
-    icon: '🏭',
-    out: 'minerals 🪨'
-  },
-  solar: {
-    label: 'Solar Plant',
-    icon: '🔲',
-    out: 'energy 🔋'
-  },
-  nuclear: {
-    label: 'Nuclear Plant',
-    icon: '⚛️',
-    out: 'energy 🔋',
-  },
-  housing: {
-    label: 'Housing',
-    icon: '🏢',
-    out: 'waste 💩'
-  },
-}
-
+let dismissOnArrival
+let isZoomed
 export const updateTile = ({id, build, stock}) => {
   if (!tiles[id]) return
-  if (build != tiles[id].build) {
+  if (build && build != tiles[id].build) {
     const $icon = document.createElement('span')
     $icon.style.animationDelay = -700 * Math.random() + 'ms'
     tiles[id].$tile.appendChild($icon)
-    $icon.innerText = buildingEmoji[build].icon
+    $icon.innerText = buildings[build].icon
     tiles[id].build = build
   }
   if (stock > tiles[id].stock) {
@@ -44,28 +18,35 @@ export const updateTile = ({id, build, stock}) => {
     tiles[id].$tile.classList.remove('new')
   }
   tiles[id].stock = stock
-  _dialog.classList.remove('show')
-  $selectedTile?.classList.remove('selected')
-  $selectedTile = null
+  if (dismissOnArrival) {
+    dismissDialog()
+    dismissOnArrival = false
+  }
 }
 
 function onBuildChoice ({target}) {
-  if (buildingEmoji[target.id]) {
+  if (buildings[target.id]) {
     document.body.removeEventListener('click', onBuildChoice)
     buildAction($selectedTile.dataset.n, target.id)
+    dismissOnArrival = true
   }
+}
+
+export const clearSelectedTile = () => {
+  $selectedTile?.classList.remove('selected')
+  $selectedTile = null
 }
 
 export const dismissDialog = () => {
   document.body.removeEventListener('click', onBuildChoice)
   _dialog.classList.remove('show')
-  $selectedTile?.classList.remove('selected')
-  $selectedTile = null
   _choices.innerHTML = ''
+  updateMap([0,0], 1)
+  isZoomed = false
 }
 
 export const showTileDialog = (target) => {
-  if ($selectedTile) dismissDialog()
+  clearSelectedTile()
 
   $selectedTile = target
   const tile = tiles[target.dataset.n]
@@ -73,8 +54,8 @@ export const showTileDialog = (target) => {
   if (tile.build) {
     // RESOURCE DIALOG
 
-    _prompt.innerHTML = `<b>${tile.id}</b><br>${buildingEmoji[tile.build].label}`
-    const resource = buildingEmoji[tile.build].out
+    _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${buildings[tile.build].label}`
+    const resource = buildings[tile.build].out.join(' ')
     _choices.innerHTML = `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
       [`Collect 1`, 'getone'],
       [`Collect all`, 'getall'],
@@ -83,10 +64,11 @@ export const showTileDialog = (target) => {
   } else {
     // BUILD DIALOG
 
-    _prompt.innerHTML = `<b>${tile.id}</b><br>Choose build`
+    _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>Choose build`
     _choices.innerHTML = `<ul>${
-      Object.entries(buildingEmoji).map(type => {
-      return `<li class="button" id="${type[0]}">${type[1].label}</li>`
+      Object.entries(buildings).map(type => {
+        const label = `${type[1].label}<br><small>output: ${type[1].out.join(' ')}</small>`
+      return `<li class="button" id="${type[0]}">${label}</li>`
     }).join('')
     }</ul>`
     _dialog.addEventListener('click', onBuildChoice)
@@ -94,6 +76,22 @@ export const showTileDialog = (target) => {
 
   _dialog.classList.add('show')
   target.classList.add('selected')
+  moveMapTo(target)
+}
+
+export const updateMap = (translate, scale) => {
+  wrapper.style.transform = `scale(${scale}) translate(${translate[0]}px, ${translate[1]}px)` 
+}
+
+const moveMapTo = (target) => {
+  if (!isZoomed) {
+    isZoomed = true
+    const {left, top} = target.getBoundingClientRect()
+    updateMap([
+      -(left - (innerWidth / 2)),
+      -(top - (innerHeight / 2)),
+    ], 3)
+  }
 }
 
 export const showUsers = () => {
@@ -112,7 +110,14 @@ export const showComms = () => {
     return `<li><b>${user}:</b> ${msg}</li>`
   }).join('') : '<b>No messages</b>'
   _choices.innerHTML += `<input maxlength="22" id="_input" />`
+  _prompt.innerHTML = 'Comms Panel'
   _dialog.classList.add('show')
   _input.focus()
   chatlist.scrollTo(0, chatlist.clientHeight)
+}
+
+export const showSolStats = () => {
+  _choices.innerHTML = ''
+  const ul = _choices.appendChild(document.createElement('ul'))
+  _dialog.classList.add('show')
 }

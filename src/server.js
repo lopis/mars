@@ -25,11 +25,13 @@ function removeUser(user) {
 }
 
 class Tile {
+	interval = 5000 //5 * 60 * 1000
+
 	constructor(row, col, id) {
 		this.row = row
 		this.col = col
 		this.id = id
-		this.stock = 0
+		this.stock = 5 //0
 	}
 
 	broadcast() {
@@ -41,7 +43,7 @@ class Tile {
 		setInterval(() => {
 			this.stock++
 			this.broadcast()
-		}, 5 * 60 * 1000)
+		}, this.interval)
 	}
 }
 
@@ -54,7 +56,6 @@ class Game {
 	 */
 	constructor() {
 	}
-
 }
 
 /**
@@ -68,18 +69,32 @@ class User {
 	constructor(socket, name) {
 		this.socket = socket
 		this.name = name
+		this.id = socket.id.substr(0, 6)
 	}
 
 }
 
 const names = [
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-	'Sunday',
+	"Jarred",
+	"Deanna",
+	"Arlene",
+	"Jordan",
+	"Nita",
+	"Justin",
+	"Katheryn",
+	"Manual",
+	"Violet",
+	"Martin",
+	"Felix",
+	"Cathy",
+	"Adan",
+	"Anderson",
+	"Asa",
+	"Micah",
+	"Emmitt",
+	"Johnnie",
+	"Rene",
+	"Darron",
 ]
 
 for (let row = 0; row < 13; row++) {
@@ -121,7 +136,7 @@ module.exports = {
 		socket.on('msg', (msg) => {
 			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
 			console.info(`# ${user.name}: ${safeString}`)
-			broadcast('msg', {user: user.name, msg: 'poop'})
+			broadcast('msg', {user: user.name, msg: safeString})
 		})
 
 		socket.on('build', ({id, choice}) => {
@@ -135,8 +150,13 @@ module.exports = {
 
 		socket.on('collect', ({id, count}) => {
 			if (tiles[id] && tiles[id].stock > 0) {
-				tiles[id].stock -= count || tiles[id].stock
+				const name = buildings[tiles[id].build].out[0]
+				const delta = count || tiles[id].stock
+				console.log(delta, count, tiles[id].stock);
+				stats[name] += delta
+				tiles[id].stock -= delta
 				tiles[id].broadcast()
+				broadcast('stats', stats)
 			} else {
 				user.socket.emit('collect-fail')
 			}
@@ -144,11 +164,14 @@ module.exports = {
 
 		console.info('Connected: ' + socket.id)
 		users.forEach(user => {
-			user.socket.emit('users', users.map(user => user.name))
+			user.socket.emit('users', {
+				id: socket.id.substr(0, 6),
+				users: users.map(user => ({id: user.id, name: user.name}))
+			})
 		})
 
 		user.socket.emit('sol', getSol())
-		user.socket.emit('world', tiles)
+		user.socket.emit('world', {tiles, stats})
 	},
 
 	stat: (req, res) => {
@@ -156,7 +179,9 @@ module.exports = {
 			res.send(
 				`${users.length} Player(s): ${users.map(user => user.name).join(', ')}
 				<br>
-				Sol: ${getSol()}
+				Sol: ${Math.ceil(getSol()/(60 * 1000))} (${getSol()} ms)
+				<br>
+				stats: ${JSON.stringify(stats)}
 				<br>
 				${Object.keys(tiles)}`
 			)

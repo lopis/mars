@@ -55,6 +55,18 @@ const webpackClientConfig = (isProduction) => ({
   // stats: 'errors-warnings',
 })
 
+const webpackSharedConfig = (isProduction) => ({
+  entry: './src/shared.js',
+  output: {
+    path: path.resolve(__dirname, 'public'),
+    filename: 'shared.js',
+  },
+  watch: !isProduction,
+  optimization: {
+    usedExports: true,
+  },
+})
+
 const serverPlugins = [
   new WebpackShellPluginNext({
     onDoneWatch:{
@@ -90,6 +102,7 @@ module.exports = (env, argv) => {
 
   return [
     webpackClientConfig(isProduction),
+    webpackSharedConfig(isProduction),
     webpackServerConfig(isProduction)
   ]
 };

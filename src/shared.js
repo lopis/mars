@@ -1,9 +1,35 @@
-"use strict";
+buildings = {
+  greenhouse: {
+    label: 'Greenhouse',
+    icon: '🌳',
+    out: ['oxygen', '🫁'],
+  },
+  minery: {
+    label: 'Refinery',
+    icon: '🏭',
+    out: ['minerals', '🪨']
+  },
+  solar: {
+    label: 'Solar Plant',
+    icon: '🔲',
+    out: ['energy', '🔋'],
+  },
+  nuclear: {
+    label: 'Nuclear Plant',
+    icon: '⚛️',
+    out: ['energy', '🔋'],
+  },
+  housing: {
+    label: 'Housing',
+    icon: '🏢',
+    out: ['waste', '💩'],
+  },
+}
 
-class Tile {
-  constructor(id, element, col) {
-    this.id = id
-    this.element = element
-    this.col = col
-  }
+stats = {
+	population: 0,
+	minerals: 0,
+	oxygen: 0,
+  energy: 0,
+	heat: 0,
 }

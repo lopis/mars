@@ -16,16 +16,14 @@ body {
   user-select: none;
 }
 
-.hidden canvas,
-.hidden #tileset,
-.hidden #toolbar,
-.hidden #earth {
+.hidden {
   transition: opacity 0s;
   opacity: 0;
 }
 
-canvas, .tileset {
+.show {
   transition: opacity 700ms ease-out;
+  opacity: 1;
 }
 
 canvas {
@@ -44,6 +42,11 @@ canvas {
   margin: 0;
   box-sizing: border-box;
   transform: rotate(25deg);
+}
+
+#wrapper {
+  transition: transform 200ms ease-in;
+  height: 100vh;
 }
 
 .hex {
@@ -89,7 +92,7 @@ canvas {
 .hex.selected {
   --fade-time: 50ms;
   --tile-color: rgb(255, 253, 253);
-  transform: scale(3);
+  /* transform: scale(3); */
   opacity: 1;
   z-index: 1;
 }
@@ -147,6 +150,8 @@ svg {
 
 /* EARTH */
 #earth {
+  position: absolute;
+  top: 0;
 	padding: 1vmin;
 	background-color: black;
 	width: 20vmin;
@@ -276,6 +281,8 @@ ul {
   content: ' ' attr(data-count);
   float: right;
   margin-left: 1ch;
+  min-width: 3ch;
+  text-align: right;
 }
 
 [data-new]::after {
@@ -322,10 +329,19 @@ h1 {
 
 /* STATS */
 
-div#stats {
+#stats {
   position: fixed;
   bottom: 0;
   display: grid;
-  gap: 1vh;
+  gap: 0.6vh 2.5vh;
   padding: 2vh;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(4, 1fr);
+}
+
+#stats div {
+	background: rgba(255, 255, 255, 0.078);
+	padding: 1px 12px;
+	border-radius: 99px;
 }

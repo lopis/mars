@@ -1,6 +1,6 @@
 # Planet B
 
-Earth is dead. We fucked up. Time for planet B.
+We fucked up. Earth is dead. Time for planet B.
 
 ## Development
 

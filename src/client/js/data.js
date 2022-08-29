@@ -9,5 +9,9 @@ statusRefreshDelay = 10
 
 phase = null
 tiles = {}
+stats = {}
 
 $selectedTile = null
+
+MAX_ZOOM = 6
+SCROLL_SPEED = 0.5

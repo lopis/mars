@@ -27,8 +27,8 @@ const update = (dt) => {
   requestAnimationFrame(() => update(Date.now() - time))
 }
 
-export const updateUsers = (users) => {
-  userList = users
+export const updateUsers = (userId, users) => {
+  userList = users.map(({id, name}) => id === userId ? `${name} (you)` : name)
 }
 
 export const updateChat = (user, msg) => {
@@ -39,6 +39,10 @@ export const updateSol = (currentSol) => {
   if (currentSol) solCount = currentSol
   else solCount += solDuration
   _sol.dataset.count = Math.ceil(solCount / solDuration)
+}
+
+export const updateStats = (newStats) => {
+  stats = newStats
 }
 
 export const playOffline = () => {

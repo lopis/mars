@@ -1,4 +1,4 @@
-import { updateUsers, updateChat, updateSol } from './game'
+import { updateUsers, updateChat, updateSol, updateStats } from './game'
 import { showComms, updateTile } from './ui';
 
 let socket //Socket.IO client
@@ -17,9 +17,9 @@ function bind() {
   });
 
 
-  socket.on('users', (userList) => {
-    updateUsers(userList)
-    users.dataset.count = userList.length
+  socket.on('users', ({id, users}) => {
+    updateUsers(id, users)
+    _users.dataset.count = users.length
   });
 
   socket.on('msg', ({user, msg}) => {
@@ -27,7 +27,7 @@ function bind() {
     if (typeof _input !== 'undefined') {
       showComms()
     } else {
-      comms.dataset.new = true
+      _comms.dataset.new = true
     }
   });
 
@@ -36,17 +36,19 @@ function bind() {
     updateSol(solCount)
   });
 
-  socket.on('world', (tiles) => {
-    console.log('world', tiles);
+  socket.on('world', ({tiles, stats}) => {
     Object.entries(tiles).forEach(([id, tile]) => {
       updateTile(tile)
     })
-    document.body.classList.remove('hidden')
+    document.querySelectorAll('.hidden').forEach(e => e.classList.add('show'))
+    updateStats(stats)
   })
 
   socket.on('tile', updateTile)
 
   socket.on('build', updateTile)
+  
+  socket.on('stats', updateStats)
 }
 
 export const bindIo = () => {
