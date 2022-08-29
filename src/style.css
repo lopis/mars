@@ -11,7 +11,7 @@ body {
   image-rendering: optimizespeed;
   background: black;
   overflow: hidden;
-  font-family: DejaVu Sans Mono, Consolas, SF Mono, Roboto Mono;
+  font-family: DejaVu Sans Mono, Consolas, SF Mono, Roboto Mono, monospace;
 	color: white;
   user-select: none;
 }
