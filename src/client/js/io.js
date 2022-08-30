@@ -32,8 +32,8 @@ function bind() {
   });
 
   socket.on('sol', (solCount) => {
-    phase = (solCount % solDuration) / solDuration
-    updateSol(solCount)
+    // phase = (solCount % solDuration) / solDuration
+    // updateSol(solCount)
   });
 
   socket.on('world', ({tiles, stats}) => {

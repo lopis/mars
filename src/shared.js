@@ -24,15 +24,28 @@ buildings = {
     icon: '🏢',
     out: ['waste', '💩'],
   },
+  water: {
+    label: 'Water Plant',
+    icon: '⛲️',
+    out: ['water', '💧'],
+    polar: true,
+  },
+  // hydrogen: {
+  //   label: 'Hydrogen Refinery',
+  //   icon: '⛲️',
+  //   out: ['water', '🔘'],
+  //   polar: true,
+  // }
 }
 
 stats = {
-	population: 9990,
-  workforce: 99190,
-  consumption: 9990,
-  heating: 9990,
-	minerals: 9990,
-	oxygen: 9990,
-  energy: 9990,
-	heat: 9990,
+	population: 0,
+  workforce: 0,
+  consumption: 0,
+  heating: 0,
+	minerals: 0,
+	oxygen: 0,
+  energy: 0,
+	heat: 0,
+	water: 0,
 }

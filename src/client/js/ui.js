@@ -66,7 +66,9 @@ export const showTileDialog = (target) => {
 
     _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>Choose build`
     _choices.innerHTML = `<ul>${
-      Object.entries(buildings).map(type => {
+      Object.entries(buildings).filter(
+        type => tile.id[0] == 'A' ? type[1].polar : !type[1].polar
+      ).map(type => {
         const label = `${type[1].label}<br><small>output: ${type[1].out.join(' ')}</small>`
       return `<li class="button" id="${type[0]}">${label}</li>`
     }).join('')

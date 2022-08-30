@@ -1,5 +1,5 @@
 import { updateSol } from './game'
-import { context } from './graphics'
+import { context, gradient } from './graphics'
 
 export let planetSize = planetScale * canvas.clientHeight
 
@@ -49,31 +49,31 @@ const halfCircle = (radius, start, end) => {
 const drawShadow = (phase) => {
   context.beginPath()
   if (phase < 0.25) {
-    drawBase(RED)
+    drawBase(gradient)
     context.fillStyle = BLACK
     halfCircle(1.0, 0, 1)
-    context.fillStyle = RED
+    context.fillStyle = gradient
     halfCircle(1.0, 1, 0)
     halfCircle((0.25 - phase) * 4, 0, 1) // right red shrinks
   } else if (phase < 0.5) {
     drawBase(BLACK)
-    context.fillStyle = RED
+    context.fillStyle = gradient
     halfCircle(1.0, 1, 0)
     context.fillStyle = BLACK
     halfCircle(1.0, 0, 1)
     halfCircle((phase - 0.25) * 4, 1, 0) // left black grows
   } else if (phase < 0.75) {
     drawBase(BLACK)
-    context.fillStyle = RED
+    context.fillStyle = gradient
     halfCircle(1.0, 0, 1)
     context.fillStyle = BLACK
     halfCircle(1.0, 1, 0)
     halfCircle((0.75 - phase) * 4, 0, 1) // right black shrinks
   } else {
-    drawBase(RED)
+    drawBase(gradient)
     context.fillStyle = BLACK
     halfCircle(1.0, 1, 0)
-    context.fillStyle = RED
+    context.fillStyle = gradient
     halfCircle(1.0, 0, 1)
     halfCircle((phase - 0.75) * 4, 1, 0) // left red grows
     context.stroke()
