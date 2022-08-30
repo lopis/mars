@@ -223,6 +223,10 @@ svg {
 	margin-right: 2vh;
 }
 
+small {
+  pointer-events: none;
+}
+
 .close {
   margin-left: 1vmin;
 }
