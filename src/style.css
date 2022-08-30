@@ -152,22 +152,22 @@ svg {
 #earth {
   position: absolute;
   top: 0;
-	padding: 1vmin;
+	padding: 1vh;
 	background-color: black;
-	width: 20vmin;
-  height: 10vmin;
+	width: 20vh;
+  height: 10vh;
 	border: solid #063680;
 	border-width: 0 3px 3px 0;
-	border-bottom-right-radius: 3vmin;
+	border-bottom-right-radius: 3vh;
 }
 
 #earth .icon,
 #earth .icon::before,
 #earth .icon::after {
   position: relative;
-	height: 5vmin;
-	width: 5vmin;
-  border-radius: 5vmin;
+	height: 5vh;
+	width: 5vh;
+  border-radius: 5vh;
 	background: radial-gradient(circle at top left, #bcbebf 30%, #063680 31%);
   overflow: hidden;
 }
@@ -283,9 +283,7 @@ ul {
 
 [data-count]::after {
   content: ' ' attr(data-count);
-  float: right;
   margin-left: 1ch;
-  min-width: 3ch;
   text-align: right;
 }
 
@@ -308,7 +306,7 @@ ul {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 3vh;
   opacity: 1;
 }
 
@@ -348,4 +346,50 @@ h1 {
 	background: rgba(255, 255, 255, 0.078);
 	padding: 1px 12px;
 	border-radius: 99px;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	gap: 1vh;
+	align-items: center;
+	text-align: center;
+}
+
+[i]::before {
+  content: attr(i);
+  justify-self: start;
+}
+
+@media screen and (max-width: 810px) {
+  #_stats {
+    gap: 1px;
+    padding: 2vh 0;
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  #_stats div {
+    text-align: left;
+    grid-template-columns: auto 1fr;
+  }
+
+  [i]::before {
+    content: unset;
+  }
+
+  #toolbar {
+    width: 100%;
+    box-sizing: border-box;
+    bottom: 22vh;
+    top: unset;
+  }
+
+  .button {
+    padding: 2vmin 1vmin;
+  }
+
+  #_dialog.show {
+    top: 50%;
+    max-width: none;
+    left: 5vh;
+    z-index: 9;
+    box-shadow: 0 15vh 1vh 20vh #0009;
+  }
 }

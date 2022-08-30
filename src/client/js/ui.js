@@ -80,13 +80,20 @@ export const showTileDialog = (target) => {
 }
 
 export const updateMap = (translate, scale) => {
-  wrapper.style.transform = `scale(${scale}) translate(${translate[0]}px, ${translate[1]}px)` 
+  if (mobile) {
+    wrapper.style.transform = `translateY(-${ scale > 1 ? 20 : 10}vh) scale(${scale}) translate(${translate[0]}px, ${translate[1]}px)` 
+  } else {
+    wrapper.style.transform = `scale(${scale}) translate(${translate[0]}px, ${translate[1]}px)` 
+  }
 }
 
 const moveMapTo = (target) => {
   if (!isZoomed) {
     isZoomed = true
-    const {left, top} = target.getBoundingClientRect()
+    let {left, top} = target.getBoundingClientRect()
+    if (mobile) {
+      top += innerHeight * 0.1
+    }
     updateMap([
       -(left - (innerWidth / 2)),
       -(top - (innerHeight / 2)),

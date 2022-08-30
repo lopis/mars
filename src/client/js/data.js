@@ -6,6 +6,7 @@ solDuration = 60 * 1000 // 60 seconds
 initialPhase = 0.0
 
 statusRefreshDelay = 10
+mobile = false
 
 phase = null
 tiles = {}

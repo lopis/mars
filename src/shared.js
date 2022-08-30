@@ -27,9 +27,12 @@ buildings = {
 }
 
 stats = {
-	population: 0,
-	minerals: 0,
-	oxygen: 0,
-  energy: 0,
-	heat: 0,
+	population: 9990,
+  workforce: 99190,
+  consumption: 9990,
+  heating: 9990,
+	minerals: 9990,
+	oxygen: 9990,
+  energy: 9990,
+	heat: 9990,
 }

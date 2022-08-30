@@ -9,9 +9,7 @@
     "dev": "webpack --mode=development --config webpack.config.js",
     "build": "webpack --mode=production --config webpack.config.js",
     "postbuild": "node postbuild.js",
-    "test": "node tests/index.js",
-    "start": "node index.js",
-    "start:dev": "yarn build && concurrently \"yarn dev\" \"yarn start\""
+    "start": "node index.js"
   },
   "dependencies": {
     "archiver": "^5.3.0",
