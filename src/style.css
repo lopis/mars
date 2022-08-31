@@ -45,12 +45,12 @@ canvas {
 }
 
 #wrapper {
-  transition: transform 200ms ease-in;
+  transition: transform 500ms ease-in-out;
   height: 100vh;
 }
 
 .hex {
-  --tile-color: #000000;
+  --tile-color: #2e0808;
   --hex-size: 2.8vmin;
   --fade-time: 300ms;
   font-size: 1.4vmin;
@@ -90,12 +90,15 @@ canvas {
   box-sizing: border-box;
 }
 .hex:hover {
-  --tile-color: rgb(233, 167, 69);
+  --tile-color: #e9a745;
   cursor: pointer;
+}
+.row:first-child .hex:hover {
+	--tile-color: #45ade9;
 }
 .hex.selected {
   --fade-time: 50ms;
-  --tile-color: rgb(255, 253, 253);
+  --tile-color: rgb(255, 253, 253) !important;
   /* transform: scale(3); */
   opacity: 1;
   z-index: 1;
@@ -344,6 +347,7 @@ h1 {
   grid-template-columns: 1fr 1fr;
   grid-auto-flow: column;
   grid-template-rows: repeat(5, 1fr);
+  pointer-events: none;
 }
 
 #_stats div {

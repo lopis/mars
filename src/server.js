@@ -25,7 +25,7 @@ function removeUser(user) {
 }
 
 class Tile {
-	interval = 5000 //5 * 60 * 1000
+	interval = 5000 //5 * solDuration
 
 	constructor(row, col, id) {
 		this.row = row
@@ -140,8 +140,11 @@ module.exports = {
 		})
 
 		socket.on('build', ({id, choice}) => {
-			if (tiles[id] && !tiles[id].build) {
-				tiles[id].setBuild(choice)
+			if (tiles[id] && !tiles[id].build && buildings[choice]) {
+				tiles[id].setBuild('wip')
+				setTimeout(() => {
+					tiles[id].setBuild(choice)
+				}, buildings[choice].days * solDuration)
 				broadcast('build', tiles[id])
 			} else {
 				user.socket.emit('build-fail')	
@@ -179,7 +182,7 @@ module.exports = {
 			res.send(
 				`${users.length} Player(s): ${users.map(user => user.name).join(', ')}
 				<br>
-				Sol: ${Math.ceil(getSol()/(60 * 1000))} (${getSol()} ms)
+				Sol: ${Math.ceil(getSol()/(solDuration))} (${getSol()} ms)
 				<br>
 				stats: ${JSON.stringify(stats)}
 				<br>

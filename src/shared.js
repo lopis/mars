@@ -3,32 +3,41 @@ buildings = {
     label: 'Greenhouse',
     icon: '🌳',
     out: ['oxygen', '🫁'],
+    days: 2,
   },
   minery: {
     label: 'Refinery',
     icon: '🏭',
-    out: ['minerals', '🪨']
+    out: ['minerals', '🪨'],
+    days: 3,
   },
   solar: {
     label: 'Solar Plant',
     icon: '🔲',
     out: ['energy', '🔋'],
+    days: 4,
   },
   nuclear: {
     label: 'Nuclear Plant',
     icon: '⚛️',
-    out: ['energy', '🔋'],
+    out: ['energy', '🔋🔋'],
+    days: 8
   },
   housing: {
     label: 'Housing',
     icon: '🏢',
     out: ['waste', '💩'],
+    days: 1,
   },
   water: {
     label: 'Water Plant',
     icon: '⛲️',
     out: ['water', '💧'],
     polar: true,
+    days: 3,
+  },
+  wip: {
+    icon: '🏗',
   },
   // hydrogen: {
   //   label: 'Hydrogen Refinery',
@@ -49,3 +58,6 @@ stats = {
 	heat: 0,
 	water: 0,
 }
+
+solDuration = 60 * 1000 // 60 seconds
+initialPhase = 0.0

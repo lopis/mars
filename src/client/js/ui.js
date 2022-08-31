@@ -8,7 +8,10 @@ export const updateTile = ({id, build, stock}) => {
   if (build && build != tiles[id].build) {
     const $icon = document.createElement('span')
     $icon.style.animationDelay = -700 * Math.random() + 'ms'
-    tiles[id].$tile.appendChild($icon)
+    if (build === 'wip') {
+      $icon.style.animationDuration = 200
+    }
+    tiles[id].$tile.replaceChildren($icon)
     $icon.innerText = buildings[build].icon
     tiles[id].build = build
   }
@@ -28,6 +31,7 @@ function onBuildChoice ({target}) {
   if (buildings[target.id]) {
     document.body.removeEventListener('click', onBuildChoice)
     buildAction($selectedTile.dataset.n, target.id)
+    clearSelectedTile()
     dismissOnArrival = true
   }
 }
@@ -67,9 +71,9 @@ export const showTileDialog = (target) => {
     _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>Choose build`
     _choices.innerHTML = `<ul>${
       Object.entries(buildings).filter(
-        type => tile.id[0] == 'A' ? type[1].polar : !type[1].polar
+        type => type[1].out && (tile.id[0] == 'A' ? type[1].polar : !type[1].polar)
       ).map(type => {
-        const label = `${type[1].label}<br><small>output: ${type[1].out.join(' ')}</small>`
+        const label = `${type[1].label}<br><small>output: ${type[1].out.join(' ')} per day</small>`
       return `<li class="button" id="${type[0]}">${label}</li>`
     }).join('')
     }</ul>`
