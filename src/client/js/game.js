@@ -5,6 +5,7 @@ import {
 } from './draw-planet'
 import { renderTiles, updateTiles } from './draw-tiles'
 import { bindIo } from './io'
+import { initMusic } from './audio'
 
 export let userList = []
 export let commsList = []
@@ -56,6 +57,7 @@ export const playOffline = () => {
 }
 
 export const playGlobal = () => {
+  initMusic()
   intro.classList.add('gone')
   bindIo()
   renderTiles()
