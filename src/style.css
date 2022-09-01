@@ -3,6 +3,10 @@
   --hex-size-height: 1.1547;
 }
 
+html, body {
+  touch-action: none;
+}
+
 body {
   margin: 0;
   height: 100vh;
