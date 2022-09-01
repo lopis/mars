@@ -1,3 +1,4 @@
+import { toggleMusic, toggleSounds } from './audio'
 import { playGlobal, playOffline } from './game'
 import { collect, sendMessage } from './io'
 import { showUsers, showComms, showTileDialog, dismissDialog, updateMap, clearSelectedTile, showSolStats } from './ui'
@@ -77,6 +78,11 @@ export default () => {
       listener()
       clearSelectedTile()
     }
+
+    ({
+      _sound: toggleSounds,
+      _music: toggleMusic,
+    })[target.id]?.()
 
   })
 }

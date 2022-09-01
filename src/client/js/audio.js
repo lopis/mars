@@ -1,22 +1,22 @@
 const playMusic = (frequency) => {
 
   notes.forEach(([time, note]) => {
-    const o = a.createOscillator()
+    const osc = a.createOscillator()
     const gain = a.createGain()
-    o.connect(gain)
+    osc.connect(gain)
     gain.connect(a.destination)
     gain.gain.setValueAtTime(0.01, a.currentTime + time*duration)
     gain.gain.exponentialRampToValueAtTime(musicVolume, a.currentTime + time*duration + duration*0.05)
     gain.gain.setValueAtTime(musicVolume, a.currentTime + time*duration + duration*0.8)
     gain.gain.exponentialRampToValueAtTime(0.01, a.currentTime + time*duration + duration*1.5);
-    o.frequency.value = frequency / 1.06 ** note
-    o.start(a.currentTime + time*duration)
-    o.stop(a.currentTime + time*duration + duration*1.5)
+    osc.frequency.value = frequency / 1.06 ** note
+    osc.start(a.currentTime + time*duration)
+    osc.stop(a.currentTime + time*duration + duration*1.5)
   })
 }
 
 const noiseBuffer = () => {
-  var bufferSize = a.sampleRate;
+  var bufferSize = a.sampleRate * 2;
   var buffer = a.createBuffer(1, bufferSize, a.sampleRate);
   var output = buffer.getChannelData(0);
 
@@ -27,20 +27,13 @@ const noiseBuffer = () => {
   return buffer;
 }
 
-let windValue = 0
-let windVariation = 10
 const playNoise = (fadeIn) => {
-  const noise = a.createBufferSource();
+  noise = a.createBufferSource();
+  noise.loop = true
   noise.buffer = noiseBuffer();
   var noiseFilter = a.createBiquadFilter();
   noiseFilter.type = 'lowpass';
-  windValue += Math.max(
-    -windVariation,
-    Math.min(
-      windVariation, 2 * windVariation * Math.random() - windVariation
-    )
-  )
-  noiseFilter.frequency.value = 100 + windValue;
+  noiseFilter.frequency.value = 200;
   noise.connect(noiseFilter);
   const gain = a.createGain();
   noiseFilter.connect(gain);
@@ -52,7 +45,6 @@ const playNoise = (fadeIn) => {
     gain.gain.setValueAtTime(0.5, a.currentTime);
   }
   noise.start(a.currentTime)
-  noise.stop(a.currentTime + 1)
 }
 
 const notes = [
@@ -71,22 +63,48 @@ const musicVolume = 0.3
 let crossFade = 0
 const variations = [400, 460, 420, 440]
 let variation = variations.pop()
+/**
+ * @type {AudioContext}
+ */
 let a
+/**
+ * @type {AudioBufferSourceNode}
+ */
+let noise
+let musicLoop
 
-export const initMusic = () => {
-  a = new AudioContext()
-
-  playMusic(440)
-
-  setInterval(() => {
+const startMusicLoop = () => {
+  musicLoop = setInterval(() => {
     crossFade += duration
     variations.unshift(variation)
     variation = variations.pop()
     playMusic(variation)
   }, notes[notes.length - 1][0] * duration * 1000)
+}
+
+export const initMusic = () => {
+  a = new AudioContext()
+
+  playMusic(440)
+  startMusicLoop() 
 
   playNoise(true)
-  setInterval(() => {
-    playNoise()
-  }, 800)
+}
+
+export const toggleSounds = () => {
+  if (noise) {
+    noise.stop()
+    noise = null
+  } else {
+    playNoise(true)
+  }
+}
+
+export const toggleMusic = () => {
+  if (musicLoop) {
+    clearInterval(musicLoop)
+    musicLoop = null
+  } else {
+    startMusicLoop(true)
+  }
 }
