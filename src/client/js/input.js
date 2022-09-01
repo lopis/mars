@@ -1,4 +1,4 @@
-import { toggleMusic, toggleSounds } from './audio'
+import { toggleMusic, toggleSoundEffects } from './audio'
 import { playGlobal, playOffline } from './game'
 import { collect, sendMessage } from './io'
 import { showUsers, showComms, showTileDialog, dismissDialog, updateMap, clearSelectedTile, showSolStats } from './ui'
@@ -80,7 +80,7 @@ export default () => {
     }
 
     ({
-      _sound: toggleSounds,
+      _sound: toggleSoundEffects,
       _music: toggleMusic,
     })[target.id]?.()
 

@@ -27,7 +27,8 @@ const noiseBuffer = () => {
   return buffer;
 }
 
-const playNoise = (fadeIn) => {
+const startNoiseLoop = (fadeIn) => {
+  const a = new AudioContext()
   noise = a.createBufferSource();
   noise.loop = true
   noise.buffer = noiseBuffer();
@@ -74,6 +75,8 @@ let noise
 let musicLoop
 
 const startMusicLoop = () => {
+  a = new AudioContext()
+  playMusic(440)
   musicLoop = setInterval(() => {
     crossFade += duration
     variations.unshift(variation)
@@ -82,26 +85,24 @@ const startMusicLoop = () => {
   }, notes[notes.length - 1][0] * duration * 1000)
 }
 
-export const initMusic = () => {
-  a = new AudioContext()
-
-  playMusic(440)
-  startMusicLoop() 
-
-  playNoise(true)
+export const initAudio = () => {
+  startMusicLoop()
+  startNoiseLoop(true)
 }
 
-export const toggleSounds = () => {
+export const toggleSoundEffects = () => {
   if (noise) {
     noise.stop()
     noise = null
   } else {
-    playNoise(true)
+    startNoiseLoop(true)
   }
 }
 
 export const toggleMusic = () => {
+  console.log(a);
   if (musicLoop) {
+    a.close()
     clearInterval(musicLoop)
     musicLoop = null
   } else {
