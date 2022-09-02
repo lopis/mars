@@ -38,8 +38,16 @@ class Tile {
 		broadcast('tile', this)
 	}
 
-	setBuild(build) {
-		this.build = build
+	setBuild(buildID, build) {
+		
+		this.build = 'wip'
+		this.willBe = buildID
+		this.broadcast()
+		setTimeout(() => {
+			this.setBuild(choice)
+			this.broadcast()
+		}, build.days * solDuration)
+
 		setInterval(() => {
 			this.stock++
 			this.broadcast()
@@ -71,8 +79,9 @@ class User {
 		this.name = name
 		this.id = socket.id.substr(0, 6)
 	}
-
 }
+
+
 
 const names = [
 	"Jarred",
@@ -97,18 +106,31 @@ const names = [
 	"Darron",
 ]
 
+// Generate all tiles
+// including tiles that don't exist, for simplicity;
+// Creates 12 x 12 tiles
 for (let row = 0; row < 13; row++) {
 	for (let col = 0; col < 13; col++) {
 		const id = `${String.fromCharCode(65 + row)}${col}`
 		tiles[id] = new Tile(row, col, id)
+		if (id === 'G1') {
+			// Set the location of the space center
+			tiles[id].build = 'center'
+		}
+		if (id === 'G2') {
+			tiles[id].build = 'camp'
+		}
 	}	
 }
+
 
 const broadcast = (event, data) => {
 	users.forEach(user => {
 		user.socket.emit(event, data)
 	})
 }
+
+
 
 /**
  * Socket.IO on connect event
@@ -141,11 +163,7 @@ module.exports = {
 
 		socket.on('build', ({id, choice}) => {
 			if (tiles[id] && !tiles[id].build && buildings[choice]) {
-				tiles[id].setBuild('wip')
-				setTimeout(() => {
-					tiles[id].setBuild(choice)
-				}, buildings[choice].days * solDuration)
-				broadcast('build', tiles[id])
+				tiles[id].setBuild(choice, buildings[choice])
 			} else {
 				user.socket.emit('build-fail')	
 			}
@@ -168,8 +186,8 @@ module.exports = {
 		console.info('Connected: ' + socket.id)
 		users.forEach(user => {
 			user.socket.emit('users', {
-				id: socket.id.substr(0, 6),
-				users: users.map(user => ({id: user.id, name: user.name}))
+				id: user.id,
+				users: users.map(u => ({id: u.id, name: u.name}))
 			})
 		})
 

@@ -45,6 +45,23 @@ buildings = {
   //   out: ['water', '🔘'],
   //   polar: true,
   // }
+  center: {
+    label: 'Space Center',
+    icon: '📡'
+  },
+  mount: {
+    icon: '⛰'
+  },
+  camp: {
+    label: 'Earth Refugee Camp',
+    icon: '⛺️',
+    count: ['refugees', '👩‍👩‍👦‍👦']
+  },
+  road: {
+    label: 'Path',
+    icon: '✖️',
+    out: [],
+  }
 }
 
 stats = {

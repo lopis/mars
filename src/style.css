@@ -137,6 +137,14 @@ canvas {
   font-size: 50%;
 }
 
+.hex .wip {
+  animation-duration: 200ms;
+}
+.hex .center,
+.hex .camp {
+  animation-duration: 9999s;
+}
+
 @keyframes bounce {
   from {
     transform: translate(10%,-20%) rotate(-25deg) scale(1, 1);
@@ -211,7 +219,7 @@ svg {
   transition: all 100ms ease-out, top 0s 100ms;
   top: -999px;
   right: 5vh;
-  max-width: 30vh;
+  /* max-width: 30vh; */
   overflow: auto;
 }
 
@@ -224,7 +232,6 @@ svg {
 
 #_dialog div {
 	display: inline-block;
-  vertical-align: top;
 }
 
 #_dialog b {
@@ -233,6 +240,12 @@ svg {
 
 #_prompt {
 	margin-right: 2vh;
+}
+
+#dismiss {
+	position: absolute;
+	top: 1vh;
+	right: 1vh;
 }
 
 small {

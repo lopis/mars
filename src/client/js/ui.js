@@ -8,6 +8,7 @@ export const updateTile = ({id, build, stock}) => {
   if (build && build != tiles[id].build) {
     const $icon = document.createElement('span')
     $icon.style.animationDelay = -700 * Math.random() + 'ms'
+    $icon.classList.add(build)
     if (build === 'wip') {
       $icon.style.animationDuration = 200
     }
@@ -56,14 +57,24 @@ export const showTileDialog = (target) => {
   const tile = tiles[target.dataset.n]
 
   if (tile.build) {
-    // RESOURCE DIALOG
-
-    _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${buildings[tile.build].label}`
-    const resource = buildings[tile.build].out.join(' ')
-    _choices.innerHTML = `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
-      [`Collect 1`, 'getone'],
-      [`Collect all`, 'getall'],
-    ].map(([label, id]) => `<li class="button" id="${id}">${label}</li>`).join('')}</ul>`
+    if (tile.out) {
+      // RESOURCE DIALOG
+      _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${buildings[tile.build].label}`
+      const resource = buildings[tile.build].out.join(' ')
+      _choices.innerHTML = `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
+        [`Collect 1`, 'getone'],
+        [`Collect all`, 'getall'],
+      ].map(([label, id]) => `<li class="button" id="${id}">${label}</li>`).join('')}</ul>`
+    } else {
+      // STATS DIALOG
+      _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${buildings[tile.build].label}`
+      if (buildings[tile.build].count) {
+        const resource = buildings[tile.build].count.join(' ')
+        _choices.innerHTML = `<p>${tile.stock} ${resource}</p>`
+      } else {
+        _choices.innerHTML = `<p>Waiting for new convoy arrival<p>`
+      }
+    }
 
   } else {
     // BUILD DIALOG
@@ -73,8 +84,11 @@ export const showTileDialog = (target) => {
       Object.entries(buildings).filter(
         type => type[1].out && (tile.id[0] == 'A' ? type[1].polar : !type[1].polar)
       ).map(type => {
-        const label = `${type[1].label}<br><small>output: ${type[1].out.join(' ')} per day</small>`
-      return `<li class="button" id="${type[0]}">${label}</li>`
+        const output = type[1].out.length
+          ? `output: ${type[1].out.join(' ')} per day`
+          : 'Connects sectors'
+        const label = `${type[1].label}<br><small>${output}</small>`
+      return `<li i="${type[1].icon}" class="button" id="${type[0]}">${label}</li>`
     }).join('')
     }</ul>`
     _dialog.addEventListener('click', onBuildChoice)
