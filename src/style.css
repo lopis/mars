@@ -153,7 +153,8 @@ canvas {
 }
 
 .road {
-	--tile-color: linear-gradient(transparent 30%, dimgrey 30%, dimgrey 70%, transparent 70%);
+	--tile-color: linear-gradient(transparent 30%, #3f0e0e 30%, #3f0e0e 70%, transparent 70%);
+  transform: scale(1.1);
 }
 
 .road:hover {
