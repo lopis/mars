@@ -62,7 +62,7 @@ const notes = [
 const duration = 0.45
 const musicVolume = 0.3
 let crossFade = 0
-const variations = [400, 460, 420, 440]
+const variations = [400, 440, 480, 460, 420, 440]
 let variation = variations.pop()
 /**
  * @type {AudioContext}

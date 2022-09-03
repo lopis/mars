@@ -91,7 +91,7 @@ canvas {
 }
 .hex, .hex::after, .hex::before {
   transition: all var(--fade-time) ease;
-  background-color: var(--tile-color);
+  background: var(--tile-color);
   box-sizing: border-box;
 }
 .hex:hover {
@@ -116,7 +116,7 @@ canvas {
 
 .hex span {
   position: absolute;
-  font-size: 2.3em;
+  font-size: 4em;
   z-index: 1;
   display: block;
   width: 100%;
@@ -140,17 +140,34 @@ canvas {
 .hex .wip {
   animation-duration: 200ms;
 }
-.hex .center,
-.hex .camp {
-  animation-duration: 9999s;
+.still {
+  animation-duration: 9999s !important;
+  /* transform: rotate(-25deg) translate(15%, -15%) !important; */
+}
+.deco {
+	--tile-color: transparent;
+	pointer-events: none;
+	/* transform: scale(1.7) translate(0%,-20%); */
+	filter: sepia(1) hue-rotate(-20deg) brightness(0.5);
+	z-index: 5;
+}
+
+.road {
+	--tile-color: linear-gradient(transparent 30%, dimgrey 30%, dimgrey 70%, transparent 70%);
+}
+
+.road:hover {
+	--tile-color: linear-gradient(transparent 30%, #e9a745 30%, #e9a745 70%, transparent 70%);
 }
 
 @keyframes bounce {
   from {
-    transform: translate(10%,-20%) rotate(-25deg) scale(1, 1);
+    /* transform: translate(10%,-20%) rotate(-25deg) scale(1, 1); */
+    transform: translate(0.2em,-0.5em) rotate(-25deg) scale(1, 1);
   }
   to {
-    transform: translate(10%,-20%) rotate(-25deg) scale(1.2, 0.8);
+    /* transform: translate(10%,-20%) rotate(-25deg) scale(1.2, 0.8); */
+    transform: translate(0.2em,-0.5em) rotate(-25deg) scale(1.2, 0.8);
   }
 }
 
@@ -261,12 +278,20 @@ ul {
   list-style: none;
   max-height: 50vh;
   overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1vh;
+}
+ul small {
+	line-height: 1.8;
+  opacity: 0.6;
+  font-weight: bold;
 }
 
 .button {
 	padding: 0.7vmin;
 	border: 1px solid;
-	margin-bottom: 0.8vmin;
+	/* margin-bottom: 0.8vmin; */
   background: #131212;
 }
 

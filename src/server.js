@@ -31,7 +31,7 @@ class Tile {
 		this.row = row
 		this.col = col
 		this.id = id
-		this.stock = 5 //0
+		this.stock = 0
 	}
 
 	broadcast() {
@@ -39,19 +39,26 @@ class Tile {
 	}
 
 	setBuild(buildID, build) {
-		
 		this.build = 'wip'
 		this.willBe = buildID
 		this.broadcast()
+		this.ready = false
 		setTimeout(() => {
-			this.setBuild(choice)
+			this.build = buildID
+			this.broadcast()
+			this.willBe = null
+			this.ready = true
 			this.broadcast()
 		}, build.days * solDuration)
 
-		setInterval(() => {
-			this.stock++
-			this.broadcast()
-		}, this.interval)
+		// Initiate production
+		if (build.out) {
+			setInterval(() => {
+				if (!this.ready) return
+				this.stock++
+				this.broadcast()
+			}, this.interval)
+		}
 	}
 }
 
@@ -109,6 +116,8 @@ const names = [
 // Generate all tiles
 // including tiles that don't exist, for simplicity;
 // Creates 12 x 12 tiles
+let mountCount = 0
+const MOUNT_COUNT = 15
 for (let row = 0; row < 13; row++) {
 	for (let col = 0; col < 13; col++) {
 		const id = `${String.fromCharCode(65 + row)}${col}`
@@ -116,10 +125,15 @@ for (let row = 0; row < 13; row++) {
 		if (id === 'G1') {
 			// Set the location of the space center
 			tiles[id].build = 'center'
-		}
-		if (id === 'G2') {
+		} else if (id === 'G2') {
+			// Set the location of the refugee camp
 			tiles[id].build = 'camp'
+		} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
+			// Place mountains in random locations
+			tiles[id].build = 'mount'
+			mountCount++
 		}
+
 	}	
 }
 
@@ -204,7 +218,7 @@ module.exports = {
 				<br>
 				stats: ${JSON.stringify(stats)}
 				<br>
-				${Object.keys(tiles)}`
+				${mountCount} mounts`
 			)
 		})
 	}

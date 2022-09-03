@@ -19,6 +19,7 @@ function bind() {
 
   socket.on('users', ({id, users}) => {
     updateUsers(id, users)
+    localStorage.setItem('u', id)
     _users.dataset.count = users.length
   });
 

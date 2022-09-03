@@ -4,6 +4,8 @@ const nightThreshold = 0
 const dayThreshold = 0.1
 export const updateTiles = () => {
   Object.values(tiles).forEach((tile) => {
+    if (!tile.build || tile.build === 'mount') return
+
     if (phase * 2 - nightThreshold > 1 - ((tile.col))) {
       tile.$tile.classList.add('night')
     }

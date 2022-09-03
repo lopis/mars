@@ -5,10 +5,21 @@ let dismissOnArrival
 let isZoomed
 export const updateTile = ({id, build, stock}) => {
   if (!tiles[id]) return
-  if (build && build != tiles[id].build) {
+
+  if (build === 'road') {
+    tiles[id].$tile.innerHTML = ''
+    tiles[id].$tile.classList.add('road')
+  } else if (build && build != tiles[id].build) {
     const $icon = document.createElement('span')
     $icon.style.animationDelay = -700 * Math.random() + 'ms'
+    // $icon.classList.add(build)
     $icon.classList.add(build)
+    if (['center', 'camp', 'mount'].includes(build)) {
+      $icon.classList.add('still')
+    }
+    if (build === 'mount') {
+      tiles[id].$tile.classList.add('deco')
+    }
     if (build === 'wip') {
       $icon.style.animationDuration = 200
     }
@@ -16,7 +27,7 @@ export const updateTile = ({id, build, stock}) => {
     $icon.innerText = buildings[build].icon
     tiles[id].build = build
   }
-  if (stock > tiles[id].stock) {
+  if (stock && stock > tiles[id].stock) {
     tiles[id].$tile.classList.add('new')
   } else {
     tiles[id].$tile.classList.remove('new')
@@ -50,47 +61,64 @@ export const dismissDialog = () => {
   isZoomed = false
 }
 
+export const renderDialog = (tile, prompt, choicesHTML) => {
+  _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${prompt}`
+  _choices.innerHTML = choicesHTML
+}
+
 export const showTileDialog = (target) => {
   clearSelectedTile()
 
   $selectedTile = target
   const tile = tiles[target.dataset.n]
-
+  
   if (tile.build) {
-    if (tile.out) {
+    const building = buildings[tile.build]
+    if (building.out) {
       // RESOURCE DIALOG
-      _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${buildings[tile.build].label}`
-      const resource = buildings[tile.build].out.join(' ')
-      _choices.innerHTML = `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
-        [`Collect 1`, 'getone'],
-        [`Collect all`, 'getall'],
-      ].map(([label, id]) => `<li class="button" id="${id}">${label}</li>`).join('')}</ul>`
+      const resource = building.out.join(' ')
+      renderDialog(
+        tile,
+        building.label,
+        `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
+          [`Collect 1`, 'getone'],
+          [`Collect all`, 'getall'],
+        ].map(([label, id]) => `<li class="button" id="${id}">${label}</li>`).join('')}</ul>`
+      )
     } else {
       // STATS DIALOG
-      _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${buildings[tile.build].label}`
-      if (buildings[tile.build].count) {
-        const resource = buildings[tile.build].count.join(' ')
-        _choices.innerHTML = `<p>${tile.stock} ${resource}</p>`
-      } else {
-        _choices.innerHTML = `<p>Waiting for new convoy arrival<p>`
-      }
+      renderDialog(
+        tile,
+        building.label,
+        `<p>${
+          building.count
+          ? `${tile.stock} ${building.count.join(' ')}`
+          : `Waiting for new convoy arrival`
+        }</p>`
+      )
     }
 
   } else {
     // BUILD DIALOG
-
-    _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>Choose build`
-    _choices.innerHTML = `<ul>${
-      Object.entries(buildings).filter(
-        type => type[1].out && (tile.id[0] == 'A' ? type[1].polar : !type[1].polar)
-      ).map(type => {
-        const output = type[1].out.length
-          ? `output: ${type[1].out.join(' ')} per day`
-          : 'Connects sectors'
-        const label = `${type[1].label}<br><small>${output}</small>`
-      return `<li i="${type[1].icon}" class="button" id="${type[0]}">${label}</li>`
-    }).join('')
-    }</ul>`
+    const renderChoice = ([id, {out, label, icon, cost, days}]) => {
+      const details = [
+        out.length
+          ? `outputs ${out.join(' ')} per sol`
+          : 'connects sectors',
+        `costs ${cost[0]} ${cost[1]}`,
+        `builds in ${days} sols`
+      ].join('<br>')
+      return `<li i="${icon}" class="button" id="${id}">${label}<br><small>${details}</small></li>`
+    }
+    renderDialog(
+      tile,
+      'Choose build',
+      `<ul>${
+        Object.entries(buildings).filter(
+          type => type[1].out && (tile.id[0] == 'A' ? type[1].polar : !type[1].polar)
+        ).map(renderChoice).join('')
+      }</ul>`
+    )
     _dialog.addEventListener('click', onBuildChoice)
   }
 
