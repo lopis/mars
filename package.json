@@ -9,6 +9,7 @@
     "dev": "webpack --mode=development --config webpack.config.js",
     "build": "webpack --mode=production --config webpack.config.js",
     "postbuild": "node postbuild.js",
+    "bundlesize": "bundlesize",
     "start": "node index.js"
   },
   "dependencies": {
@@ -28,10 +29,14 @@
     "archiver": "^5.3.0",
     "concurrently": "^7.3.0",
     "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^4.0.0",
     "file-loader": "^6.2.0",
+    "html-inline-css-webpack-plugin": "^1.11.1",
     "html-webpack-plugin": "^5.3.2",
+    "mini-css-extract-plugin": "^2.6.1",
     "style-loader": "^3.3.1",
     "webpack": "^5.52.0",
+    "webpack-bundle-analyzer": "^4.6.1",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.1.0",
     "webpack-shell-plugin-next": "^2.2.2"

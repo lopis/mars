@@ -7,48 +7,37 @@ let socket //Socket.IO client
    * Binds Socket.IO and button events
    */
 function bind() {
-  // socket.on('start', () => {
-  // });
+  window.emit = socket.emit
 
-  // socket.on('disconnect', () => {
-  // });
-
-  // socket.on('error', () => {
-  // });
-
-  socket.on('users', ({id, users}) => {
-    updateUsers(id, users)
-    localStorage.setItem('u', id)
-    _users.dataset.count = users.length
-  });
-
-  socket.on('msg', ({user, msg}) => {
-    updateChat(user, msg)
-    if (typeof _input !== 'undefined') {
-      showComms()
-    } else {
-      _comms.dataset.new = true
-    }
-  });
-
-  socket.on('sol', (solCount) => {
-    phase = (solCount % solDuration) / solDuration
-    updateSol(solCount)
-  });
-
-  socket.on('world', ({tiles, stats}) => {
-    Object.entries(tiles).forEach(([id, tile]) => {
-      updateTile(tile)
-    })
-    document.querySelectorAll('.hidden').forEach(e => e.classList.add('show'))
-    updateStats(stats)
-  })
-
-  socket.on('tile', updateTile)
-
-  socket.on('build', updateTile)
-  
-  socket.on('stats', updateStats)
+  Object.entries({
+    'users': ({id, users}) => {
+      updateUsers(id, users)
+      localStorage.setItem('u', id)
+      _users.dataset.count = users.length
+    },
+    'msg': ({user, msg}) => {
+      updateChat(user, msg)
+      if (typeof _input !== 'undefined') {
+        showComms()
+      } else {
+        _comms.dataset.new = true
+      }
+    },
+    'sol': (solCount) => {
+      phase = (solCount % solDuration) / solDuration
+      updateSol(solCount)
+    },
+    'world': ({tiles, stats}) => {
+      Object.entries(tiles).forEach(([id, tile]) => {
+        updateTile(tile)
+      })
+      document.querySelectorAll('.hidden').forEach(e => e.classList.add('show'))
+      updateStats(stats)
+    },
+    'tile': updateTile,
+    'build': updateTile,
+    'stats': updateStats,
+  }).forEach(([key, fn]) => socket.on(key, fn))
 }
 
 export const bindIo = () => {

@@ -1,5 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
 
 const webpackClientConfig = (isProduction) => ({
@@ -7,6 +11,7 @@ const webpackClientConfig = (isProduction) => ({
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'client.js',
+    publicPath: '/',
   },
   watch: !isProduction,
   module: {
@@ -26,20 +31,20 @@ const webpackClientConfig = (isProduction) => ({
       {
         test: /\.css$/i,
         use: [
-          // The `injectType`  option can be avoided because it is default behaviour
-          {
-            loader: "style-loader",
-            options: { 
-              insert: 'head', // insert style tag inside of <head>
-            },
-          },
-          "css-loader",
-        ],
+          MiniCssExtractPlugin.loader,
+          "css-loader"
+        ]
       },
     ],
   },
   optimization: {
     usedExports: true,
+    minimizer: [
+      '...',
+      new CssMinimizerPlugin({
+        test: /\.css$/i,
+      })
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -48,9 +53,13 @@ const webpackClientConfig = (isProduction) => ({
         collapseWhitespace: true
       },
       minifyCSS: true,
-      inlineSource: isProduction && '\.(js|css)$',
       favicon: path.resolve(__dirname, 'src/client/assets/favicon.svg'),
     }),
+    new MiniCssExtractPlugin(),
+    new HTMLInlineCSSWebpackPlugin(),
+    // new BundleAnalyzerPlugin({
+    //   analyzerPort: 8003
+    // })
   ],
   // stats: 'errors-warnings',
 })
@@ -65,6 +74,11 @@ const webpackSharedConfig = (isProduction) => ({
   optimization: {
     usedExports: true,
   },
+  // plugins: [
+  //   new BundleAnalyzerPlugin({
+  //     analyzerPort: 8002
+  //   })
+  // ]
 })
 
 const serverPlugins = [
@@ -78,7 +92,10 @@ const serverPlugins = [
       ],
       parallel: true
     },
-  })
+  }),
+  // new BundleAnalyzerPlugin({
+  //   analyzerPort: 8001
+  // })
 ]
 
 const webpackServerConfig = (isProduction) => ({
