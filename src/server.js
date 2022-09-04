@@ -18,11 +18,12 @@ const getSol = () => {
 }
 
 /**
- * Remove user session
- * @param {User} user
+ * Remove element from array
+ * @param {Array} array
+ * @param {any} element
  */
-function removeUser(user) {
-	users.splice(users.indexOf(user), 1)
+function removeElement(array, element) {
+	array.splice(array.indexOf(element), 1)
 }
 
 class Tile {
@@ -90,8 +91,9 @@ class User {
 }
 
 class Event {
-	constructor(name, alertTime, wait, count) { 
-		Object.assign(this, {name, alertTime, wait, count})
+	constructor(name, type, alertTime, wait, count) { 
+		Object.assign(this, {name, type, alertTime, wait, count})
+		this.sol = Math.floor(alertTime / solDuration + wait)
 	}
 
 	broadcast() {
@@ -99,8 +101,28 @@ class Event {
 	}
 
 	static init() {
-		const e = new Event('convoy', 0, 0)
+		// const e = new Event('convoy1', 'ℹ️', solCount, Math.round(1, Math.random() * 10000))
+		const e = new Event('convoy1', 'ℹ️', solCount, 1)
 		events.push(e)
+		// e.broadcast()
+
+		// Schedule Manager
+		setInterval(() => {
+			events.forEach(
+				/**
+				 * @property {Event} event
+				 */
+				(event) => {
+					const {alertTime, wait, broadcast} = event
+					if (solCount > alertTime) {
+						broadcast()
+					}
+					if (solCount > alertTime + wait * solDuration) {
+						removeElement(events, event)
+					}
+				}
+			)
+		}, 1000)
 	}
 }
 
@@ -152,7 +174,7 @@ module.exports = {
 
 		socket.on('disconnect', () => {
 			console.info('Disconnected: ' + user.name)
-			removeUser(user)
+			removeElement(users, user)
 			if (users.length === 0) {
 				solCount += Date.now() - lastTime
 				lastTime = Date.now()

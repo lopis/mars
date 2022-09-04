@@ -1,3 +1,4 @@
+import { notification, playSound, warning } from './audio';
 import { updateUsers, updateChat, updateSol, updateStats } from './game'
 import { showComms, updateTile } from './ui';
 
@@ -37,6 +38,30 @@ function bind() {
     'tile': updateTile,
     'build': updateTile,
     'stats': updateStats,
+    'events': (events) => {
+      if (events.length === 0) return
+      setTimeout(() => {
+        console.log(events);
+        let hasWarning
+        events.forEach(event => {
+          const $p = document.createElement('p')
+          $p.setAttribute('i', event.type)
+          hasWarning = hasWarning || event.type === '⚠️'
+          $p.innerHTML = [
+            '<span>',
+              msg[event.name],
+              `</br><small>Arriving in sol ${event.sol}</small>`,
+            '</span>',
+          ]. join('')
+          _notices.prepend($p)
+        })
+        if (hasWarning) {
+          playSound(warning)
+        } else {
+          playSound(notification)
+        }
+      }, 500)
+    }
   }).forEach(([key, fn]) => socket.on(key, fn))
 }
 

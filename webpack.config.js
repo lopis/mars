@@ -31,7 +31,7 @@ const webpackClientConfig = (isProduction) => ({
       {
         test: /\.css$/i,
         use: [
-          MiniCssExtractPlugin.loader,
+          isProduction ? MiniCssExtractPlugin.loader : "style-loader",
           "css-loader"
         ]
       },

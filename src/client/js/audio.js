@@ -1,19 +1,34 @@
 // t=(i,n)=>(n-i)/n;
 
-const warning = (i) => {
+
+export const warning = (i) => {
   var n=2e4;
   if (i > n) return null;
   return Math.sin(i/20 - Math.sin(i/100)*Math.sin(i/61))  *Math.sin(2 * i / 2e4 * Math.PI) * 0.5;
 }
 
-const notification = (i) => {
+export const notification = (i) => {
   var n=8e3;
   if (i > n) return null;
-  return Math.sin(i/5 - Math.sin(i/2))  *Math.sin(i / (n/2) * Math.PI) * 0.3;
+  return Math.sin(i/5 - Math.sin(i/2))  *Math.sin(i / (n/2) * Math.PI) * 0.2;
+}
+
+export const woah = (i) => {
+  var n=2e4;
+  if (i > n) return null;
+  return Math.sin(i*0.0006*Math.sin(0.009*i)+Math.sin(i/400))*(n-i)/n*0.5;
+}
+
+export const haow = i => {
+  var n=2e4;
+  if (i > n) return null;
+  i = n - i
+  return Math.sin(i*0.0006*Math.sin(0.009*i)+Math.sin(i/400))*(n-i)/n*0.5;
 }
 
 // Sound player
 export const playSound = (fn) => {
+  if (!a) return
   const buffer = a.createBuffer(1,96e3,48e3)
   const data = buffer.getChannelData(0)
   for (let i=96e3; i--;) data[i] = fn(i)
@@ -125,7 +140,6 @@ export const toggleSoundEffects = () => {
 }
 
 export const toggleMusic = () => {
-  console.log(a);
   if (musicLoop) {
     a.close()
     clearInterval(musicLoop)

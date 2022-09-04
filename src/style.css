@@ -398,15 +398,24 @@ h1 {
   pointer-events: none;
 }
 
-#_stats div {
+#_stats, #_notices {
+  max-width: 48vw;
+  box-sizing: border-box;
+}
+
+#_stats div,
+#_notices {
 	background: rgba(255, 255, 255, 0.078);
 	padding: 1px 12px;
-	border-radius: 99px;
+	border-radius: 1vh;
 	display: grid;
-	grid-template-columns: 1fr auto 1fr;
-	gap: 1vh;
+  gap: 1vh;
 	align-items: center;
 	text-align: center;
+}
+
+#_stats div {
+	grid-template-columns: 1fr auto 1fr;
 }
 
 [i]::before {
@@ -454,5 +463,49 @@ h1 {
     left: 5vh;
     z-index: 9;
     box-shadow: 0 15vh 1vh 20vh #0009;
+  }
+}
+
+
+/* NOTIFICATIONS */
+#_notices {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+  margin: 2vh;
+  gap: 0;
+  max-height: 22vh;
+  overflow-y: scroll;
+  pointer-events: none;
+}
+#_notices:empty {
+  display: none;
+}
+
+p {
+  position: relative;
+  display: flex;
+	padding: 1vh;
+	text-align: left;
+	margin: 0;
+  animation: appear 500ms;
+}
+
+p + p {
+	border-top: 1px dashed gray;
+}
+
+p[i]::before {
+  margin-right: 1.5ch;
+}
+
+@keyframes appear {
+  from {
+    top: -100%;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
   }
 }

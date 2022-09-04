@@ -1,3 +1,4 @@
+import { haow, playSound, woah } from './audio'
 import { userList, commsList } from './game'
 import { buildAction } from './io'
 
@@ -59,11 +60,14 @@ export const dismissDialog = () => {
   _choices.innerHTML = ''
   updateMap([0,0], 1)
   isZoomed = false
+  playSound(woah)
 }
 
 export const renderDialog = (tile, prompt, choicesHTML) => {
-  _prompt.innerHTML = `<b>Sector ${tile.id}</b><br>${prompt}`
+  _prompt.innerHTML = (tile ? `<b>Sector ${tile.id}</b><br>` : '') + prompt
   _choices.innerHTML = choicesHTML
+  playSound(haow)
+  _dialog.classList.add('show')
 }
 
 export const showTileDialog = (target) => {
@@ -122,7 +126,6 @@ export const showTileDialog = (target) => {
     _dialog.addEventListener('click', onBuildChoice)
   }
 
-  _dialog.classList.add('show')
   target.classList.add('selected')
   moveMapTo(target)
 }
@@ -150,23 +153,24 @@ const moveMapTo = (target) => {
 }
 
 export const showUsers = () => {
-  _prompt.innerText = 'Player List'
-  _choices.innerHTML = userList.map(user => {
-    return `<li>${user}</li>`
-  }).join('')
-  _dialog.classList.add('show')
+  renderDialog(
+    null,
+    'Player List',
+    userList.map(user => {
+      return `<li>${user}</li>`
+    }).join('')
+  )
 }
 
 export const showComms = () => {
-  _choices.innerHTML = ''
-  const ul = _choices.appendChild(document.createElement('ul'))
-  ul.id = 'chatlist'
-  ul.innerHTML = commsList.length > 0 ? commsList.map(({user, msg}) => {
+  const chatList = commsList.length > 0 ? commsList.map(({user, msg}) => {
     return `<li><b>${user}:</b> ${msg}</li>`
   }).join('') : '<b>No messages</b>'
-  _choices.innerHTML += `<input maxlength="22" id="_input" />`
-  _prompt.innerHTML = 'Comms Panel'
-  _dialog.classList.add('show')
+  renderDialog(
+    null,
+    'Comms Panel',
+    `<ul id="chatlist" />${chatList}</ul><input maxlength="22" id="_input" />`
+  )
   _input.focus()
   chatlist.scrollTo(0, chatlist.clientHeight)
 }

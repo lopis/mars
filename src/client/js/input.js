@@ -71,10 +71,9 @@ export default () => {
       _sol: showSolStats,
       getone: collect(1),
       getall: collect(),
-      dismiss: ()=>{},
+      dismiss: dismissDialog,
     })[target.id]
     if (listener) {
-      dismissDialog()
       listener()
       clearSelectedTile()
     }
