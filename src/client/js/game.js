@@ -9,7 +9,7 @@ import { initAudio } from './audio'
 
 export let userList = []
 export let commsList = []
-let solCount = 0
+export let solCount = 0
 
 const render = () => {
   try {

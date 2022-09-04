@@ -1,5 +1,5 @@
 import { haow, playSound, woah } from './audio'
-import { userList, commsList } from './game'
+import { userList, commsList, solCount } from './game'
 import { buildAction } from './io'
 
 let dismissOnArrival
@@ -156,9 +156,9 @@ export const showUsers = () => {
   renderDialog(
     null,
     'Player List',
-    userList.map(user => {
+    `<ul id="players">${userList.map(user => {
       return `<li>${user}</li>`
-    }).join('')
+    }).join('')}</ul>`
   )
 }
 
@@ -176,7 +176,14 @@ export const showComms = () => {
 }
 
 export const showSolStats = () => {
-  _choices.innerHTML = ''
-  const ul = _choices.appendChild(document.createElement('ul'))
-  _dialog.classList.add('show')
+  renderDialog(
+    null,
+    'Game stats',
+    `<p>${[
+      `<b>☀️ Sol:</b> ${Math.ceil(solCount / solDuration)}`,
+      `<b>🕐 Game start:</b> n/a`,
+      `<b>🎉 Events:</b> n/a`,
+      `<b>⚰️ Deaths:</b> n/a`,
+    ].join('<br>')}</p>`
+  )
 }

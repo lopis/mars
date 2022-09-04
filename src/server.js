@@ -90,10 +90,60 @@ class User {
 	}
 }
 
+const initScheduler = () => {
+	setInterval(() => {
+		events.forEach(
+			/**
+			 * @param {Event} event
+			 */
+			(event) => {
+				const {alertTime, wait, old, fn} = event
+				const solCount = getSol()
+				if (!old && solCount > alertTime) {
+					console.log(event, 'sol:', solCount);
+					event.broadcast()
+					event.old = true
+					if (fn) fn()
+				}
+				if (solCount > alertTime + wait * solDuration) {
+					removeElement(events, event)
+				}
+			}
+		)
+	}, 1000)
+}
+
+const initConvoySchedule = () => {
+	const fn = count => () => {
+		tiles[CAMP].stock = count
+		tiles[CAMP].broadcast()
+	}
+
+	const solCount = getSol()
+	events.push(new Event('convoy1', 'ℹ️', solCount, 1))
+	events.push(new Event('convoy2', 'ℹ️', solCount + solDuration*0.1, 0, 9000, fn(9000)))
+
+	const scheduleNext = () => {
+		// From 5 to 10 sols
+		const nextConvoy = 5 //Math.round(Math.random() * 5 + 5)
+		const count = Math.round(Math.random() * 5000 + 1000) * 10
+		setTimeout(() => {
+			const solCount = getSol()
+			events.push(new Event('convoy1', 'ℹ️', solCount, 4))
+			events.push(new Event('convoy2', 'ℹ️', solCount + 4*solDuration, 0, count, fn(count)))
+
+			scheduleNext()
+		}, (nextConvoy - 4) * solDuration)
+	}
+
+	scheduleNext()
+}
+
 class Event {
-	constructor(name, type, alertTime, wait, count) { 
-		Object.assign(this, {name, type, alertTime, wait, count})
-		this.sol = Math.floor(alertTime / solDuration + wait)
+	constructor(name, type, alertTime, wait, count, fn) { 
+		Object.assign(this, {name, type, alertTime, wait, count, fn})
+		// { "name": "convoy1", "type": "ℹ️", "alertTime": 1, "wait": 1, "sol": 2 }
+		this.sol = Math.ceil(alertTime / solDuration + wait)
 	}
 
 	broadcast() {
@@ -101,28 +151,8 @@ class Event {
 	}
 
 	static init() {
-		// const e = new Event('convoy1', 'ℹ️', solCount, Math.round(1, Math.random() * 10000))
-		const e = new Event('convoy1', 'ℹ️', solCount, 1)
-		events.push(e)
-		// e.broadcast()
-
-		// Schedule Manager
-		setInterval(() => {
-			events.forEach(
-				/**
-				 * @property {Event} event
-				 */
-				(event) => {
-					const {alertTime, wait, broadcast} = event
-					if (solCount > alertTime) {
-						broadcast()
-					}
-					if (solCount > alertTime + wait * solDuration) {
-						removeElement(events, event)
-					}
-				}
-			)
-		}, 1000)
+		initScheduler()
+		initConvoySchedule()
 	}
 }
 
@@ -131,15 +161,17 @@ class Event {
 // including tiles that don't exist, for simplicity;
 // Creates 12 x 12 tiles
 let mountCount = 0
-const MOUNT_COUNT = 15
+const MOUNT_COUNT = 20
+const CENTER = 'G1'
+const CAMP = 'G2'
 for (let row = 0; row < 13; row++) {
 	for (let col = 0; col < 13; col++) {
 		const id = `${String.fromCharCode(65 + row)}${col}`
 		tiles[id] = new Tile(row, col, id)
-		if (id === 'G1') {
+		if (id === CENTER) {
 			// Set the location of the space center
 			tiles[id].build = 'center'
-		} else if (id === 'G2') {
+		} else if (id === CAMP) {
 			// Set the location of the refugee camp
 			tiles[id].build = 'camp'
 		} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
@@ -199,7 +231,6 @@ module.exports = {
 			if (tiles[id] && tiles[id].stock > 0) {
 				const name = buildings[tiles[id].build].out[0]
 				const delta = count || tiles[id].stock
-				console.log(delta, count, tiles[id].stock);
 				stats[name] += delta
 				tiles[id].stock -= delta
 				tiles[id].broadcast()
@@ -219,7 +250,7 @@ module.exports = {
 
 		user.socket.emit('sol', getSol())
 		user.socket.emit('world', {tiles, stats})
-		user.socket.emit('events', events)
+		user.socket.emit('events', events.filter(e => e.old))
 	},
 
 	stat: (req, res) => {
@@ -231,7 +262,10 @@ module.exports = {
 				<br>
 				stats: ${JSON.stringify(stats)}
 				<br>
-				${mountCount} mounts`
+				events: ${JSON.stringify(events, null, ' ')}
+				<br>
+				camp: ${JSON.stringify(tiles[CAMP])}
+				`
 			)
 		})
 	}

@@ -56,7 +56,7 @@ buildings = {
     icon: '📡'
   },
   mount: {
-    icon: '⛰'
+    icon: '⛰⛰'
   },
   camp: {
     label: 'Earth Refugee Camp',

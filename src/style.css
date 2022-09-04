@@ -116,7 +116,7 @@ canvas {
 
 .hex span {
   position: absolute;
-  font-size: 4em;
+  font-size: 4.5vh;
   z-index: 1;
   display: block;
   width: 100%;
@@ -132,9 +132,9 @@ canvas {
 .new span::after {
   content: "🔷";
   position: absolute;
-  top: -50%;
+  top: 10%;
   right: 0px;
-  font-size: 50%;
+  font-size: 30%;
 }
 
 .hex .wip {
@@ -142,7 +142,6 @@ canvas {
 }
 .still {
   animation-duration: 9999s !important;
-  /* transform: rotate(-25deg) translate(15%, -15%) !important; */
 }
 .deco {
 	--tile-color: transparent;
@@ -150,6 +149,14 @@ canvas {
 	/* transform: scale(1.7) translate(0%,-20%); */
 	filter: sepia(1) hue-rotate(-20deg) brightness(0.5);
 	z-index: 5;
+}
+.mount {
+	letter-spacing: -2.5vh;
+	text-shadow: none;
+	margin-left: -1.3vh;
+}
+.mount::first-letter {
+  font-size: 80%;
 }
 
 .road {
@@ -164,11 +171,11 @@ canvas {
 @keyframes bounce {
   from {
     /* transform: translate(10%,-20%) rotate(-25deg) scale(1, 1); */
-    transform: translate(0.2em,-0.5em) rotate(-25deg) scale(1, 1);
+    transform: translate(0.9vh,-1.6vh) rotate(-25deg) scale(1, 1);
   }
   to {
     /* transform: translate(10%,-20%) rotate(-25deg) scale(1.2, 0.8); */
-    transform: translate(0.2em,-0.5em) rotate(-25deg) scale(1.2, 0.8);
+    transform: translate(0.9vh,-1.6vh) rotate(-25deg) scale(1.2, 0.8);
   }
 }
 
@@ -237,7 +244,7 @@ svg {
   transition: all 100ms ease-out, top 0s 100ms;
   top: -999px;
   right: 5vh;
-  /* max-width: 30vh; */
+  min-width: 30vh;
   overflow: auto;
 }
 
@@ -283,6 +290,11 @@ ul {
   grid-template-columns: 1fr 1fr;
   gap: 1vh;
 }
+
+#chatlist, #players {
+  display: block;
+}
+
 ul small {
 	line-height: 1.8;
   opacity: 0.6;
@@ -292,7 +304,6 @@ ul small {
 .button {
 	padding: 0.7vmin;
 	border: 1px solid;
-	/* margin-bottom: 0.8vmin; */
   background: #131212;
 }
 
@@ -382,6 +393,11 @@ h1 {
   transform: scale(3);
   filter: blur(20px);
   transition: all 1s ease-out, top 0s 1s;
+}
+
+#intro .button {
+	margin-bottom: 0.8vmin;
+  padding: 1.5vh;
 }
 
 /* STATS */
@@ -476,13 +492,12 @@ h1 {
   gap: 0;
   max-height: 22vh;
   overflow-y: scroll;
-  pointer-events: none;
 }
 #_notices:empty {
   display: none;
 }
 
-p {
+#_notices p {
   position: relative;
   display: flex;
 	padding: 1vh;
@@ -491,7 +506,7 @@ p {
   animation: appear 500ms;
 }
 
-p + p {
+#_notices p + p {
 	border-top: 1px dashed gray;
 }
 
