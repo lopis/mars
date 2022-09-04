@@ -1,3 +1,28 @@
+// t=(i,n)=>(n-i)/n;
+
+const warning = (i) => {
+  var n=2e4;
+  if (i > n) return null;
+  return Math.sin(i/20 - Math.sin(i/100)*Math.sin(i/61))  *Math.sin(2 * i / 2e4 * Math.PI) * 0.5;
+}
+
+const notification = (i) => {
+  var n=8e3;
+  if (i > n) return null;
+  return Math.sin(i/5 - Math.sin(i/2))  *Math.sin(i / (n/2) * Math.PI) * 0.3;
+}
+
+// Sound player
+export const playSound = (fn) => {
+  const buffer = a.createBuffer(1,96e3,48e3)
+  const data = buffer.getChannelData(0)
+  for (let i=96e3; i--;) data[i] = fn(i)
+  const source = a.createBufferSource()
+  source.buffer = buffer
+  source.connect(a.destination)
+  source.start()
+}
+
 const playMusic = (frequency) => {
 
   notes.forEach(([time, note]) => {

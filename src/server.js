@@ -6,6 +6,7 @@
  */
 const users = []
 const tiles = {}
+const events = []
 let solCount = 0
 let lastTime = Date.now()
 
@@ -28,10 +29,7 @@ class Tile {
 	interval = 5000 //5 * solDuration
 
 	constructor(row, col, id) {
-		this.row = row
-		this.col = col
-		this.id = id
-		this.stock = 0
+		Object.assign(this, {row, col, id, stock: 0})
 	}
 
 	broadcast() {
@@ -40,14 +38,14 @@ class Tile {
 
 	setBuild(buildID, build) {
 		this.build = 'wip'
-		this.willBe = buildID
+		// this.willBe = buildID
 		this.broadcast()
-		this.ready = false
+		// this.ready = false
 		setTimeout(() => {
 			this.build = buildID
 			this.broadcast()
-			this.willBe = null
-			this.ready = true
+			// this.willBe = null
+			// this.ready = true
 			this.broadcast()
 		}, build.days * solDuration)
 
@@ -65,53 +63,47 @@ class Tile {
 /**
  * Game class
  */
-class Game {
+// class Game {
 
-	/**
-	 */
-	constructor() {
-	}
-}
+// 	/**
+// 	 */
+// 	constructor() {
+// 	}
+// }
 
 /**
  * User session class
  */
 class User {
-
 	/**
 	 * @param {Socket} socket
 	 */
-	constructor(socket, name) {
+	constructor(socket) {
+		const num = (from, to) => from + Math.round(Math.random() * (to - 1)),
+		char = () => String.fromCharCode(num(65, 26)),
+		a = char(), b = char(), c = num(1, 10)
+
 		this.socket = socket
-		this.name = name
+		this.name = `${a}${b}${c}`
 		this.id = socket.id.substr(0, 6)
 	}
 }
 
+class Event {
+	constructor(name, alertTime, wait, count) { 
+		Object.assign(this, {name, alertTime, wait, count})
+	}
 
+	broadcast() {
+		broadcast('event', this)
+	}
 
-const names = [
-	"Jarred",
-	"Deanna",
-	"Arlene",
-	"Jordan",
-	"Nita",
-	"Justin",
-	"Katheryn",
-	"Manual",
-	"Violet",
-	"Martin",
-	"Felix",
-	"Cathy",
-	"Adan",
-	"Anderson",
-	"Asa",
-	"Micah",
-	"Emmitt",
-	"Johnnie",
-	"Rene",
-	"Darron",
-]
+	static init() {
+		const e = new Event('convoy', 0, 0)
+		events.push(e)
+	}
+}
+
 
 // Generate all tiles
 // including tiles that don't exist, for simplicity;
@@ -137,14 +129,13 @@ for (let row = 0; row < 13; row++) {
 	}	
 }
 
-
 const broadcast = (event, data) => {
 	users.forEach(user => {
 		user.socket.emit(event, data)
 	})
 }
 
-
+Event.init()
 
 /**
  * Socket.IO on connect event
@@ -153,7 +144,7 @@ const broadcast = (event, data) => {
 module.exports = {
 
 	io: (socket) => {
-		const user = new User(socket, names.pop())
+		const user = new User(socket)
 		if (users.length === 0) {
 			lastTime = Date.now()
 		}
@@ -161,7 +152,6 @@ module.exports = {
 
 		socket.on('disconnect', () => {
 			console.info('Disconnected: ' + user.name)
-			names.unshift(user.name)
 			removeUser(user)
 			if (users.length === 0) {
 				solCount += Date.now() - lastTime
@@ -207,6 +197,7 @@ module.exports = {
 
 		user.socket.emit('sol', getSol())
 		user.socket.emit('world', {tiles, stats})
+		user.socket.emit('events', events)
 	},
 
 	stat: (req, res) => {

@@ -7,15 +7,14 @@ let socket //Socket.IO client
    * Binds Socket.IO and button events
    */
 function bind() {
-  socket.on('start', () => {
-  });
+  // socket.on('start', () => {
+  // });
 
-  socket.on('disconnect', () => {
-  });
+  // socket.on('disconnect', () => {
+  // });
 
-  socket.on('error', () => {
-  });
-
+  // socket.on('error', () => {
+  // });
 
   socket.on('users', ({id, users}) => {
     updateUsers(id, users)
@@ -33,8 +32,8 @@ function bind() {
   });
 
   socket.on('sol', (solCount) => {
-    // phase = (solCount % solDuration) / solDuration
-    // updateSol(solCount)
+    phase = (solCount % solDuration) / solDuration
+    updateSol(solCount)
   });
 
   socket.on('world', ({tiles, stats}) => {
