@@ -4,7 +4,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require("terser-webpack-plugin");
+
 const path = require('path');
+const mangle = true
 
 const webpackClientConfig = (isProduction) => ({
   entry: './src/client.js',
@@ -39,8 +42,29 @@ const webpackClientConfig = (isProduction) => ({
   },
   optimization: {
     usedExports: true,
+    minimize: true,
     minimizer: [
-      '...',
+      // '...',
+      new TerserPlugin({
+        terserOptions: {
+          ecma: 2016,
+          module: true,
+          toplevel: true,
+          compress: {
+            keep_fargs: false,
+            passes: 4,
+            pure_funcs: ['assert', 'debug'],
+            pure_getters: true,
+            unsafe: true,
+            unsafe_arrows: true,
+            unsafe_comps: true,
+            unsafe_math: true,
+            unsafe_methods: true,
+            booleans: true,
+          },
+          mangle: true
+        }
+      }),
       new CssMinimizerPlugin({
         test: /\.css$/i,
       })
