@@ -36,6 +36,7 @@ canvas {
 }
 
 #tileset {
+  --tile-color: #2e0808;
   height: 100vh;
   width: 100vw;
   position: absolute;
@@ -55,7 +56,6 @@ canvas {
 }
 
 .hex {
-  --tile-color: #2e0808;
   --hex-size: 2.8vmin;
   --fade-time: 300ms;
   font-size: 1.4vmin;
@@ -94,6 +94,8 @@ canvas {
   transition: all var(--fade-time) ease;
   background: var(--tile-color);
   box-sizing: border-box;
+}
+.night, .night::after, .night::before {
   box-shadow: 0 0 3vh -0.5vh var(--tile-color);
 }
 .hex:hover {
