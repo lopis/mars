@@ -24,9 +24,9 @@ function bind() {
         _comms.dataset.new = true
       }
     },
-    'sol': (solCount) => {
-      phase = (solCount % solDuration) / solDuration
-      updateSol(solCount)
+    'sol': (data) => {
+      phase = (data.sol % solDuration) / solDuration
+      updateSol(data)
     },
     'world': ({tiles, stats}) => {
       Object.entries(tiles).forEach(([id, tile]) => {

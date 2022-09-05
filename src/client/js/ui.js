@@ -1,5 +1,5 @@
 import { haow, playSound, woah } from './audio'
-import { userList, commsList, solCount } from './game'
+import { userList, commsList, solCount, data } from './game'
 import { buildAction } from './io'
 
 let dismissOnArrival
@@ -58,12 +58,13 @@ export const clearSelectedTile = () => {
 }
 
 export const dismissDialog = () => {
+  if (_dialog.classList.contains('show')) playSound(woah)
+
   document.body.removeEventListener('click', onBuildChoice)
   _dialog.classList.remove('show')
   _choices.innerHTML = ''
   updateMap([0,0], 1)
   isZoomed = false
-  playSound(woah)
 }
 
 export const renderDialog = (tile, prompt, choicesHTML) => {
@@ -185,9 +186,10 @@ export const showSolStats = () => {
     'Game stats',
     `<p>${[
       `<b>☀️ Sol:</b> ${Math.ceil(solCount / solDuration)}`,
-      `<b>🕐 Game start:</b> n/a`,
-      `<b>🎉 Events:</b> n/a`,
-      `<b>⚰️ Deaths:</b> n/a`,
+      `<b>🕐 Game start:</b> ${new Date(data.start).toDateString()}`,
+      `<b>🎉 Events:</b> ${data.events}`,
+      `<b>⚰️ Deaths:</b> ${data.deaths}`,
+      `<b>👨‍👨‍👧‍👧 Total refugees:</b> ${data.saved}`,
     ].join('<br>')}</p>`
   )
 }

@@ -10,6 +10,7 @@ import { initAudio } from './audio'
 export let userList = []
 export let commsList = []
 export let solCount = 0
+export let data = {}
 
 const render = () => {
   try {
@@ -36,8 +37,11 @@ export const updateChat = (user, msg) => {
   commsList.push({user, msg})
 }
 
-export const updateSol = (currentSol) => {
-  if (currentSol) solCount = currentSol
+export const updateSol = (gameData) => {
+  if (gameData) {
+    data = gameData
+    solCount = data.sol
+  }
   else solCount += solDuration
   _sol.dataset.count = Math.ceil(solCount / solDuration)
 }

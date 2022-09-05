@@ -7,8 +7,12 @@
 const users = []
 const tiles = {}
 const events = []
-let solCount = 0
-let lastTime = Date.now()
+let solCount = 0,
+lastTime = Date.now(),
+timeStarted,
+eventCount = 0,
+totalPopulation = 0,
+deaths = 0
 
 const getSol = () => {
 	solCount += Date.now() - lastTime
@@ -117,6 +121,7 @@ const initConvoySchedule = () => {
 	const fn = count => () => {
 		tiles[CAMP].stock += count
 		tiles[CAMP].broadcast()
+		eventCount++
 	}
 
 	const solCount = getSol()
@@ -199,6 +204,10 @@ Event.init()
 module.exports = {
 
 	io: (socket) => {
+		if (!timeStarted) {
+			timeStarted = Date.now()
+		}
+
 		const user = new User(socket)
 		if (users.length === 0) {
 			lastTime = Date.now()
@@ -249,7 +258,13 @@ module.exports = {
 			})
 		})
 
-		user.socket.emit('sol', getSol())
+		user.socket.emit('sol', {
+			sol: getSol(),
+			start: timeStarted,
+			events: eventCount,
+			deaths: deaths,
+			saved: totalPopulation,
+		})
 		user.socket.emit('world', {tiles, stats})
 		user.socket.emit('events', events.filter(e => e.old))
 	},

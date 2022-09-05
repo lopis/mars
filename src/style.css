@@ -74,6 +74,7 @@ canvas {
 .hex.night:not(:empty) {
   --tile-color: #ffe479;
 }
+
 .hex::before, .hex::after {
   content: "";
   position: absolute;
@@ -93,6 +94,7 @@ canvas {
   transition: all var(--fade-time) ease;
   background: var(--tile-color);
   box-sizing: border-box;
+  box-shadow: 0 0 3vh -0.5vh var(--tile-color);
 }
 .hex:hover {
   --tile-color: #e9a745;
