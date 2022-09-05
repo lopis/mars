@@ -4,7 +4,7 @@ import { buildAction } from './io'
 
 let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock, willBe}) => {
+export const updateTile = ({id, build, stock, willBe, ppl}) => {
   if (!tiles[id]) return
 
   if (build === 'road') {
@@ -33,8 +33,7 @@ export const updateTile = ({id, build, stock, willBe}) => {
   if (stock && stock > tiles[id].stock) {
     tiles[id].$tile.classList.add('new')
   }
-  tiles[id].stock = stock
-  tiles[id].willBe = willBe
+  Object.assign(tiles[id], {stock, willBe, ppl})
   
   if (dismissOnArrival) {
     dismissDialog()
@@ -73,13 +72,13 @@ export const renderDialog = (tile, prompt, choicesHTML) => {
   _dialog.classList.add('show')
 }
 
-const renderCamp = (tile, building) => {
-  const usage = Math.round(100 * tile.stock / building.cap)
+const renderCap = (tile, building) => {
+  const usage = Math.round(100 * tile.ppl / building.cap)
   return [
-    `${tile.stock} ${building.count.join(' ')}`,
+    `${tile.ppl || 0} ${building.count.join(' ')}`,
     `Capacity: ${building.cap}`,
     `At ${usage}% capacity`,
-    usage > 99 ? '<br>🚨 WARNING. The camp cannot<br>support this many people' : 'Running normally'
+    usage > 99 ? '<br>🚨 WARNING. This many people<br>cannot be supported!' : 'Operating normally'
   ].join('<br>')
 }
 
@@ -101,7 +100,9 @@ export const showTileDialog = (target) => {
         `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
           [`Collect 1`, 'getone'],
           [`Collect all`, 'getall'],
-        ].map(([label, id]) => `<li class="button" id="${id}">${label}</li>`).join('')}</ul>`
+        ].map(([label, id]) => 
+          `<li class="button" id="${id}">${label}</li>`
+        ).join('')}</ul><br>${building.count ? renderCap(tile, building) : ''}`
       )
     } else {
       // STATS DIALOG
@@ -109,7 +110,7 @@ export const showTileDialog = (target) => {
         tile,
         buildings[tile.willBe]?.label || building.label,
         `<p>${
-          building.count ? renderCamp(tile, building)
+          building.count ? renderCap(tile, building)
           : tile.willBe ? '🚧 Under construction'
           : `Waiting for new convoy arrival`
         }</p>`

@@ -18,11 +18,12 @@ export const updateEvents = (events) => {
 }
 
 export const updateEvent = (event, withSound = true) => {
+  console.log(event);
   const $p = document.createElement('p')
   $p.setAttribute('i', event.type)
   const label = msg[event.name]
     .replace('%c', event.count)
-    .replace('%t', event.tile)
+    .replace('%t', event.tileId)
     .replace('%s', event.sol)
   $p.innerHTML = [
     '<span>',
@@ -36,7 +37,7 @@ export const updateEvent = (event, withSound = true) => {
     playSound(event.type === '⚠️' ? warning : notification)
   }
   
-  eventFunctions[event.name]?.()
+  eventFunctions[event.name]?.(event)
 }
 
 const eventFunctions = {
@@ -51,6 +52,9 @@ const eventFunctions = {
     setTimeout(() => {
       rocket2.classList.remove('go')
     }, 6000)
+  },
+  riot ({tileId}) {
+    tiles[tileId].$tile.classList.add('bad')
   },
   asteroid () {
     

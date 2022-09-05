@@ -126,7 +126,7 @@ const initScheduler = () => {
 const initConvoySchedule = () => {
 	// Function that runs when the event happens
 	const fn = count => () => {
-		tiles[CAMP].stock += count
+		tiles[CAMP].ppl += count
 		tiles[CAMP].broadcast()
 		stats.population += count
 
@@ -134,13 +134,13 @@ const initConvoySchedule = () => {
 		stats.workforce += count * 0.4
 		totalPopulation += count
 		eventCount++
-		broadcast('stats', stats)
+		broadcastStats()
 	}
 
 	// First event happens on game start
 	const solCount = getSol()
-	events.push(new Event('convoy1', 'ℹ️', solCount, 1))
-	events.push(new Event('convoy2', 'ℹ️', solCount + solDuration, 0, 9000, fn(9000)))
+	Event.create('convoy1', 'ℹ️', solCount, 1)
+	Event.create('convoy2', 'ℹ️', solCount + solDuration, 0, 9000, fn(9000))
 
 	// Scheduler runs a loop on a variable timeout
 	const scheduleNext = () => {
@@ -154,8 +154,8 @@ const initConvoySchedule = () => {
 		const count = Math.round(Math.random() * 5000 + 1000) * 10
 		setTimeout(() => {
 			const solCount = getSol()
-			events.push(new Event('convoy1', 'ℹ️', solCount, 4))
-			events.push(new Event('convoy2', 'ℹ️', solCount + 4*solDuration, 0, count, fn(count)))
+			Event.create('convoy1', 'ℹ️', solCount, 4)
+			Event.create('convoy2', 'ℹ️', solCount + 4*solDuration, 0, count, fn(count))
 
 			setTimeout(scheduleNext, 4 * solDuration)
 		}, (nextConvoy - 4) * solDuration)
@@ -164,20 +164,63 @@ const initConvoySchedule = () => {
 	scheduleNext()
 }
 
+const initRiotSchedule = () => {
+	setInterval(() => {
+		Object.values(tiles)
+		// Only houses and the camp have ppl
+		.filter(tile => tile.ppl)
+		.forEach(house => {
+			const chanceOfRiot = (house.ppl / buildings[house.build].cap) - 0.99
+			console.log('chance of riot', house.id, chanceOfRiot);
+			if (chanceOfRiot > Math.random()) {
+				const casualities = Math.ceil(house.ppl * 0.01)
+				Event.create(
+					'riot',
+					'⚠️',
+					solCount,
+					0,
+					casualities,
+					null,
+					house.id
+				)
+				house.ppl -= casualities
+				house.broadcast()
+				stats.population -= casualities
+				stats.workforce -= casualities
+				broadcastStats()
+				deaths += casualities
+			}
+		})
+	}, 5000)
+}
+
 class Event {
-	constructor(name, type, alertTime, wait, count, fn) { 
-		Object.assign(this, {name, type, alertTime, wait, count, fn})
-		// { "name": "convoy1", "type": "ℹ️", "alertTime": 1, "wait": 1, "sol": 2 }
+
+	constructor(name, type, alertTime, wait, count, fn, tileId) { 
+		Object.assign(this, {name, type, alertTime, wait, count, fn, tileId})
 		this.sol = Math.ceil(alertTime / solDuration + wait)
 	}
 
 	broadcast() {
 		broadcast('event', this)
 	}
-
 	static init() {
 		initScheduler()
 		initConvoySchedule()
+		initRiotSchedule()
+	}
+
+	/**
+	 * 
+	 * @param {string} name event name
+	 * @param {string} type emoji representing it's type e.g. 'ℹ️'
+	 * @param {number} alertTime solCount time (in milis)
+	 * @param {number} wait how far in the future the event happens (in days)
+	 * @param {number} count amount associated with event
+	 * @param {number} fn Optional callback function when it triggers
+	 */
+	static create(name, type, alertTime, wait, count, fn, tileId) {
+		events.push(new Event(...arguments))
 	}
 }
 
@@ -200,6 +243,8 @@ for (let row = 0; row < 13; row++) {
 		} else if (id === CAMP) {
 			// Set the location of the refugee camp
 			tiles[id].build = 'camp'
+			tiles[id].ppl = 75000
+			tiles[id].unrest = 0
 		} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
 			// Place mountains in random locations
 			tiles[id].build = 'mount'
@@ -212,6 +257,19 @@ for (let row = 0; row < 13; row++) {
 const broadcast = (event, data) => {
 	users.forEach(user => {
 		user.socket.emit(event, data)
+	})
+}
+
+const broadcastStats = () => {
+	users.forEach(user => {
+		user.socket.emit('sol', {
+			sol: getSol(),
+			start: timeStarted,
+			events: eventCount,
+			deaths: deaths,
+			saved: totalPopulation,
+		})
+		broadcast('stats', stats)
 	})
 }
 
@@ -267,7 +325,7 @@ module.exports = {
 				stats[name] += delta
 				tiles[id].stock -= delta
 				tiles[id].broadcast()
-				broadcast('stats', stats)
+				broadcastStats()
 			} else {
 				user.socket.emit('collect-fail')
 			}
@@ -281,13 +339,7 @@ module.exports = {
 			})
 		})
 
-		user.socket.emit('sol', {
-			sol: getSol(),
-			start: timeStarted,
-			events: eventCount,
-			deaths: deaths,
-			saved: totalPopulation,
-		})
+		broadcastStats()
 		user.socket.emit('world', {tiles, stats})
 		user.socket.emit('events', events.filter(e => e.old))
 	},

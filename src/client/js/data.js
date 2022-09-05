@@ -17,7 +17,8 @@ SCROLL_SPEED = 0.5
 msg = {
   convoy1: 'Refugee convoy departed from Earth.',
   convoy2: 'Convoy arrived with %c refugees.',
+  riot: 'Riots in sector %t have caused %c deaths.',
   asteroid: 'Danger: asteroid heading to Mars.',
   conjunction: 'Solar conjunction for the next 7 sols; Earth link down.',
-  dust: 'Dust storm in $t until sol $s affecting radio.'
+  dust: 'Dust storm in %t until sol %s affecting radio.'
 }

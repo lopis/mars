@@ -27,12 +27,14 @@ buildings = {
     out: ['energy', '🔋🔋'],
     days: 8
   },
-  housing: {
+  house: {
     label: 'Housing',
     icon: '🏢',
     out: ['waste', '💩'],
     cost: [5, 'water'],
     days: 1,
+    count: ['residents', '👩‍👩‍👦‍👦'],
+    cap: 142000,
   },
   water: {
     label: 'Water Plant',

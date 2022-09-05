@@ -132,18 +132,30 @@ canvas {
   pointer-events: none;
   text-shadow: 0 0 1px black;
 }
+.hex span::after {
+  position: absolute;
+  top: 20%;
+  right: 10px;
+  font-size: 30%;
+}
 
 .new span::after {
   content: "🔷";
-  position: absolute;
-  top: 10%;
-  right: 0px;
-  font-size: 30%;
 }
 
 .hex .wip {
   animation-duration: 200ms;
 }
+
+.bad span {
+  animation-duration: 120ms !important;
+  text-shadow: 0 -1vh 2vh red
+}
+.bad span::after {
+  content: "💢";
+  font-size: 50%;
+}
+
 .still {
   animation-duration: 9999s !important;
 }
@@ -308,6 +320,7 @@ svg {
   right: 5vh;
   min-width: 30vh;
   overflow: auto;
+  line-height: 1.4;
 }
 
 #_dialog.show {
