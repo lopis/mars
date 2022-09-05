@@ -245,7 +245,7 @@ svg {
 }
 
 #rocket.go {
-  transition: left 3s cubic-bezier(.55,.06,.68,.19);
+  transition: left 6s cubic-bezier(.55,.06,.68,.19);
 	left: 105%;
 }
 
@@ -257,7 +257,7 @@ svg {
 }
 
 #rocket2.go {
-	transition: left 3s cubic-bezier(.22,.61,.36,1);
+	transition: left 6s cubic-bezier(.22,.61,.36,1);
 	left: 8vh;
 }
 

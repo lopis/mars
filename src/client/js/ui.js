@@ -35,8 +35,6 @@ export const updateTile = ({id, build, stock}) => {
   }
   if (stock && stock > tiles[id].stock) {
     tiles[id].$tile.classList.add('new')
-  } else {
-    tiles[id].$tile.classList.remove('new')
   }
   tiles[id].stock = stock
   if (dismissOnArrival) {
@@ -79,6 +77,7 @@ export const showTileDialog = (target) => {
   clearSelectedTile()
 
   $selectedTile = target
+  target.classList.remove('new')
   const tile = tiles[target.dataset.n]
   
   if (tile.build) {

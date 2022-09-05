@@ -84,5 +84,5 @@ stats = {
 	water: 0,
 }
 
-solDuration = 60 * 1000 // 60 seconds
+solDuration = 0.2 * 60 * 1000 // 60 seconds
 initialPhase = 0.0

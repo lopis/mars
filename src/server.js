@@ -115,24 +115,25 @@ const initScheduler = () => {
 
 const initConvoySchedule = () => {
 	const fn = count => () => {
-		tiles[CAMP].stock = count
+		tiles[CAMP].stock += count
 		tiles[CAMP].broadcast()
 	}
 
 	const solCount = getSol()
 	events.push(new Event('convoy1', 'ℹ️', solCount, 1))
-	events.push(new Event('convoy2', 'ℹ️', solCount + solDuration*0.1, 0, 9000, fn(9000)))
+	events.push(new Event('convoy2', 'ℹ️', solCount + solDuration, 0, 9000, fn(9000)))
 
 	const scheduleNext = () => {
-		// From 5 to 10 sols
-		const nextConvoy = Math.round(Math.random() * 5 + 5)
+		// From 5 to 15 sols
+		const nextConvoy = Math.round(Math.random() * 5 + 10)
+		console.log('nextConvoy in ', nextConvoy, 'sols');
 		const count = Math.round(Math.random() * 5000 + 1000) * 10
 		setTimeout(() => {
 			const solCount = getSol()
 			events.push(new Event('convoy1', 'ℹ️', solCount, 4))
 			events.push(new Event('convoy2', 'ℹ️', solCount + 4*solDuration, 0, count, fn(count)))
 
-			scheduleNext()
+			setTimeout(scheduleNext, 4 * solDuration)
 		}, (nextConvoy - 4) * solDuration)
 	}
 
