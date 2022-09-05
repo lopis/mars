@@ -204,6 +204,7 @@ svg {
 	border: solid #063680;
 	border-width: 0 3px 3px 0;
 	border-bottom-right-radius: 3vh;
+  overflow: hidden;
 }
 
 #earth .icon,
@@ -215,6 +216,7 @@ svg {
   border-radius: 5vh;
 	background: radial-gradient(circle at top left, #bcbebf 30%, #063680 31%);
   overflow: hidden;
+  z-index: 1;
 }
 
 #earth .icon::before,
@@ -231,6 +233,32 @@ svg {
   top: -60%;
   right: 10%;
   width: 2vmin;
+}
+
+#rocket, #rocket2 {
+	transform: rotate(45deg);
+	display: inline-block;
+	font-size: 3vh;
+	position: absolute;
+	left: 2vh;
+  top: 2vh;
+}
+
+#rocket.go {
+  transition: left 3s cubic-bezier(.55,.06,.68,.19);
+	left: 105%;
+}
+
+#rocket2 {
+	transform: rotate(-135deg);
+	top: 0px;
+	z-index: 9;
+  left: -100vh;
+}
+
+#rocket2.go {
+	transition: left 3s cubic-bezier(.22,.61,.36,1);
+	left: 8vh;
 }
 
 /* DIALOG */

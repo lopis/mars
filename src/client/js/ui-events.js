@@ -35,4 +35,30 @@ export const updateEvent = (event, withSound = true) => {
   if (withSound) {
     playSound(event.type === '⚠️' ? warning : notification)
   }
+  
+  eventFunctions[event.name]?.()
+}
+
+const eventFunctions = {
+  convoy1 () {
+    rocket.classList.add('go')
+    setTimeout(() => {
+      rocket.classList.remove('go')
+    }, 3000)
+  },
+  convoy2 () {
+    rocket2.classList.add('go')
+    setTimeout(() => {
+      rocket2.classList.remove('go')
+    }, 3000)
+  },
+  asteroid () {
+    
+  },
+  conjunction () {
+    
+  },
+  dust () {
+    
+  },
 }

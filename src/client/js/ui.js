@@ -27,6 +27,11 @@ export const updateTile = ({id, build, stock}) => {
     tiles[id].$tile.replaceChildren($icon)
     $icon.innerText = buildings[build].icon
     tiles[id].build = build
+    if (build === 'center' && typeof rocket2 === 'undefined') {
+      const r = rocket.cloneNode(true)
+      r.id = 'rocket2'
+      tiles[id].$tile.appendChild(r)
+    }
   }
   if (stock && stock > tiles[id].stock) {
     tiles[id].$tile.classList.add('new')

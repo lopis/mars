@@ -125,7 +125,7 @@ const initConvoySchedule = () => {
 
 	const scheduleNext = () => {
 		// From 5 to 10 sols
-		const nextConvoy = 5 //Math.round(Math.random() * 5 + 5)
+		const nextConvoy = Math.round(Math.random() * 5 + 5)
 		const count = Math.round(Math.random() * 5000 + 1000) * 10
 		setTimeout(() => {
 			const solCount = getSol()
