@@ -10,11 +10,14 @@ const events = []
 let solCount = 0,
 lastTime = Date.now(),
 timeStarted,
+gameRunning,
 eventCount = 0,
 totalPopulation = 0,
 deaths = 0
 
 const getSol = () => {
+	if (!gameRunning) return solCount
+
 	solCount += Date.now() - lastTime
 	lastTime = Date.now()
 
@@ -43,7 +46,7 @@ class Tile {
 
 	setBuild(buildID, build) {
 		this.build = 'wip'
-		// this.willBe = buildID
+		this.willBe = buildID
 		this.broadcast()
 		// this.ready = false
 		setTimeout(() => {
@@ -96,6 +99,8 @@ class User {
 
 const initScheduler = () => {
 	setInterval(() => {
+		if (!gameRunning) return
+
 		events.forEach(
 			/**
 			 * @param {Event} event
@@ -117,21 +122,35 @@ const initScheduler = () => {
 	}, 1000)
 }
 
+// Refugee convoy event manager
 const initConvoySchedule = () => {
+	// Function that runs when the event happens
 	const fn = count => () => {
 		tiles[CAMP].stock += count
 		tiles[CAMP].broadcast()
+		stats.population += count
+
+		// TODO: add to workforce only after they move to houses?
+		stats.workforce += count * 0.4
+		totalPopulation += count
 		eventCount++
+		broadcast('stats', stats)
 	}
 
+	// First event happens on game start
 	const solCount = getSol()
 	events.push(new Event('convoy1', 'ℹ️', solCount, 1))
 	events.push(new Event('convoy2', 'ℹ️', solCount + solDuration, 0, 9000, fn(9000)))
 
+	// Scheduler runs a loop on a variable timeout
 	const scheduleNext = () => {
+		// If the game is paused, skip loop and try again later
+		if (!gameRunning) {
+			setTimeout(scheduleNext, 4 * solDuration)
+			return
+		}
 		// From 5 to 15 sols
 		const nextConvoy = Math.round(Math.random() * 5 + 10)
-		console.log('nextConvoy in ', nextConvoy, 'sols');
 		const count = Math.round(Math.random() * 5000 + 1000) * 10
 		setTimeout(() => {
 			const solCount = getSol()
@@ -166,6 +185,7 @@ class Event {
 // Generate all tiles
 // including tiles that don't exist, for simplicity;
 // Creates 12 x 12 tiles
+console.log('🤖 Generating tiles');
 let mountCount = 0
 const MOUNT_COUNT = 20
 const CENTER = 'G1'
@@ -195,6 +215,7 @@ const broadcast = (event, data) => {
 	})
 }
 
+console.log('🤖 Initializing events');
 Event.init()
 
 /**
@@ -208,6 +229,7 @@ module.exports = {
 			timeStarted = Date.now()
 		}
 
+		gameRunning = true
 		const user = new User(socket)
 		if (users.length === 0) {
 			lastTime = Date.now()
@@ -218,6 +240,7 @@ module.exports = {
 			console.info('Disconnected: ' + user.name)
 			removeElement(users, user)
 			if (users.length === 0) {
+				gameRunning = false
 				solCount += Date.now() - lastTime
 				lastTime = Date.now()
 			}
@@ -272,17 +295,16 @@ module.exports = {
 	stat: (req, res) => {
 		storage.get('games', 0).then(games => {
 			res.send(
-				`${users.length} Player(s): ${users.map(user => user.name).join(', ')}
-				<br>
-				Sol: ${Math.ceil(getSol()/(solDuration))} (${getSol()} ms)
-				<br>
-				stats: ${JSON.stringify(stats)}
-				<br>
-				events: ${JSON.stringify(events, null, ' ')}
-				<br>
-				camp: ${JSON.stringify(tiles[CAMP])}
-				`
+				[
+					`${users.length} Player(s): ${users.map(user => user.name).join(', ')}`,
+					`Sol: ${Math.ceil(getSol()/(solDuration))} (${getSol()} ms)`,
+					`stats: ${JSON.stringify(stats)}`,
+					`events: ${JSON.stringify(events, null, ' ')}`,
+					`camp: ${JSON.stringify(tiles[CAMP])}`,
+				].join('<br>')
 			)
 		})
 	}
 }
+
+console.log('🤖 Ready');

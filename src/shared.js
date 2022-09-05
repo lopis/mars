@@ -61,7 +61,8 @@ buildings = {
   camp: {
     label: 'Earth Refugee Camp',
     icon: '⛺️',
-    count: ['refugees', '👩‍👩‍👦‍👦']
+    count: ['refugees', '👩‍👩‍👦‍👦'],
+    cap: 75000,
   },
   road: {
     label: 'Path',

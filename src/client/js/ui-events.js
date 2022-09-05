@@ -27,7 +27,7 @@ export const updateEvent = (event, withSound = true) => {
   $p.innerHTML = [
     '<span>',
       label,
-      `</br><small>${event.wait ? 'arriving on' : 'date'}: sol ${event.sol}</small>`,
+      `</br><small>${event.wait ? 'arriving on' : 'date:'} sol ${event.sol}</small>`,
     '</span>',
   ]. join('')
   _notices.prepend($p)
@@ -44,13 +44,13 @@ const eventFunctions = {
     rocket.classList.add('go')
     setTimeout(() => {
       rocket.classList.remove('go')
-    }, 3000)
+    }, 6000)
   },
   convoy2 () {
     rocket2.classList.add('go')
     setTimeout(() => {
       rocket2.classList.remove('go')
-    }, 3000)
+    }, 6000)
   },
   asteroid () {
     

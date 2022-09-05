@@ -4,7 +4,7 @@ import { buildAction } from './io'
 
 let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock}) => {
+export const updateTile = ({id, build, stock, willBe}) => {
   if (!tiles[id]) return
 
   if (build === 'road') {
@@ -21,9 +21,6 @@ export const updateTile = ({id, build, stock}) => {
     if (build === 'mount') {
       tiles[id].$tile.classList.add('deco')
     }
-    if (build === 'wip') {
-      $icon.style.animationDuration = 200
-    }
     tiles[id].$tile.replaceChildren($icon)
     $icon.innerText = buildings[build].icon
     tiles[id].build = build
@@ -37,6 +34,8 @@ export const updateTile = ({id, build, stock}) => {
     tiles[id].$tile.classList.add('new')
   }
   tiles[id].stock = stock
+  tiles[id].willBe = willBe
+  
   if (dismissOnArrival) {
     dismissDialog()
     dismissOnArrival = false
@@ -74,6 +73,16 @@ export const renderDialog = (tile, prompt, choicesHTML) => {
   _dialog.classList.add('show')
 }
 
+const renderCamp = (tile, building) => {
+  const usage = Math.round(100 * tile.stock / building.cap)
+  return [
+    `${tile.stock} ${building.count.join(' ')}`,
+    `Capacity: ${building.cap}`,
+    `At ${usage}% capacity`,
+    usage > 99 ? '<br>🚨 WARNING. The camp cannot<br>support this many people' : 'Running normally'
+  ].join('<br>')
+}
+
 export const showTileDialog = (target) => {
   clearSelectedTile()
 
@@ -98,10 +107,10 @@ export const showTileDialog = (target) => {
       // STATS DIALOG
       renderDialog(
         tile,
-        building.label,
+        buildings[tile.willBe]?.label || building.label,
         `<p>${
-          building.count
-          ? `${tile.stock} ${building.count.join(' ')}`
+          building.count ? renderCamp(tile, building)
+          : tile.willBe ? '🚧 Under construction'
           : `Waiting for new convoy arrival`
         }</p>`
       )

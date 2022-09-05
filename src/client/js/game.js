@@ -48,8 +48,9 @@ export const updateSol = (gameData) => {
 
 export const updateStats = (newStats) => {
   stats = newStats
-  Object.keys(newStats).forEach(key => {
-    document.getElementById(key).dataset.count = newStats[key]
+  Object.entries(newStats).forEach(([key, value]) => {
+    value = value > 1e4 ? Math.round(value / 1e4) + 'K' : value
+    document.getElementById(key).dataset.count = value
   })
 }
 

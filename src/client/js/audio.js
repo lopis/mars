@@ -81,9 +81,9 @@ const startNoiseLoop = (fadeIn) => {
   gain.connect(a.destination);
   if (fadeIn) {
     gain.gain.setValueAtTime(0.01, a.currentTime);
-    gain.gain.linearRampToValueAtTime(0.5, a.currentTime + 0.5)
+    gain.gain.linearRampToValueAtTime(0.35, a.currentTime + 0.5)
   } else {
-    gain.gain.setValueAtTime(0.5, a.currentTime);
+    gain.gain.setValueAtTime(0.35, a.currentTime);
   }
   noise.start(a.currentTime)
 }
@@ -99,12 +99,12 @@ const notes = [
 
   10,8,10,13,18,13,
   10,8,10,13,18,13,
-  10,8,10,13,18,12,
+  10,8,10,13,17,12,
 ]
 const duration = 0.55
 const musicVolume = 0.3
 let crossFade = 0
-const variations = [400, 440, 480, 460, 420, 440]
+const variations = [420, 400, 420, 440, 460, 480, 460, 440]
 let variation = variations.pop()
 /**
  * @type {AudioContext}
