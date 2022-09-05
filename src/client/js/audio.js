@@ -28,7 +28,7 @@ export const haow = i => {
 
 // Sound player
 export const playSound = (fn) => {
-  if (!a) return
+  if (!a || !noise) return
   const buffer = a.createBuffer(1,96e3,48e3)
   const data = buffer.getChannelData(0)
   for (let i=96e3; i--;) data[i] = fn(i)
@@ -40,7 +40,7 @@ export const playSound = (fn) => {
 
 const playMusic = (frequency) => {
 
-  notes.forEach(([time, note]) => {
+  notes.forEach((note, time) => {
     const osc = a.createOscillator()
     const gain = a.createGain()
     osc.connect(gain)
@@ -89,17 +89,19 @@ const startNoiseLoop = (fadeIn) => {
 }
 
 const notes = [
-  [1,9],[2,7],[3,9],[4,13],[5,17],[6,13],
-  [7,9],[8,7],[9,9],[10,13],[11,17],[12,13],
-  [13,9],[14,7],[15,9],[16,13],[17,17],[18,13],
-  [19,9],[20,7],[21,9],[22,13],[23,17],[24,12],
-  [25,9],[26,7],[27,9],[28,12],[29,18],[30,12],
-  [31,9],[32,7],[33,9],[34,12],[35,18],[36,12],
-  [37,9],[38,7],[39,9],[40,12],[41,18],[42,13],
-  [43,10],[44,8],[45,10],[46,13],[47,18],[48,13],
-  [49,10],[50,8],[51,10],[52,13],[53,18],[54,13],
+  9,7,9,13,17,13,
+  9,7,9,13,17,13,
+  9,7,9,13,17,12,
+
+  9,7,9,12,18,12,
+  9,7,9,12,18,12,
+  9,7,9,12,18,13,
+
+  10,8,10,13,18,13,
+  10,8,10,13,18,13,
+  10,8,10,13,18,12,
 ]
-const duration = 0.45
+const duration = 0.55
 const musicVolume = 0.3
 let crossFade = 0
 const variations = [400, 440, 480, 460, 420, 440]
@@ -116,13 +118,13 @@ let musicLoop
 
 const startMusicLoop = () => {
   a = new AudioContext()
-  playMusic(440)
+  playMusic(variation)
   musicLoop = setInterval(() => {
     crossFade += duration
     variations.unshift(variation)
     variation = variations.pop()
     playMusic(variation)
-  }, notes[notes.length - 1][0] * duration * 1000)
+  }, notes.length * duration * 1000)
 }
 
 export const initAudio = () => {
