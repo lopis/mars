@@ -20,5 +20,6 @@ msg = {
   riot: 'Riots in sector %t have caused %c deaths.',
   asteroid: 'Danger: asteroid heading to Mars.',
   conjunction: 'Solar conjunction for the next 7 sols; Earth link down.',
-  dust: 'Dust storm in %t until sol %s affecting radio.'
+  dust1: 'Dust storm around %t forecasted until sol %s affecting radio.',
+  dust2: 'Dust storm around %t ended.'
 }

@@ -109,7 +109,7 @@ const initScheduler = () => {
 				const {alertTime, wait, old, fn} = event
 				const solCount = getSol()
 				if (!old && solCount > alertTime) {
-					console.log(event, 'sol:', solCount);
+					// console.log(event, 'sol:', solCount);
 					event.broadcast()
 					event.old = true
 					if (fn) fn()
@@ -171,7 +171,7 @@ const initRiotSchedule = () => {
 		.filter(tile => tile.ppl)
 		.forEach(house => {
 			const chanceOfRiot = (house.ppl / buildings[house.build].cap) - 0.99
-			console.log('chance of riot', house.id, chanceOfRiot);
+			// console.log('chance of riot', house.id, chanceOfRiot);
 			if (chanceOfRiot > Math.random()) {
 				const casualities = Math.ceil(house.ppl * 0.01)
 				Event.create(
@@ -194,6 +194,43 @@ const initRiotSchedule = () => {
 	}, 5000)
 }
 
+const CHANCE_OF_NEW_STORM = 0.05
+const initStormSchedule = () => {
+	setInterval(() => {
+		const r = Math.random()
+		// Chance of new storm
+		if (r < CHANCE_OF_NEW_STORM) {
+			const idx = Math.floor(Object.values(tiles).length * r / CHANCE_OF_NEW_STORM)
+			const tile = Object.values(tiles)[idx]
+			tile.dust = true
+			tile.broadcast()
+			const neighbours = getNeighbours(tile.row, tile.col)
+			.map(([row, col]) => {
+				return Object.values(tiles).find(t => t.row == row && t.col == col)
+			})
+			.filter(n=>n)
+			neighbours.forEach(neighbour => {
+				neighbour.dust = true
+				neighbour.broadcast()
+			})
+
+			const stormDuration = Math.random() * 5
+			Event.create('dust1', '⚠️', getSol(), 0, stormDuration, null, tile.id)
+			Event.create('dust2', 'ℹ️', getSol() + solDuration, 0, stormDuration, () => {
+				tile.dust = false
+				tile.broadcast()
+				neighbours.forEach(tile => {
+					tile.dust = false
+					tile.broadcast()
+				})
+			}, tile.id)
+			tile.broadcast()
+		}
+
+		// Chance of storm moving
+	}, 1000)
+}
+
 class Event {
 
 	constructor(name, type, alertTime, wait, count, fn, tileId) { 
@@ -208,6 +245,7 @@ class Event {
 		initScheduler()
 		initConvoySchedule()
 		initRiotSchedule()
+		initStormSchedule()
 	}
 
 	/**
@@ -233,8 +271,11 @@ let mountCount = 0
 const MOUNT_COUNT = 20
 const CENTER = 'G1'
 const CAMP = 'G2'
-for (let row = 0; row < 13; row++) {
-	for (let col = 0; col < 13; col++) {
+const rows = 13
+let cols = Math.floor(rows / 2)
+for (let row = 0; row < rows; row++) {
+	const colNum = (row === 0 || row === rows -1 || cols === 13 - 1) ? cols - 2 : cols
+	for (let col = 0; col < colNum; col++) {
 		const id = `${String.fromCharCode(65 + row)}${col}`
 		tiles[id] = new Tile(row, col, id)
 		if (id === CENTER) {
@@ -243,15 +284,19 @@ for (let row = 0; row < 13; row++) {
 		} else if (id === CAMP) {
 			// Set the location of the refugee camp
 			tiles[id].build = 'camp'
-			tiles[id].ppl = 75000
+			tiles[id].ppl = 0
 			tiles[id].unrest = 0
 		} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
 			// Place mountains in random locations
 			tiles[id].build = 'mount'
 			mountCount++
 		}
-
 	}	
+	if (row >= Math.floor(rows / 2)) {
+		cols--
+	} else {
+		cols++
+	}
 }
 
 const broadcast = (event, data) => {

@@ -565,11 +565,15 @@ h1 {
 	right: 0;
   margin: 2vh;
   gap: 0;
-  max-height: 22vh;
+  max-height: 15vh;
   overflow-y: scroll;
+  transition: max-height 200ms ease-in-out;
 }
 #_notices:empty {
   display: none;
+}
+#_notices:hover {
+  max-height: 50vh;
 }
 
 #_notices p {

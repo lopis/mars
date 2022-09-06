@@ -89,3 +89,14 @@ stats = {
 
 solDuration = 0.2 * 60 * 1000 // 60 seconds
 initialPhase = 0.0
+
+getNeighbours = function (row, col) {
+  return [
+    [row, col + 1],
+    [row, col - 1],
+    [row - 1, col],
+    [row + 1, col],
+    [row - 1, col + (row == 7 ? -1 : row >= 6 ? 1 : -1)],
+    [row + 1, col + (row == 5 ? -1 : row > 6 ? -1 : 1)],
+  ]
+}

@@ -1,7 +1,6 @@
 import { notification, playSound, warning } from './audio';
 
 export const updateEvents = (events) => {
-  console.log(events);
   if (events.length === 0) return
   setTimeout(() => {
     let hasWarning
@@ -18,7 +17,6 @@ export const updateEvents = (events) => {
 }
 
 export const updateEvent = (event, withSound = true) => {
-  console.log(event);
   const $p = document.createElement('p')
   $p.setAttribute('i', event.type)
   const label = msg[event.name]

@@ -4,8 +4,17 @@ import { buildAction } from './io'
 
 let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock, willBe, ppl}) => {
+export const updateTile = ({id, build, stock, willBe, ppl, dust}) => {
   if (!tiles[id]) return
+
+  Object.assign(tiles[id], {stock, willBe, ppl, dust})
+
+  if (dust) {
+    tiles[id].$tile.classList.add('dust')
+    return
+  } else {
+    tiles[id].$tile.classList.remove('dust')
+  }
 
   if (build === 'road') {
     tiles[id].$tile.innerHTML = ''
@@ -33,10 +42,8 @@ export const updateTile = ({id, build, stock, willBe, ppl}) => {
   if (stock && stock > tiles[id].stock) {
     tiles[id].$tile.classList.add('new')
   }
-  Object.assign(tiles[id], {stock, willBe, ppl})
   
   if (dismissOnArrival) {
-    dismissDialog()
     dismissOnArrival = false
   }
 }
@@ -88,6 +95,10 @@ export const showTileDialog = (target) => {
   $selectedTile = target
   target.classList.remove('new')
   const tile = tiles[target.dataset.n]
+  console.log('tile', tile);
+  if (tile.dust) {
+    return
+  }
   
   if (tile.build) {
     const building = buildings[tile.build]
