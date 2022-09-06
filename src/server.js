@@ -216,7 +216,7 @@ const initStormSchedule = () => {
 			})
 
 			const stormDuration = Math.random() * 5
-			Event.create('dust1', '⚠️', getSol(), 0, stormDuration, null, tile.id)
+			Event.create('dust1', '⚠️', getSol(), stormDuration, 0, null, tile.id)
 			Event.create('dust2', 'ℹ️', getSol() + solDuration, 0, stormDuration, () => {
 				tile.dust = false
 				tile.broadcast()

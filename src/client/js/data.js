@@ -15,7 +15,7 @@ MAX_ZOOM = 6
 SCROLL_SPEED = 0.5
 
 msg = {
-  convoy1: 'Refugee convoy departed from Earth.',
+  convoy1: 'Refugee convoy departed from Earth and will arrive on sol %s.',
   convoy2: 'Convoy arrived with %c refugees.',
   riot: 'Riots in sector %t have caused %c deaths.',
   asteroid: 'Danger: asteroid heading to Mars.',

@@ -199,9 +199,8 @@ canvas {
 }
 
 .hex.dust {
-  --tile-color: #2f0000 !important;;
-  animation: dust 400ms alternate infinite;
-  opacity: 1;
+  --tile-color: #2a1413 !important;;
+  animation: dust 800ms alternate infinite;
   cursor: wait;
 }
 .hex.dust span {
@@ -211,20 +210,16 @@ canvas {
 
 @keyframes dust {
   0% {
-    filter: blur(0.2vh);
-    left: 1px;
+    filter: blur(0.3vh);
   }
   20% {
     filter: blur(0.5vh);
-    left: -1px;
   }
   80% {
-    filter: blur(0.2vh);
-    left: 1px;
+    filter: blur(0.3vh);
   }
   100% {
     filter: blur(0.5vh);
-    left: -1px;
   }
 }
 
@@ -450,6 +445,11 @@ ul small {
 
 .off {
   opacity: 0.4;
+}
+
+.red {
+	background: #9d0404;
+	padding: 0 1ch;
 }
 
 #_input {

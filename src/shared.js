@@ -17,7 +17,7 @@ buildings = {
     label: 'Solar Plant',
     icon: '🔲',
     out: ['energy', '🔋'],
-    cost: [5, 'mineral'],
+    cost: [5, 'minerals'],
     days: 4,
   },
   nuclear: {
@@ -32,7 +32,7 @@ buildings = {
     icon: '🏢',
     out: ['waste', '💩'],
     cost: [5, 'water'],
-    days: 0.1, //1,
+    days: 1,
     count: ['residents', '👩‍👩‍👦‍👦'],
     cap: 72000,
   },
@@ -40,7 +40,7 @@ buildings = {
     label: 'Water Plant',
     icon: '⛲️',
     out: ['water', '💧'],
-    cost: [5, 'mineral'],
+    cost: [5, 'minerals'],
     polar: true,
     days: 3,
   },
@@ -70,7 +70,7 @@ buildings = {
     label: 'Path',
     icon: '✖️',
     out: [],
-    cost: [1, 'mineral'],
+    cost: [1, 'minerals'],
     days: 0.1,
   }
 }
@@ -80,11 +80,11 @@ stats = {
   workforce: 0,
   consumption: 0,
   heating: 0,
-	minerals: 0,
-	oxygen: 0,
-  energy: 0,
-	heat: 0,
-	water: 0,
+	minerals: 5,
+	oxygen: 5,
+  energy: 5,
+	heat: 5,
+	water: 5,
 }
 
 solDuration = 60 * 1000 // 60 seconds

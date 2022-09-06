@@ -146,14 +146,15 @@ export const showTileDialog = (target) => {
   } else {
     // BUILD DIALOG
     const renderChoice = ([id, {out, label, icon, cost, days}]) => {
+      const costClass = stats[cost[1]] >= cost[0] ? '' : 'red'
       const details = [
         out.length
           ? `outputs ${out.join(' ')}`
           : 'connects sectors',
-        `costs ${cost[0]} ${cost[1]}`,
+        `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
         `builds in ${days} sols`
       ].join('<br>')
-      return `<li i="${icon}" class="button" id="${id}">${label}<br><small>${details}</small></li>`
+      return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
     }
     renderDialog(
       tile,

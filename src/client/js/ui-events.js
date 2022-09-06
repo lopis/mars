@@ -26,7 +26,7 @@ export const updateEvent = (event, withSound = true) => {
   $p.innerHTML = [
     '<span>',
       label,
-      `</br><small>${event.wait ? 'arriving on' : 'date:'} sol ${event.sol}</small>`,
+      !event.wait ? `</br><small>date: sol ${event.sol}</small>` : '',
     '</span>',
   ]. join('')
   _notices.prepend($p)
