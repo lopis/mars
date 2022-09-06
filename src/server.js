@@ -1,6 +1,18 @@
 'use strict'
 
 /**
+ * Returns a hash code from a string
+ * @param  {String} str The string to hash.
+ * @return {Number}    A 32bit integer
+ * @see https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
+ */
+function hashCode(str) {
+  return Array.from(str)
+  .reduce((hash, char) => 0 | (31 * hash + char.charCodeAt(0)), 0);
+}
+const hash = -105377644
+
+/**
  * User sessions
  * @param {Array} users
  */
@@ -414,6 +426,17 @@ module.exports = {
 				].join('<br>')
 			)
 		})
+	},
+
+	reset: (req, res) => {
+		const html = `<form method="POST"><input name="pwd" type=text/><button type="submit">Reset Game</button>`
+		if (req.method === 'POST') {
+			const correct = hashCode(req.body.pwd) === hash
+			res.send(correct + html)
+			// TODO: reset game here
+		} else {
+			res.send(html)
+		}
 	}
 }
 
