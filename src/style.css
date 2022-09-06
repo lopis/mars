@@ -402,7 +402,7 @@ small {
 ul {
   padding: 0;
   max-height: 50vh;
-  max-width: 400px;
+  max-width: 450px;
   overflow: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;

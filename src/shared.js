@@ -24,7 +24,7 @@ buildings = {
     label: 'Nuclear Plant',
     icon: '⚛️',
     cost: [20, 'water'],
-    out: ['energy', '🔋🔋'],
+    out: ['energy', '🔋🔋🔋'],
     days: 8
   },
   house: {

@@ -148,7 +148,7 @@ export const showTileDialog = (target) => {
     const renderChoice = ([id, {out, label, icon, cost, days}]) => {
       const details = [
         out.length
-          ? `outputs ${out.join(' ')} per sol`
+          ? `outputs ${out.join(' ')}`
           : 'connects sectors',
         `costs ${cost[0]} ${cost[1]}`,
         `builds in ${days} sols`

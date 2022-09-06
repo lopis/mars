@@ -381,7 +381,7 @@ module.exports = {
 		socket.on('move', ({id, action, count}) => {
 			if (count < 100 || count > 1e5 || tiles[id].build != 'house') return
 
-			const n = Math.min(count, tiles[CAMP].ppl)
+			const n = Math.min(count, action == 'movein' ? tiles[CAMP].ppl : tiles[id].ppl)
 			console.log(id, action, count, n);
 			tiles[id].ppl += n * (action == 'movein' ? +1 : -1)
 			tiles[CAMP].ppl += n * (action == 'movein' ? -1 : +1)
