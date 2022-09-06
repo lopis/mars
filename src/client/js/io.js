@@ -58,6 +58,10 @@ export const buildAction = (id, choice) => {
   socket.emit('build', { id, choice })
 }
 
+export const relocateAction = (action, count) => {
+  socket.emit('move', { id: $selectedTile.dataset.n, action, count })
+}
+
 export const collect = (count) => () => {
   const id = $selectedTile.dataset.n
   socket.emit('collect', { 

@@ -84,11 +84,14 @@ canvas {
   transform-origin: center;
 }
 .hex::after {
-  content: attr(data-icon);
-  color: rgb(0, 0, 0);
+  content: attr(data-n);
+  color: transparent;
   transform: rotate(-60deg);
   text-align: center;
   font-size: 3vmin;
+}
+.hex:hover::after{
+  color: white;
 }
 .hex, .hex::after, .hex::before {
   transition: all var(--fade-time) ease;
@@ -130,7 +133,7 @@ canvas {
   transform: rotate(-25deg) translateY(-16%) scale(1, 1);
   animation-timing-function: ease-in;
   pointer-events: none;
-  text-shadow: 0 0 1px black;
+  /* text-shadow: 0 0 1px black; */
 }
 .hex span::after {
   position: absolute;
@@ -225,6 +228,17 @@ canvas {
   }
 }
 
+.crater::before {
+  content: '✹';
+  position: absolute;
+  left: 0;
+  color: black;
+  width: 100%;
+  text-align: center;
+  transform: scale(2.5);
+  line-height: 1
+}
+
 svg {
   position: fixed;
   top: 0;
@@ -241,16 +255,26 @@ svg {
 
 /* EARTH */
 #earth {
-  position: absolute;
-  top: 0;
+	position: absolute;
+	top: 1vh;
 	padding: 1vh;
 	background-color: black;
-	width: 20vh;
-  height: 10vh;
-	border: solid #063680;
-	border-width: 0 3px 3px 0;
-	border-bottom-right-radius: 3vh;
-  overflow: hidden;
+	width: 24vh;
+	height: 6vh;
+	border-radius: 6px;
+	overflow: hidden;
+	left: 1vh;
+	border: 1px solid #003461;
+  animation: screen 1s alternate infinite;
+}
+
+@keyframes screen {
+  from {
+	  box-shadow: -0vh -0vh 3.5vh -1vh #0754e9 inset;
+  }
+  to {
+	  box-shadow: -0vh -0vh 4vh -1vh #0754e9 inset;
+  }
 }
 
 #earth .icon,
@@ -348,6 +372,25 @@ svg {
 	right: 1vh;
 }
 
+aside {
+	display: grid;
+	grid-template-columns: 1fr 0.5fr 1fr;
+  gap: 1vh;
+  align-items: center;
+  text-align: center;
+  border-top: 1px dashed gray;
+  margin-top: 2vh;
+}
+aside p {
+	grid-column: 1 / 4;
+}
+aside .button {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	text-align: center;
+}
+
 small {
   pointer-events: none;
 }
@@ -358,12 +401,15 @@ small {
 
 ul {
   padding: 0;
-  list-style: none;
   max-height: 50vh;
+  max-width: 400px;
   overflow: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1vh;
+}
+li {
+  list-style: none;
 }
 
 #chatlist, #players {
@@ -378,14 +424,20 @@ ul small {
 
 .button {
 	padding: 0.7vmin;
-	border: 1px solid;
-  background: #131212;
+	border: 1px solid currentColor;
+	background: #131212;
+	align-items: center;
 }
 
 .button:hover {
   background: #999;
   color: #131212;
   cursor: pointer;
+}
+
+.button.checked {
+  background: white;
+  color: #131212;
 }
 
 .button, #_dialog {

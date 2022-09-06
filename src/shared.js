@@ -32,9 +32,9 @@ buildings = {
     icon: '🏢',
     out: ['waste', '💩'],
     cost: [5, 'water'],
-    days: 1,
+    days: 0.1, //1,
     count: ['residents', '👩‍👩‍👦‍👦'],
-    cap: 142000,
+    cap: 72000,
   },
   water: {
     label: 'Water Plant',
@@ -64,7 +64,7 @@ buildings = {
     label: 'Earth Refugee Camp',
     icon: '⛺️',
     count: ['refugees', '👩‍👩‍👦‍👦'],
-    cap: 75000,
+    cap: 25000,
   },
   road: {
     label: 'Path',
@@ -87,7 +87,7 @@ stats = {
 	water: 0,
 }
 
-solDuration = 0.2 * 60 * 1000 // 60 seconds
+solDuration = 60 * 1000 // 60 seconds
 initialPhase = 0.0
 
 getNeighbours = function (row, col) {

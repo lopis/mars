@@ -11,6 +11,7 @@ export let userList = []
 export let commsList = []
 export let solCount = 0
 export let data = {}
+let gameStarted = false
 
 const render = () => {
   try {
@@ -55,16 +56,22 @@ export const updateStats = (newStats) => {
 }
 
 export const playOffline = () => {
-  intro.classList.add('gone')
-  bindIo()
-  renderTiles()
+  if (!gameStarted) {
+    gameStarted = true
+    intro.classList.add('gone')
+    bindIo()
+    renderTiles()
+  }
 }
 
 export const playGlobal = () => {
-  initAudio()
-  intro.classList.add('gone')
-  bindIo()
-  renderTiles()
+  if (!gameStarted) {
+    gameStarted = true
+    initAudio()
+    intro.classList.add('gone')
+    bindIo()
+    renderTiles()
+  }
 }
 
 export const initLoop = () => {

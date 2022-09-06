@@ -1,7 +1,31 @@
 import { toggleMusic, toggleSoundEffects } from './audio'
 import { playGlobal, playOffline } from './game'
-import { collect, sendMessage } from './io'
+import { collect, relocateAction, sendMessage } from './io'
 import { showUsers, showComms, showTileDialog, dismissDialog, updateMap, clearSelectedTile, showSolStats } from './ui'
+
+let houseDirection, houseNumber
+
+const updateHouseNumber = (ratio) => () => {
+  houseNumber = Math.round(Math.max(100, Math.min(1e5, houseNumber*ratio)))
+  _val.innerText = houseNumber > 1e3
+  ? Math.round(houseNumber / 1e3) + 'k'
+  : houseNumber
+}
+
+const updateDirection = (target) => {
+  movein.classList.remove('checked')
+  moveout.classList.remove('checked')
+  houseDirection = target.id
+  target.classList.add('checked')
+}
+
+const submitAction = () => {
+  if (!houseDirection) return
+
+  relocateAction(houseDirection, houseNumber)
+  dismissDialog()
+  clearSelectedTile()
+}
 
 export default () => {
   addEventListener('keyup', ({target, key}) => {
@@ -60,6 +84,21 @@ export default () => {
   addEventListener('click', ({target}) => {
     if(target?.dataset?.n) {
       showTileDialog(target)
+      houseDirection = null
+      houseNumber = 100
+      return
+    }
+
+    // House buttons
+    const houseDialogListern = ({
+      movein: updateDirection,
+      moveout:  updateDirection,
+      div10: updateHouseNumber(0.1),
+      mul10: updateHouseNumber(10),
+      ok: submitAction
+    })[target.id]
+    if (houseDialogListern) {
+      houseDialogListern(target)
       return
     }
 

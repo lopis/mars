@@ -8,12 +8,12 @@ const users = []
 const tiles = {}
 const events = []
 let solCount = 0,
-lastTime = Date.now(),
-timeStarted,
-gameRunning,
-eventCount = 0,
-totalPopulation = 0,
-deaths = 0
+	lastTime = Date.now(),
+	timeStarted,
+	gameRunning,
+	eventCount = 0,
+	totalPopulation = 0,
+	deaths = 0
 
 const getSol = () => {
 	if (!gameRunning) return solCount
@@ -34,10 +34,10 @@ function removeElement(array, element) {
 }
 
 class Tile {
-	interval = 5000 //5 * solDuration
+	interval = solDuration
 
 	constructor(row, col, id) {
-		Object.assign(this, {row, col, id, stock: 0})
+		Object.assign(this, { row, col, id, stock: 0 })
 	}
 
 	broadcast() {
@@ -48,23 +48,18 @@ class Tile {
 		this.build = 'wip'
 		this.willBe = buildID
 		this.broadcast()
-		// this.ready = false
 		setTimeout(() => {
 			this.build = buildID
+			this.willBe = null
+			if (build.cap) this.ppl = 0
 			this.broadcast()
-			// this.willBe = null
-			// this.ready = true
-			this.broadcast()
-		}, build.days * solDuration)
-
-		// Initiate production
-		if (build.out) {
-			setInterval(() => {
+			// Initiate production
+			safeTimeout(() => {
 				if (!this.ready) return
 				this.stock++
 				this.broadcast()
 			}, this.interval)
-		}
+		}, build.days * solDuration)
 	}
 }
 
@@ -79,6 +74,15 @@ class Tile {
 // 	}
 // }
 
+const safeTimeout = (fn, timeout) => {
+	if (!gameRunning) {
+		setTimeout(() => safeTimeout(fn, timeout), 1000)
+		return
+	}
+
+	setTimeout(fn, timeout)
+}
+
 /**
  * User session class
  */
@@ -88,8 +92,8 @@ class User {
 	 */
 	constructor(socket) {
 		const num = (from, to) => from + Math.round(Math.random() * (to - 1)),
-		char = () => String.fromCharCode(num(65, 26)),
-		a = char(), b = char(), c = num(1, 10)
+			char = () => String.fromCharCode(num(65, 26)),
+			a = char(), b = char(), c = num(1, 10)
 
 		this.socket = socket
 		this.name = `${a}${b}${c}`
@@ -106,7 +110,7 @@ const initScheduler = () => {
 			 * @param {Event} event
 			 */
 			(event) => {
-				const {alertTime, wait, old, fn} = event
+				const { alertTime, wait, old, fn } = event
 				const solCount = getSol()
 				if (!old && solCount > alertTime) {
 					// console.log(event, 'sol:', solCount);
@@ -144,18 +148,13 @@ const initConvoySchedule = () => {
 
 	// Scheduler runs a loop on a variable timeout
 	const scheduleNext = () => {
-		// If the game is paused, skip loop and try again later
-		if (!gameRunning) {
-			setTimeout(scheduleNext, 4 * solDuration)
-			return
-		}
 		// From 5 to 15 sols
 		const nextConvoy = Math.round(Math.random() * 5 + 10)
 		const count = Math.round(Math.random() * 5000 + 1000) * 10
 		setTimeout(() => {
 			const solCount = getSol()
 			Event.create('convoy1', 'ℹ️', solCount, 4)
-			Event.create('convoy2', 'ℹ️', solCount + 4*solDuration, 0, count, fn(count))
+			Event.create('convoy2', 'ℹ️', solCount + 4 * solDuration, 0, count, fn(count))
 
 			setTimeout(scheduleNext, 4 * solDuration)
 		}, (nextConvoy - 4) * solDuration)
@@ -165,38 +164,40 @@ const initConvoySchedule = () => {
 }
 
 const initRiotSchedule = () => {
-	setInterval(() => {
+	safeTimeout(() => {
 		Object.values(tiles)
-		// Only houses and the camp have ppl
-		.filter(tile => tile.ppl)
-		.forEach(house => {
-			const chanceOfRiot = (house.ppl / buildings[house.build].cap) - 0.99
-			// console.log('chance of riot', house.id, chanceOfRiot);
-			if (chanceOfRiot > Math.random()) {
-				const casualities = Math.ceil(house.ppl * 0.01)
-				Event.create(
-					'riot',
-					'⚠️',
-					solCount,
-					0,
-					casualities,
-					null,
-					house.id
-				)
-				house.ppl -= casualities
-				house.broadcast()
-				stats.population -= casualities
-				stats.workforce -= casualities
-				broadcastStats()
-				deaths += casualities
-			}
-		})
+			// Only houses and the camp have ppl
+			.filter(tile => tile.ppl)
+			.forEach(house => {
+				const chanceOfRiot = (house.ppl / buildings[house.build].cap) - 0.99
+				// console.log('chance of riot', house.id, chanceOfRiot);
+				if (chanceOfRiot > Math.random()) {
+					const casualities = Math.ceil(house.ppl * 0.01)
+					Event.create(
+						'riot',
+						'⚠️',
+						solCount,
+						0,
+						casualities,
+						null,
+						house.id
+					)
+					house.ppl -= casualities
+					house.broadcast()
+					stats.population -= casualities
+					stats.workforce -= casualities
+					broadcastStats()
+					deaths += casualities
+				}
+			})
+
+		initRiotSchedule()
 	}, 5000)
 }
 
-const CHANCE_OF_NEW_STORM = 0.05
+const CHANCE_OF_NEW_STORM = 0.01
 const initStormSchedule = () => {
-	setInterval(() => {
+	safeTimeout(() => {
 		const r = Math.random()
 		// Chance of new storm
 		if (r < CHANCE_OF_NEW_STORM) {
@@ -205,10 +206,10 @@ const initStormSchedule = () => {
 			tile.dust = true
 			tile.broadcast()
 			const neighbours = getNeighbours(tile.row, tile.col)
-			.map(([row, col]) => {
-				return Object.values(tiles).find(t => t.row == row && t.col == col)
-			})
-			.filter(n=>n)
+				.map(([row, col]) => {
+					return Object.values(tiles).find(t => t.row == row && t.col == col)
+				})
+				.filter(n => n)
 			neighbours.forEach(neighbour => {
 				neighbour.dust = true
 				neighbour.broadcast()
@@ -227,14 +228,14 @@ const initStormSchedule = () => {
 			tile.broadcast()
 		}
 
-		// Chance of storm moving
+		initStormSchedule()
 	}, 1000)
 }
 
 class Event {
 
-	constructor(name, type, alertTime, wait, count, fn, tileId) { 
-		Object.assign(this, {name, type, alertTime, wait, count, fn, tileId})
+	constructor(name, type, alertTime, wait, count, fn, tileId) {
+		Object.assign(this, { name, type, alertTime, wait, count, fn, tileId })
 		this.sol = Math.ceil(alertTime / solDuration + wait)
 	}
 
@@ -274,7 +275,7 @@ const CAMP = 'G2'
 const rows = 13
 let cols = Math.floor(rows / 2)
 for (let row = 0; row < rows; row++) {
-	const colNum = (row === 0 || row === rows -1 || cols === 13 - 1) ? cols - 2 : cols
+	const colNum = (row === 0 || row === rows - 1 || cols === 13 - 1) ? cols - 2 : cols
 	for (let col = 0; col < colNum; col++) {
 		const id = `${String.fromCharCode(65 + row)}${col}`
 		tiles[id] = new Tile(row, col, id)
@@ -284,14 +285,14 @@ for (let row = 0; row < rows; row++) {
 		} else if (id === CAMP) {
 			// Set the location of the refugee camp
 			tiles[id].build = 'camp'
-			tiles[id].ppl = 0
+			tiles[id].ppl = 999
 			tiles[id].unrest = 0
 		} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
 			// Place mountains in random locations
 			tiles[id].build = 'mount'
 			mountCount++
 		}
-	}	
+	}
 	if (row >= Math.floor(rows / 2)) {
 		cols--
 	} else {
@@ -352,18 +353,18 @@ module.exports = {
 		socket.on('msg', (msg) => {
 			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
 			console.info(`# ${user.name}: ${safeString}`)
-			broadcast('msg', {user: user.name, msg: safeString})
+			broadcast('msg', { user: user.name, msg: safeString })
 		})
 
-		socket.on('build', ({id, choice}) => {
+		socket.on('build', ({ id, choice }) => {
 			if (tiles[id] && !tiles[id].build && buildings[choice]) {
 				tiles[id].setBuild(choice, buildings[choice])
 			} else {
-				user.socket.emit('build-fail')	
+				user.socket.emit('build-fail')
 			}
 		})
 
-		socket.on('collect', ({id, count}) => {
+		socket.on('collect', ({ id, count }) => {
 			if (tiles[id] && tiles[id].stock > 0) {
 				const name = buildings[tiles[id].build].out[0]
 				const delta = count || tiles[id].stock
@@ -376,16 +377,28 @@ module.exports = {
 			}
 		})
 
+  	// socket.emit('move', { id: $selectedTile.dataset.n, action, count })
+		socket.on('move', ({id, action, count}) => {
+			if (count < 100 || count > 1e5 || tiles[id].build != 'house') return
+
+			const n = Math.min(count, tiles[CAMP].ppl)
+			console.log(id, action, count, n);
+			tiles[id].ppl += n * (action == 'movein' ? +1 : -1)
+			tiles[CAMP].ppl += n * (action == 'movein' ? -1 : +1)
+			tiles[id].broadcast()
+			tiles[CAMP].broadcast()
+		})
+
 		console.info('Connected: ' + socket.id)
 		users.forEach(user => {
 			user.socket.emit('users', {
 				id: user.id,
-				users: users.map(u => ({id: u.id, name: u.name}))
+				users: users.map(u => ({ id: u.id, name: u.name }))
 			})
 		})
 
 		broadcastStats()
-		user.socket.emit('world', {tiles, stats})
+		user.socket.emit('world', { tiles, stats })
 		user.socket.emit('events', events.filter(e => e.old))
 	},
 
@@ -394,7 +407,7 @@ module.exports = {
 			res.send(
 				[
 					`${users.length} Player(s): ${users.map(user => user.name).join(', ')}`,
-					`Sol: ${Math.ceil(getSol()/(solDuration))} (${getSol()} ms)`,
+					`Sol: ${Math.ceil(getSol() / (solDuration))} (${getSol()} ms)`,
 					`stats: ${JSON.stringify(stats)}`,
 					`events: ${JSON.stringify(events, null, ' ')}`,
 					`camp: ${JSON.stringify(tiles[CAMP])}`,

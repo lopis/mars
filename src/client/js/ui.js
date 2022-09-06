@@ -7,11 +7,8 @@ let isZoomed
 export const updateTile = ({id, build, stock, willBe, ppl, dust}) => {
   if (!tiles[id]) return
 
-  Object.assign(tiles[id], {stock, willBe, ppl, dust})
-
   if (dust) {
     tiles[id].$tile.classList.add('dust')
-    return
   } else {
     tiles[id].$tile.classList.remove('dust')
   }
@@ -39,11 +36,14 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust}) => {
       tiles[id].$tile.appendChild(r)
     }
   }
-  if (stock && stock > tiles[id].stock) {
+  if ((stock && stock > tiles[id].stock) || (ppl && ppl > tiles[id].ppl)) {
     tiles[id].$tile.classList.add('new')
   }
+
+  Object.assign(tiles[id], {stock, willBe, ppl, dust})
   
   if (dismissOnArrival) {
+    dismissDialog()
     dismissOnArrival = false
   }
 }
@@ -89,13 +89,24 @@ const renderCap = (tile, building) => {
   ].join('<br>')
 }
 
+const renderActions = () => {
+  return `<aside>
+<p>Move residents ↕️</p>
+<li class="button" id="movein">From camp</li>
+<br>
+<li class="button" id="moveout">To camp</li>
+<li class="button" id="div10">÷ 10</li><span id="_val">100</span><li class="button" id="mul10">× 10</li>
+<br>
+<li class="button" id="ok">OK</li>
+</aside>`
+}
+
 export const showTileDialog = (target) => {
   clearSelectedTile()
 
   $selectedTile = target
   target.classList.remove('new')
   const tile = tiles[target.dataset.n]
-  console.log('tile', tile);
   if (tile.dust) {
     return
   }
@@ -113,7 +124,11 @@ export const showTileDialog = (target) => {
           [`Collect all`, 'getall'],
         ].map(([label, id]) => 
           `<li class="button" id="${id}">${label}</li>`
-        ).join('')}</ul><br>${building.count ? renderCap(tile, building) : ''}`
+        ).join('')}</ul>${
+          building.count
+          ? `${renderCap(tile, building)}<br>${renderActions(tile, building)}`
+          : ''
+        }`,
       )
     } else {
       // STATS DIALOG
