@@ -38,21 +38,21 @@ export const playSound = (fn) => {
   source.start()
 }
 
-const playMusic = (frequency) => {
+const playNote = (note, time, frequency) => {
 
-  notes.forEach((note, time) => {
+  // notes.forEach((note, time) => {
     const osc = a.createOscillator()
     const gain = a.createGain()
     osc.connect(gain)
     gain.connect(a.destination)
-    gain.gain.setValueAtTime(0.01, a.currentTime + time*duration)
-    gain.gain.exponentialRampToValueAtTime(musicVolume, a.currentTime + time*duration + duration*0.05)
-    gain.gain.setValueAtTime(musicVolume, a.currentTime + time*duration + duration*0.8)
-    gain.gain.exponentialRampToValueAtTime(0.01, a.currentTime + time*duration + duration*1.5);
+    gain.gain.setValueAtTime(0.01, time)
+    gain.gain.exponentialRampToValueAtTime(musicVolume, time + duration*0.05)
+    gain.gain.setValueAtTime(musicVolume, time + duration*0.8)
+    gain.gain.exponentialRampToValueAtTime(0.01, time + duration*1.5);
     osc.frequency.value = frequency / 1.06 ** note
-    osc.start(a.currentTime + time*duration)
-    osc.stop(a.currentTime + time*duration + duration*1.5)
-  })
+    osc.start(time)
+    osc.stop(time + duration*1.5)
+  // })
 }
 
 const noiseBuffer = () => {
@@ -114,17 +114,30 @@ let a
  * @type {AudioBufferSourceNode}
  */
 let noise
-let musicLoop
+let musicIsPlaying = true
+let currentNoteIndex = 0
+let startTime = 0
+
+const scheduleNextNote = () => {
+  if (!musicIsPlaying) return
+  if (startTime + currentNoteIndex * duration < a.currentTime) {
+    console.log(currentNoteIndex, startTime + duration, variation);
+    playNote(notes[currentNoteIndex], startTime + currentNoteIndex * duration, variation)
+    currentNoteIndex++
+    if (currentNoteIndex == notes.length) {
+      startTime = a.currentTime + duration
+      currentNoteIndex = 0
+      variations.unshift(variation)
+      variation = variations.pop()
+    }
+  }
+  requestAnimationFrame(scheduleNextNote)
+}
 
 const startMusicLoop = () => {
   a = new AudioContext()
-  playMusic(variation)
-  musicLoop = setInterval(() => {
-    crossFade += duration
-    variations.unshift(variation)
-    variation = variations.pop()
-    playMusic(variation)
-  }, notes.length * duration * 1000)
+  startTime = a.currentTime
+  scheduleNextNote()
 }
 
 export const initAudio = () => {
@@ -136,17 +149,21 @@ export const toggleSoundEffects = () => {
   if (noise) {
     noise.stop()
     noise = null
+    _sound.classList.add('off')
   } else {
     startNoiseLoop(true)
+    _sound.classList.remove('off')
   }
 }
 
 export const toggleMusic = () => {
-  if (musicLoop) {
-    a.close()
-    clearInterval(musicLoop)
-    musicLoop = null
+  if (musicIsPlaying) {
+    musicIsPlaying = false
+    _music.classList.add('off')
   } else {
-    startMusicLoop(true)
+    musicIsPlaying = true
+    startTime = a.currentTime - currentNoteIndex * duration
+    scheduleNextNote()
+    _music.classList.remove('off')
   }
 }
