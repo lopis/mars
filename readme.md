@@ -1,4 +1,4 @@
-# Planet B
+# Planet B <sup>alpha</sup>
 
 We fucked up. Earth is dead. Time for planet B.
 
@@ -24,6 +24,10 @@ You will face several problems:
 - You might need to decide to let some people out to save your residents...
 
 There's a chat function to communicate with other people online.
+
+## Link to the game
+
+https://mars-planet-b.herokuapp.com/ (heroku takes a moment to warm up the first time)
 
 ## Development
 
