@@ -80,15 +80,15 @@ class Tile {
 		this.build = 'wip'
 		this.willBe = buildID
 		this.broadcast()
-		setTimeout(() => {
+		safeTimeout(() => {
 			this.build = buildID
 			this.willBe = null
 			if (build.cap) this.ppl = 0
 			this.broadcast()
 			// Initiate production
 			safeTimeout(() => {
-				if (!this.ready) return
-				this.stock++
+				// The increment is defined by the number of emoji in the output label.
+				this.stock += build.cost[1].length
 				this.broadcast()
 			}, this.interval)
 		}, build.days * solDuration)
@@ -199,7 +199,7 @@ const initRiotSchedule = () => {
 	safeTimeout(() => {
 		Object.values(tiles)
 			// Only houses and the camp have ppl
-			.filter(tile => tile.ppl)
+			.filter(tile => typeof tile.ppl !== 'undefined')
 			.forEach(house => {
 				const chanceOfRiot = (house.ppl / buildings[house.build].cap) - 0.99
 				if (chanceOfRiot > Math.random()) {
@@ -324,7 +324,7 @@ const generateTiles = () => {
 			} else if (id === CAMP) {
 				// Set the location of the refugee camp
 				tiles[id].build = 'camp'
-				tiles[id].ppl = 999
+				tiles[id].ppl = 0
 				tiles[id].unrest = 0
 			} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
 				// Place mountains in random locations

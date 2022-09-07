@@ -91,12 +91,12 @@ const renderCap = (tile, building) => {
 const renderActions = () => {
   return `<aside>
 <p>Move residents ↕️</p>
-<li class="button" id="movein">From camp</li>
-<br>
-<li class="button" id="moveout">To camp</li>
-<li class="button" id="div10">÷ 10</li><span id="_val">100</span><li class="button" id="mul10">× 10</li>
-<br>
-<li class="button" id="ok">OK</li>
+<li class="button radio" id="movein">From camp</li>
+<li class="button radio" id="moveout">To camp</li>
+<li class="button" id="div10">÷ 10</li>
+<li class="button" id="mul10">× 10</li>
+<span id="_val">100</span>
+<li class="button" id="ok">MOVE&nbsp;➡️</li>
 </aside>`
 }
 
