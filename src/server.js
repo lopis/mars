@@ -17,6 +17,9 @@ const hash = -105377644
  * @param {Array} users
  */
 const users = []
+/**
+ * @type Tile[]
+ */
 let tiles
 let events
 let solCount,
@@ -67,6 +70,13 @@ class Tile {
 	}
 
 	setBuild(buildID, build) {
+		const [cost, material] = build.cost
+		if (cost > stats[material]) return
+
+		// Update resource stats
+		stats[material] -= cost
+		broadcastStats()
+
 		this.build = 'wip'
 		this.willBe = buildID
 		this.broadcast()
@@ -345,8 +355,8 @@ const broadcastStats = () => {
 			deaths: deaths,
 			saved: totalPopulation,
 		})
-		broadcast('stats', stats)
 	})
+	broadcast('stats', stats)
 }
 
 generateTiles()
