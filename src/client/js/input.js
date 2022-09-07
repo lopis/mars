@@ -6,7 +6,7 @@ import { showUsers, showComms, showTileDialog, dismissDialog, updateMap, clearSe
 let houseDirection, houseNumber
 
 const updateHouseNumber = (ratio) => () => {
-  houseNumber = Math.round(Math.max(100, Math.min(1e5, houseNumber*ratio)))
+  houseNumber = Math.round(Math.max(10, Math.min(1e5, houseNumber*ratio)))
   _val.innerText = houseNumber > 1e3
   ? Math.round(houseNumber / 1e3) + 'k'
   : houseNumber
@@ -93,8 +93,8 @@ export default () => {
     const houseDialogListern = ({
       movein: updateDirection,
       moveout:  updateDirection,
-      div10: updateHouseNumber(0.1),
-      mul10: updateHouseNumber(10),
+      div: updateHouseNumber(0.2),
+      mul: updateHouseNumber(5),
       ok: submitAction
     })[target.id]
     if (houseDialogListern) {

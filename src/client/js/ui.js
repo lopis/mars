@@ -2,7 +2,7 @@ import { haow, playSound, woah } from './audio'
 import { userList, commsList, solCount, data } from './game'
 import { buildAction } from './io'
 
-let dismissOnArrival
+// let dismissOnArrival
 let isZoomed
 export const updateTile = ({id, build, stock, willBe, ppl, dust, riot}) => {
   const tile = tiles[id] 
@@ -41,10 +41,10 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot}) => {
   tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
   Object.assign(tile, {stock, willBe, ppl, dust})
   
-  if (dismissOnArrival) {
-    dismissDialog()
-    dismissOnArrival = false
-  }
+  // if (dismissOnArrival) {
+  //   dismissDialog()
+  //   dismissOnArrival = false
+  // }
 }
 
 function onBuildChoice ({target}) {
@@ -52,7 +52,8 @@ function onBuildChoice ({target}) {
     document.body.removeEventListener('click', onBuildChoice)
     buildAction($selectedTile.dataset.n, target.id)
     clearSelectedTile()
-    dismissOnArrival = true
+    // dismissOnArrival = true
+    dismissDialog()
   }
 }
 
@@ -93,8 +94,8 @@ const renderActions = () => {
 <p>Move residents ↕️</p>
 <li class="button radio" id="movein">From camp</li>
 <li class="button radio" id="moveout">To camp</li>
-<li class="button" id="div10">÷ 10</li>
-<li class="button" id="mul10">× 10</li>
+<li class="button" id="div">÷ 5</li>
+<li class="button" id="mul">× 5</li>
 <span id="_val">100</span>
 <li class="button" id="ok">MOVE&nbsp;➡️</li>
 </aside>`

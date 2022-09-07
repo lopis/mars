@@ -1,5 +1,5 @@
 import { updateUsers, updateChat, updateSol, updateStats } from './game'
-import { showComms, updateTile } from './ui';
+import { dismissDialog, showComms, updateTile } from './ui';
 import { updateEvent, updateEvents } from './ui-events';
 
 let socket //Socket.IO client
@@ -68,5 +68,6 @@ export const collect = (count) => () => {
   socket.emit('collect', { 
     id,
     count,
-   })
+  })
+  dismissDialog()
 }

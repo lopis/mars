@@ -430,11 +430,6 @@ ul small {
   cursor: pointer;
 }
 
-.button.checked {
-  background: white;
-  color: #131212;
-}
-
 .button, #_dialog {
   border-radius: 3px;
 }
