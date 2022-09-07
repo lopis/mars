@@ -1,3 +1,5 @@
+![image](https://user-images.githubusercontent.com/2715751/188812893-c452ed60-5f4d-45e6-9b7a-b5de22c44337.png)
+
 # Planet B <sup>alpha</sup>
 
 We fucked up. Earth is dead. Time for planet B.
