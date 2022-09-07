@@ -121,7 +121,6 @@ let startTime = 0
 const scheduleNextNote = () => {
   if (!musicIsPlaying) return
   if (startTime + currentNoteIndex * duration < a.currentTime) {
-    console.log(currentNoteIndex, startTime + duration, variation);
     playNote(notes[currentNoteIndex], startTime + currentNoteIndex * duration, variation)
     currentNoteIndex++
     if (currentNoteIndex == notes.length) {
@@ -149,21 +148,19 @@ export const toggleSoundEffects = () => {
   if (noise) {
     noise.stop()
     noise = null
-    _sound.classList.add('off')
   } else {
     startNoiseLoop(true)
-    _sound.classList.remove('off')
   }
+  _sound.classList.toggle('off', !!noise)
 }
 
 export const toggleMusic = () => {
   if (musicIsPlaying) {
     musicIsPlaying = false
-    _music.classList.add('off')
   } else {
     musicIsPlaying = true
     startTime = a.currentTime - currentNoteIndex * duration
     scheduleNextNote()
-    _music.classList.remove('off')
   }
+  _music.classList.toggle('off', !!musicIsPlaying)
 }

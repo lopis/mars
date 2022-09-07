@@ -4,19 +4,17 @@ import { buildAction } from './io'
 
 let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock, willBe, ppl, dust}) => {
-  if (!tiles[id]) return
+export const updateTile = ({id, build, stock, willBe, ppl, dust, riot}) => {
+  const tile = tiles[id] 
+  if (!tile) return
 
-  if (dust) {
-    tiles[id].$tile.classList.add('dust')
-  } else {
-    tiles[id].$tile.classList.remove('dust')
-  }
+  tile.$tile.classList.toggle('dust', !!dust)
+
 
   if (build === 'road') {
-    tiles[id].$tile.innerHTML = ''
-    tiles[id].$tile.classList.add('road')
-  } else if (build && build != tiles[id].build) {
+    tile.$tile.innerHTML = ''
+    tile.$tile.classList.add('road')
+  } else if (build && build != tile.build) {
     const $icon = document.createElement('span')
     $icon.style.animationDelay = -700 * Math.random() + 'ms'
     // $icon.classList.add(build)
@@ -25,22 +23,23 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust}) => {
       $icon.classList.add('still')
     }
     if (build === 'mount') {
-      tiles[id].$tile.classList.add('deco')
+      tile.$tile.classList.add('deco')
     }
-    tiles[id].$tile.replaceChildren($icon)
+    tile.$tile.replaceChildren($icon)
     $icon.innerText = buildings[build].icon
-    tiles[id].build = build
+    tile.build = build
     if (build === 'center' && typeof rocket2 === 'undefined') {
       const r = rocket.cloneNode(true)
       r.id = 'rocket2'
-      tiles[id].$tile.appendChild(r)
+      tile.$tile.appendChild(r)
     }
   }
-  if ((stock && stock > tiles[id].stock) || (ppl && ppl > tiles[id].ppl)) {
-    tiles[id].$tile.classList.add('new')
+  if ((stock && stock > tile.stock) || (ppl && ppl > tile.ppl)) {
+    tile.$tile.classList.add('new')
   }
 
-  Object.assign(tiles[id], {stock, willBe, ppl, dust})
+  tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
+  Object.assign(tile, {stock, willBe, ppl, dust})
   
   if (dismissOnArrival) {
     dismissDialog()

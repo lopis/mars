@@ -51,9 +51,9 @@ const eventFunctions = {
       rocket2.classList.remove('go')
     }, 6000)
   },
-  riot ({tileId}) {
-    tiles[tileId].$tile.classList.add('bad')
-  },
+  // riot ({tileId}) {
+  //   tiles[tileId].$tile.classList.add('bad')
+  // },
   asteroid () {
     
   },

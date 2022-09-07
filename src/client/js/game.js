@@ -39,7 +39,11 @@ export const updateChat = (user, msg) => {
 }
 
 export const updateSol = (gameData) => {
+  console.log('updateSol', gameData);
   if (gameData) {
+    if (data && gameData.start > data.start) {
+      window.location.reload()
+    }
     data = gameData
     solCount = data.sol
   }

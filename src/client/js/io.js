@@ -16,6 +16,7 @@ function bind() {
       localStorage.setItem('u', id)
       _users.dataset.count = users.length
     },
+    'restart': () => window.location.reload(),
     'msg': ({user, msg}) => {
       updateChat(user, msg)
       if (typeof _input !== 'undefined') {

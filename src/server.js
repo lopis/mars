@@ -17,15 +17,25 @@ const hash = -105377644
  * @param {Array} users
  */
 const users = []
-const tiles = {}
-const events = []
-let solCount = 0,
-	lastTime = Date.now(),
+let tiles
+let events
+let solCount,
+	lastTime,
 	timeStarted,
 	gameRunning,
+	eventCount,
+	totalPopulation,
+	deaths
+
+const startTime = () => {
+	solCount = 0,
+	lastTime = Date.now(),
+	timeStarted = 0,
+	gameRunning = false,
 	eventCount = 0,
 	totalPopulation = 0,
 	deaths = 0
+}
 
 const getSol = () => {
 	if (!gameRunning) return solCount
@@ -182,7 +192,6 @@ const initRiotSchedule = () => {
 			.filter(tile => tile.ppl)
 			.forEach(house => {
 				const chanceOfRiot = (house.ppl / buildings[house.build].cap) - 0.99
-				// console.log('chance of riot', house.id, chanceOfRiot);
 				if (chanceOfRiot > Math.random()) {
 					const casualities = Math.ceil(house.ppl * 0.01)
 					Event.create(
@@ -195,11 +204,15 @@ const initRiotSchedule = () => {
 						house.id
 					)
 					house.ppl -= casualities
+					house.riot = true
 					house.broadcast()
 					stats.population -= casualities
 					stats.workforce -= casualities
 					broadcastStats()
 					deaths += casualities
+				} else if(house.riot) {
+					house.riot = false
+					house.broadcast()
 				}
 			})
 
@@ -255,6 +268,8 @@ class Event {
 		broadcast('event', this)
 	}
 	static init() {
+		console.log('🤖 Initializing events');
+		events = []
 		initScheduler()
 		initConvoySchedule()
 		initRiotSchedule()
@@ -279,36 +294,39 @@ class Event {
 // Generate all tiles
 // including tiles that don't exist, for simplicity;
 // Creates 12 x 12 tiles
-console.log('🤖 Generating tiles');
 let mountCount = 0
 const MOUNT_COUNT = 20
 const CENTER = 'G1'
 const CAMP = 'G2'
 const rows = 13
-let cols = Math.floor(rows / 2)
-for (let row = 0; row < rows; row++) {
-	const colNum = (row === 0 || row === rows - 1 || cols === 13 - 1) ? cols - 2 : cols
-	for (let col = 0; col < colNum; col++) {
-		const id = `${String.fromCharCode(65 + row)}${col}`
-		tiles[id] = new Tile(row, col, id)
-		if (id === CENTER) {
-			// Set the location of the space center
-			tiles[id].build = 'center'
-		} else if (id === CAMP) {
-			// Set the location of the refugee camp
-			tiles[id].build = 'camp'
-			tiles[id].ppl = 999
-			tiles[id].unrest = 0
-		} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
-			// Place mountains in random locations
-			tiles[id].build = 'mount'
-			mountCount++
+const generateTiles = () => {
+	console.log('🤖 Generating tiles');
+	tiles = {}
+	let cols = Math.floor(rows / 2)
+	for (let row = 0; row < rows; row++) {
+		const colNum = (row === 0 || row === rows - 1 || cols === 13 - 1) ? cols - 2 : cols
+		for (let col = 0; col < colNum; col++) {
+			const id = `${String.fromCharCode(65 + row)}${col}`
+			tiles[id] = new Tile(row, col, id)
+			if (id === CENTER) {
+				// Set the location of the space center
+				tiles[id].build = 'center'
+			} else if (id === CAMP) {
+				// Set the location of the refugee camp
+				tiles[id].build = 'camp'
+				tiles[id].ppl = 999
+				tiles[id].unrest = 0
+			} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
+				// Place mountains in random locations
+				tiles[id].build = 'mount'
+				mountCount++
+			}
 		}
-	}
-	if (row >= Math.floor(rows / 2)) {
-		cols--
-	} else {
-		cols++
+		if (row >= Math.floor(rows / 2)) {
+			cols--
+		} else {
+			cols++
+		}
 	}
 }
 
@@ -331,7 +349,8 @@ const broadcastStats = () => {
 	})
 }
 
-console.log('🤖 Initializing events');
+generateTiles()
+startTime()
 Event.init()
 
 /**
@@ -432,8 +451,11 @@ module.exports = {
 		const html = `<form method="POST"><input name="pwd" type=text/><button type="submit">Reset Game</button>`
 		if (req.method === 'POST') {
 			const correct = hashCode(req.body.pwd) === hash
+			broadcast('restart')
 			res.send(correct + html)
-			// TODO: reset game here
+			generateTiles()
+			startTime()
+			Event.init()
 		} else {
 			res.send(html)
 		}
