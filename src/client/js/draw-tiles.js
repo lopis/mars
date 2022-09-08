@@ -31,6 +31,7 @@ export const renderTiles = () => {
       tiles[id] = {
         $tile,
         id,
+        row,
         // A little math to adjust the day/night cycle of the tiles
         col: (col + 2/colNum) / colNum, // + Math.random() * 0.1,
         stock: 0,

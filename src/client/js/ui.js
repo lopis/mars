@@ -158,12 +158,15 @@ export const showTileDialog = (target) => {
       ].join('<br>')
       return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
     }
+    const options = tile.row === 0 ? ['water']
+      : tile.mine ? ['minery', 'nuclear']
+      : ['house', 'solar', 'greenery']
     renderDialog(
       tile,
       'Choose build',
       `<ul>${
         Object.entries(buildings).filter(
-          type => type[1].out && (tile.id[0] == 'A' ? type[1].polar : !type[1].polar)
+          ([id, type]) => options.includes(id)
         ).map(renderChoice).join('')
       }</ul>`
     )
