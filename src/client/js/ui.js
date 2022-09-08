@@ -75,9 +75,9 @@ export const dismissDialog = () => {
 }
 
 export const renderDialog = (tile, prompt, choicesHTML) => {
-  const type = tile.mine ? '🔵 Rocky area'
-  : tile.row === 0 ? '⚪️ Glaciar'
-  : '🟤 Open plains'
+  const type = tile?.mine ? '🔵 Rocky area'
+  : tile?.row === 0 ? '⚪️ Glaciar'
+  : tile ? '🟤 Open plains' : ''
   _prompt.innerHTML = (tile ? `<b>Sector ${tile.id} ${type}</b><br>` : '') + prompt
   _choices.innerHTML = choicesHTML
   playSound(haow)

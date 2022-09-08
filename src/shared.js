@@ -8,7 +8,7 @@ buildings = {
     days: 2,
   },
   minery: {
-    label: 'Refinery',
+    label: 'Minery',
     icon: '🏭',
     out: ['minerals', '🪨'],
     in: ['energy', '🔋'],

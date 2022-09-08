@@ -80,8 +80,9 @@ canvas {
 	transform: scale(0.6);
 }
 
+/* polar */
 .row:first-child .hex {
-	--tile-color: #272727;
+	--tile-color: #00474e;
 }
 .a11y .row:first-child .hex {
 	--tile-color: #cccccc;
@@ -200,7 +201,7 @@ canvas {
   font-size: 80%;
 }
 .mine {
-  --tile-color: #101924;
+  --tile-color: #001e44;
 }
 .mine:hover {
   --tile-color: #458ce9;
@@ -231,6 +232,9 @@ canvas {
 .hex.dust {
   animation: dust 800ms alternate infinite;
   cursor: wait;
+  transform: scale(1) !important;
+  --tile-color: red !important;
+  opacity: 1;
 }
 .hex.dust span {
   opacity: 0.3;
@@ -239,16 +243,16 @@ canvas {
 
 @keyframes dust {
   0% {
-    filter: blur(0.3vh) saturate(0.5) brightness(0.5);
+    filter: blur(.3vh) saturate(0.5) brightness(0.5);
   }
   20% {
-    filter: blur(0.5vh) saturate(0.5) brightness(0.5);
+    filter: blur(.5vh) saturate(0.5) brightness(0.5);
   }
   80% {
-    filter: blur(0.3vh) saturate(0.5) brightness(0.5);
+    filter: blur(.3vh) saturate(0.5) brightness(0.5);
   }
   100% {
-    filter: blur(0.5vh) saturate(0.5) brightness(0.5);
+    filter: blur(.5vh) saturate(0.5) brightness(0.5);
   }
 }
 
