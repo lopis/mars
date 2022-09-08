@@ -13,19 +13,31 @@ Somehow in the last years the world governments managed to put aside their diffe
 In this glocal co-op game you're one of Mars' managers.
 Any number of players can join simultaneously to help deal with every day tasks like:
 
-- Welcome refugee ships and assign them housing
-- Build housing for the refugees
-- Harvest resources by building varied infrastructure
+- Build houses for the refugees
+- Welcome refugee ships and move them to houses
+- Build varied buildings and collect resources from them
+  - Buildings can only be built next to your colony, or connected by paths
 - Move resources where they are needed.
 
 You will face several problems:
 
-- The more people are crammed together, the more likely riots emerge
-- Without enough resources, people will also riot
+- The more people are crammed together, the more likely riots emerge. When riots start, people will die.
+- Without enough resources, people will also riot.
 - Natural disasters can occur that disrupt comms or destroy infrastructure
+  - Dust storms will cut communication off with that area
 - You might need to decide to let some people out to save your residents...
 
 There's a chat function to communicate with other people online.
+
+### Game map
+
+The map represents the planet Mars. There are 3 types of areas:
+
+ - Red tiles, aka "Open Plains" where you can build houses and solar plants
+ - Blue tiles around the mountains, or "Rocky areas" where you can build mines and nuclear plants
+ - White tiles, or "Glaciar" where you can harvest water
+
+There are the mountains where you can't build anything.
 
 ## Link to the game
 
