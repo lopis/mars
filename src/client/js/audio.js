@@ -130,7 +130,8 @@ const scheduleNextNote = () => {
       variation = variations.pop()
     }
   }
-  requestAnimationFrame(scheduleNextNote)
+  // Using setTimeout instead of requestAnimationFrame otherwise it stops when window is not focused.
+  setTimeout(scheduleNextNote, 10)
 }
 
 const startMusicLoop = () => {
@@ -151,7 +152,7 @@ export const toggleSoundEffects = () => {
   } else {
     startNoiseLoop(true)
   }
-  _sound.classList.toggle('off', !!noise)
+  _sound.classList.toggle('off', !noise)
 }
 
 export const toggleMusic = () => {
@@ -162,5 +163,5 @@ export const toggleMusic = () => {
     startTime = a.currentTime - currentNoteIndex * duration
     scheduleNextNote()
   }
-  _music.classList.toggle('off', !!musicIsPlaying)
+  _music.classList.toggle('off', !musicIsPlaying)
 }

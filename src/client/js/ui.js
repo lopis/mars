@@ -4,7 +4,7 @@ import { buildAction } from './io'
 
 // let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock, willBe, ppl, dust, riot}) => {
+export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine}) => {
   const tile = tiles[id] 
   if (!tile) return
 
@@ -38,8 +38,9 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot}) => {
     tile.$tile.classList.add('new')
   }
 
+  tile.$tile.classList.toggle('mine', !!mine)
   tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
-  Object.assign(tile, {stock, willBe, ppl, dust})
+  Object.assign(tile, {stock, willBe, ppl, dust, mine})
   
   // if (dismissOnArrival) {
   //   dismissDialog()
@@ -152,6 +153,7 @@ export const showTileDialog = (target) => {
           ? `outputs ${out.join(' ')}`
           : 'connects sectors',
         `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
+        `<span>uses ${cost[0]} ${cost[1]}</span>`,
         `builds in ${days} sols`
       ].join('<br>')
       return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`

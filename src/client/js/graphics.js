@@ -8,36 +8,24 @@ export const initContext = () => {
   mobile = window.matchMedia('(max-width: 810px)').matches
 
   updatePlanetSize()
+  createGradient()
 
   window.addEventListener('resize', () => {
     canvas.width = innerWidth
     canvas.height = innerHeight
     mobile = window.matchMedia('(max-width: 810px)').matches
     updatePlanetSize()
+    createGradient()
   })
 
-  const zero = { x: innerWidth / 2, y: innerHeight / 2}
-  const gradientRadius = planetSize * 2
+}
 
-  // gradient = context.createLinearGradient(
-  //   zero.x + planetSize * Math.sin(tilt), // x0
-  //   zero.y - planetSize * Math.cos(tilt), // y0
-  //   zero.x - planetSize * Math.sin(tilt), // x1
-  //   zero.y + planetSize * Math.cos(tilt), // y1
-  // )
-  // console.log(
-  //   zero.x, // x0
-  //   zero.y - planetSize, // y0
-  //   zero.x, // x1
-  //   zero.y  + planetSize, // y1
-  // );
+const createGradient = () => {
+  const zero = { x: canvas.width / 2, y: canvas.height / 2}
+  const gradientRadius = planetSize * 2
 
   const iceSize = 0.14
   const fade = 0.03
-  // gradient.addColorStop(iceSize, 'white')
-  // gradient.addColorStop(iceSize + fade, RED)
-  // gradient.addColorStop(1 - iceSize - fade, RED)
-  // gradient.addColorStop(1 - iceSize, 'white')
 
   gradient = context.createRadialGradient(
     zero.x + gradientRadius * Math.sin(tilt), // x0
@@ -62,3 +50,12 @@ export const getCanvasCenter = () => {
   }
 }
 
+export const toggleEffects = () => {
+  document.body.classList.toggle('fast')
+  _fast.classList.toggle('off')
+}
+
+export const toggleColorBlindness = () => {
+  document.body.classList.toggle('a11y')
+  _a11y.classList.toggle('off')
+}

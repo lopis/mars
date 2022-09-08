@@ -2,7 +2,8 @@ buildings = {
   greenhouse: {
     label: 'Greenhouse',
     icon: '🌳',
-    out: ['oxygen', '🫁'],
+    out: ['food', '🥔'],
+    in: ['waste', '💩'],
     cost: [5, 'water'],
     days: 2,
   },
@@ -10,6 +11,7 @@ buildings = {
     label: 'Refinery',
     icon: '🏭',
     out: ['minerals', '🪨'],
+    in: ['energy', '🔋'],
     cost: [5, 'energy'],
     days: 3,
   },
@@ -32,6 +34,7 @@ buildings = {
     icon: '🏢',
     out: ['waste', '💩'],
     cost: [5, 'water'],
+    in: ['food', '🥔'],
     days: 1,
     count: ['residents', '👩‍👩‍👦‍👦'],
     cap: 72000,
@@ -47,12 +50,6 @@ buildings = {
   wip: {
     icon: '🏗',
   },
-  // hydrogen: {
-  //   label: 'Hydrogen Refinery',
-  //   icon: '⛲️',
-  //   out: ['water', '🔘'],
-  //   polar: true,
-  // }
   center: {
     label: 'Space Center',
     icon: '📡'
@@ -81,13 +78,13 @@ stats = {
   consumption: 0,
   heating: 0,
 	minerals: 5,
-	oxygen: 5,
+	food: 5,
   energy: 5,
 	heat: 5,
 	water: 5,
 }
 
-solDuration = 0.2 * 60 * 1000 // 60 seconds
+solDuration = 60 * 1000 // 60 seconds
 initialPhase = 0.0
 
 getNeighbours = function (row, col) {

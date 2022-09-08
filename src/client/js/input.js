@@ -1,5 +1,6 @@
 import { toggleMusic, toggleSoundEffects } from './audio'
 import { playGlobal, playOffline } from './game'
+import { toggleColorBlindness, toggleEffects } from './graphics'
 import { collect, relocateAction, sendMessage } from './io'
 import { showUsers, showComms, showTileDialog, dismissDialog, updateMap, clearSelectedTile, showSolStats } from './ui'
 
@@ -120,6 +121,8 @@ export default () => {
     ({
       _sound: toggleSoundEffects,
       _music: toggleMusic,
+      _fast: toggleEffects,
+      _a11y: toggleColorBlindness,
     })[target.id]?.()
 
   })

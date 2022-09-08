@@ -167,7 +167,7 @@ const initConvoySchedule = () => {
 		stats.population += count
 
 		// TODO: add to workforce only after they move to houses?
-		stats.workforce += count * 0.4
+		stats.workforce += Math.round(count * 0.4)
 		totalPopulation += count
 		eventCount++
 		broadcastStats()
@@ -183,12 +183,12 @@ const initConvoySchedule = () => {
 		// From 5 to 15 sols
 		const nextConvoy = Math.round(Math.random() * 5 + 10)
 		const count = Math.round(Math.random() * 5000 + 1000) * 10
-		setTimeout(() => {
+		safeTimeout(() => {
 			const solCount = getSol()
 			Event.create('convoy1', 'ℹ️', solCount, 4)
 			Event.create('convoy2', 'ℹ️', solCount + 4 * solDuration, 0, count, fn(count))
 
-			setTimeout(scheduleNext, 4 * solDuration)
+			safeTimeout(scheduleNext, 4 * solDuration)
 		}, (nextConvoy - 4) * solDuration)
 	}
 
@@ -217,10 +217,10 @@ const initRiotSchedule = () => {
 					house.riot = true
 					house.broadcast()
 					stats.population -= casualities
-					stats.workforce -= casualities
+					stats.workforce -= Math.round(casualities * 0.4)
 					broadcastStats()
 					deaths += casualities
-				} else if(house.riot) {
+				} else if(house.riot && chanceOfRiot <= 0) {
 					house.riot = false
 					house.broadcast()
 				}
@@ -228,6 +228,12 @@ const initRiotSchedule = () => {
 
 		initRiotSchedule()
 	}, 5000)
+}
+
+const getNeighbourTiles = (tile) => {
+	return getNeighbours(tile.row, tile.col).map(([row, col]) => {
+		return Object.values(tiles).find(t => t.row == row && t.col == col)
+	}).filter(n => n)
 }
 
 const CHANCE_OF_NEW_STORM = 0.01
@@ -240,11 +246,7 @@ const initStormSchedule = () => {
 			const tile = Object.values(tiles)[idx]
 			tile.dust = true
 			tile.broadcast()
-			const neighbours = getNeighbours(tile.row, tile.col)
-				.map(([row, col]) => {
-					return Object.values(tiles).find(t => t.row == row && t.col == col)
-				})
-				.filter(n => n)
+			const neighbours = getNeighbourTiles(tile)
 			neighbours.forEach(neighbour => {
 				neighbour.dust = true
 				neighbour.broadcast()
@@ -304,8 +306,7 @@ class Event {
 // Generate all tiles
 // including tiles that don't exist, for simplicity;
 // Creates 12 x 12 tiles
-let mountCount = 0
-const MOUNT_COUNT = 20
+const MOUNT_COUNT = 10
 const CENTER = 'G1'
 const CAMP = 'G2'
 const rows = 13
@@ -318,19 +319,6 @@ const generateTiles = () => {
 		for (let col = 0; col < colNum; col++) {
 			const id = `${String.fromCharCode(65 + row)}${col}`
 			tiles[id] = new Tile(row, col, id)
-			if (id === CENTER) {
-				// Set the location of the space center
-				tiles[id].build = 'center'
-			} else if (id === CAMP) {
-				// Set the location of the refugee camp
-				tiles[id].build = 'camp'
-				tiles[id].ppl = 0
-				tiles[id].unrest = 0
-			} else if (row > 1 & Math.random() < 0.1 && mountCount < MOUNT_COUNT) {
-				// Place mountains in random locations
-				tiles[id].build = 'mount'
-				mountCount++
-			}
 		}
 		if (row >= Math.floor(rows / 2)) {
 			cols--
@@ -338,6 +326,26 @@ const generateTiles = () => {
 			cols++
 		}
 	}
+
+	// Set the location of the space center
+	tiles[CENTER].build = 'center'
+	// Set the location of the refugee camp
+	tiles[CAMP].build = 'camp'
+	tiles[CAMP].ppl = 0
+	// Place mountains in random locations
+	let mountTiles = []
+	while (mountTiles.length < MOUNT_COUNT) {
+		const index = Math.floor(Math.random() * (Object.values(tiles).length - 1))
+		const tile = Object.values(tiles)[index]
+		if (!mountTiles.includes(tile.id)) {
+			tile.build = 'mount'
+			getNeighbourTiles(tile).forEach(tile => {
+				tile.mine = true
+			})
+			mountTiles.push(tile.id)
+		}
+	}
+	console.log('🤖 Generated mines');
 }
 
 const broadcast = (event, data) => {

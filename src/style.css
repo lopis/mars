@@ -50,6 +50,10 @@ canvas {
   transform: rotate(25deg);
 }
 
+.a11y .hex {
+  --tile-color: #500505;
+}
+
 #wrapper {
   transition: transform 500ms ease-in-out;
   height: 100vh;
@@ -69,6 +73,9 @@ canvas {
 
 .row:first-child .hex {
 	--tile-color: #272727;
+}
+.a11y .row:first-child .hex {
+	--tile-color: #cccccc;
 }
 
 .hex.night:not(:empty) {
@@ -97,6 +104,7 @@ canvas {
   transition: all var(--fade-time) ease;
   background: var(--tile-color);
   box-sizing: border-box;
+  border-radius: 4px;
 }
 .night, .night::after, .night::before {
   box-shadow: 0 0 3vh -0.5vh var(--tile-color);
@@ -129,11 +137,9 @@ canvas {
   width: 100%;
   text-align: center;
   transform-origin: bottom;
-  animation: bounce 700ms alternate infinite;
-  transform: rotate(-25deg) translateY(-16%) scale(1, 1);
+  transform: translate(0.9vh,-1.6vh) rotate(-25deg) scale(1, 1);
   animation-timing-function: ease-in;
   pointer-events: none;
-  /* text-shadow: 0 0 1px black; */
 }
 .hex span::after {
   position: absolute;
@@ -143,15 +149,25 @@ canvas {
 }
 
 .new span::after {
-  content: "🔷";
+	content: "";
+	display: inline-block;
+	background: #0093ff;
+	height: 1.5vh;
+	width: 1.5vh;
+	border-radius: 1vh;
+	border: 1px solid #363636;
 }
 
 .hex .wip {
-  animation-duration: 200ms;
+  animation: bounce 120ms alternate infinite;
+}
+
+.still {
+  animation: none;
 }
 
 .bad span {
-  animation-duration: 120ms !important;
+  animation: bounce 120ms alternate infinite;
   text-shadow: 0 -1vh 2vh red
 }
 .bad span::after {
@@ -159,11 +175,8 @@ canvas {
   font-size: 50%;
 }
 
-.still {
-  animation-duration: 9999s !important;
-}
 .deco {
-	--tile-color: transparent;
+	--tile-color: transparent !important;
 	pointer-events: none;
 	/* transform: scale(1.7) translate(0%,-20%); */
 	filter: sepia(1) hue-rotate(-20deg) brightness(0.5);
@@ -177,6 +190,16 @@ canvas {
 .mount::first-letter {
   font-size: 80%;
 }
+.mine {
+  --tile-color: #101924;
+}
+.mine:hover {
+  --tile-color: #458ce9;
+}
+
+.a11y .mine {
+  --tile-color: #0b69db;
+}
 
 .road {
 	--tile-color: linear-gradient(transparent 30%, #3f0e0e 30%, #3f0e0e 70%, transparent 70%);
@@ -189,11 +212,9 @@ canvas {
 
 @keyframes bounce {
   from {
-    /* transform: translate(10%,-20%) rotate(-25deg) scale(1, 1); */
     transform: translate(0.9vh,-1.6vh) rotate(-25deg) scale(1, 1);
   }
   to {
-    /* transform: translate(10%,-20%) rotate(-25deg) scale(1.2, 0.8); */
     transform: translate(0.9vh,-1.6vh) rotate(-25deg) scale(1.2, 0.8);
   }
 }
@@ -239,6 +260,10 @@ svg {
   top: 0;
   left: 0;
   z-index: -1;
+}
+
+.fast svg {
+  display: none;
 }
 
 .noise {
@@ -485,7 +510,7 @@ ul small {
 	top: 0;
 	right: 0;
 	display: grid;
-	grid-template-columns: 1fr 1fr repeat(3, 3fr);
+	grid-template-columns: repeat(4, 1fr) repeat(3, 3fr);
 	padding: 1vh;
 	gap: 1vh;
 }
