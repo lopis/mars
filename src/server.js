@@ -306,7 +306,7 @@ class Event {
 // Generate all tiles
 // including tiles that don't exist, for simplicity;
 // Creates 12 x 12 tiles
-const MOUNT_COUNT = 10
+const MOUNT_COUNT = 6
 const CENTER = 'G1'
 const CAMP = 'G2'
 const rows = 13
