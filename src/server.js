@@ -68,7 +68,6 @@ class Tile {
 	broadcast() {
 		broadcast('tile', this)
 	}
-
 	setBuild(buildID, build) {
 		const [cost, material] = build.cost
 		if (cost > stats[material]) return
@@ -80,6 +79,11 @@ class Tile {
 		this.build = 'wip'
 		this.willBe = buildID
 		this.broadcast()
+		getNeighbourTiles(this)
+		.forEach(tile => {
+			tile.free = true
+			tile.broadcast()
+		})
 		safeTimeout(() => {
 			this.build = buildID
 			this.willBe = null
@@ -145,7 +149,6 @@ const initScheduler = () => {
 				const { alertTime, wait, old, fn } = event
 				const solCount = getSol()
 				if (!old && solCount > alertTime) {
-					// console.log(event, 'sol:', solCount);
 					event.broadcast()
 					event.old = true
 					if (fn) fn()
@@ -332,6 +335,10 @@ const generateTiles = () => {
 	// Set the location of the refugee camp
 	tiles[CAMP].build = 'camp'
 	tiles[CAMP].ppl = 0
+	getNeighbourTiles(tiles[CENTER])
+	.concat(getNeighbourTiles(tiles[CAMP]))
+	.forEach(tile => tile.free = true)
+
 	// Place mountains in random locations
 	let mountTiles = []
 	while (mountTiles.length < MOUNT_COUNT) {

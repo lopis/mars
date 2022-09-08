@@ -4,7 +4,7 @@ import { buildAction } from './io'
 
 // let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine}) => {
+export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, free}) => {
   const tile = tiles[id] 
   if (!tile) return
 
@@ -39,8 +39,9 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine}) =>
   }
 
   tile.$tile.classList.toggle('mine', !!mine)
+  tile.$tile.classList.toggle('free', !!free)
   tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
-  Object.assign(tile, {stock, willBe, ppl, dust, mine})
+  Object.assign(tile, {stock, willBe, ppl, dust, mine, free})
   
   // if (dismissOnArrival) {
   //   dismissDialog()
@@ -74,7 +75,10 @@ export const dismissDialog = () => {
 }
 
 export const renderDialog = (tile, prompt, choicesHTML) => {
-  _prompt.innerHTML = (tile ? `<b>Sector ${tile.id}</b><br>` : '') + prompt
+  const type = tile.mine ? '🔵 Rocky area'
+  : tile.row === 0 ? '⚪️ Glaciar'
+  : '🟤 Open plains'
+  _prompt.innerHTML = (tile ? `<b>Sector ${tile.id} ${type}</b><br>` : '') + prompt
   _choices.innerHTML = choicesHTML
   playSound(haow)
   _dialog.classList.add('show')
@@ -146,8 +150,8 @@ export const showTileDialog = (target) => {
 
   } else {
     // BUILD DIALOG
-    const renderChoice = ([id, {out, label, icon, cost, days}]) => {
-      const costClass = stats[cost[1]] >= cost[0] ? '' : 'red'
+    const renderChoice = tile => ([id, {out, label, icon, cost, days}]) => {
+      const costClass = tile.free && stats[cost[1]] >= cost[0] ? '' : 'red'
       const details = [
         out.length
           ? `outputs ${out.join(' ')}`
@@ -158,16 +162,19 @@ export const showTileDialog = (target) => {
       ].join('<br>')
       return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
     }
-    const options = tile.row === 0 ? ['water']
+    const options = ['road'].concat(
+      tile.row === 0 ? ['water']
       : tile.mine ? ['minery', 'nuclear']
       : ['house', 'solar', 'greenery']
+    )
+    const warning = tile.free ? '' : '<p class="red">This area isn\'t connected to your colony yet</p>'
     renderDialog(
       tile,
       'Choose build',
-      `<ul>${
+      `${warning}<ul>${
         Object.entries(buildings).filter(
           ([id, type]) => options.includes(id)
-        ).map(renderChoice).join('')
+        ).map(renderChoice(tile)).join('')
       }</ul>`
     )
     _dialog.addEventListener('click', onBuildChoice)

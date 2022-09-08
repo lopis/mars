@@ -39,7 +39,6 @@ export const updateChat = (user, msg) => {
 }
 
 export const updateSol = (gameData) => {
-  console.log('updateSol', gameData);
   if (gameData) {
     if (data && gameData.start > data.start) {
       window.location.reload()
@@ -54,8 +53,7 @@ export const updateSol = (gameData) => {
 export const updateStats = (newStats) => {
   stats = newStats
   Object.entries(newStats).forEach(([key, value]) => {
-    value = value > 1e3 ? Math.round(value / 1e3) + 'K' : value
-    console.log(key, document.getElementById(key));
+    value = value > 1e3 ? Math.floor(value / 1e3) + 'K' : value
     if (document.getElementById(key)) {
       document.getElementById(key).dataset.count = value
     }

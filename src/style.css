@@ -68,7 +68,16 @@ canvas {
   width: calc(var(--hex-width) * var(--hex-size));
   height: calc(var(--hex-size-height) * var(--hex-size));
   margin: 0.8vmin 0.3vmin;
-  opacity: 0.7;
+  opacity: 0.5;
+  transition: transform 500ms ease-in-out;
+}
+
+.hex.free {
+  opacity: 0.8;
+}
+
+.hex:not(.free):not(.deco) {
+	transform: scale(0.8);
 }
 
 .row:first-child .hex {
@@ -202,12 +211,12 @@ canvas {
 }
 
 .road {
-	--tile-color: linear-gradient(transparent 30%, #3f0e0e 30%, #3f0e0e 70%, transparent 70%);
-  transform: scale(1.1);
+  top: -1vh !important;
 }
 
-.road:hover {
-	--tile-color: linear-gradient(transparent 30%, #e9a745 30%, #e9a745 70%, transparent 70%);
+.road, .road::after, .road::before {
+  height: calc(var(--hex-size-height) * var(--hex-size) - 2vh);
+  border-radius: 0
 }
 
 @keyframes bounce {
@@ -220,7 +229,6 @@ canvas {
 }
 
 .hex.dust {
-  --tile-color: #2a1413 !important;;
   animation: dust 800ms alternate infinite;
   cursor: wait;
 }
@@ -231,16 +239,16 @@ canvas {
 
 @keyframes dust {
   0% {
-    filter: blur(0.3vh);
+    filter: blur(0.3vh) saturate(0.5) brightness(0.5);
   }
   20% {
-    filter: blur(0.5vh);
+    filter: blur(0.5vh) saturate(0.5) brightness(0.5);
   }
   80% {
-    filter: blur(0.3vh);
+    filter: blur(0.3vh) saturate(0.5) brightness(0.5);
   }
   100% {
-    filter: blur(0.5vh);
+    filter: blur(0.5vh) saturate(0.5) brightness(0.5);
   }
 }
 
