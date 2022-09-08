@@ -59,7 +59,7 @@ function removeElement(array, element) {
 }
 
 class Tile {
-	interval = solDuration
+	interval = 1000//solDuration
 
 	constructor(row, col, id) {
 		Object.assign(this, { row, col, id, stock: 0 })
@@ -68,6 +68,16 @@ class Tile {
 	broadcast() {
 		broadcast('tile', this)
 	}
+
+	produce (count) {
+		safeTimeout(() => {
+			// The increment is defined by the number of emoji in the output label.
+			this.stock += count
+			this.broadcast()
+			this.produce
+		}, this.interval)
+	}
+
 	setBuild(buildID, build) {
 		const [cost, material] = build.cost
 		if (cost > stats[material]) return
@@ -90,11 +100,7 @@ class Tile {
 			if (build.cap) this.ppl = 0
 			this.broadcast()
 			// Initiate production
-			safeTimeout(() => {
-				// The increment is defined by the number of emoji in the output label.
-				this.stock += build.cost[1].length
-				this.broadcast()
-			}, this.interval)
+			this.produce(build.cost[1].length)
 		}, build.days * solDuration)
 	}
 }

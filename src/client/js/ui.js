@@ -154,7 +154,7 @@ export const showTileDialog = (target) => {
       const costClass = tile.free && stats[cost[1]] >= cost[0] ? '' : 'red'
       const details = [
         out.length
-          ? `outputs ${out.join(' ')}`
+          ? `outputs ${out.join(' ')} daily`
           : 'connects sectors',
         `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
         `<span>uses ${cost[0]} ${cost[1]}</span>`,
