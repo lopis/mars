@@ -36,7 +36,7 @@ canvas {
 }
 
 #tileset {
-  --tile-color: #2e0808;
+  --tile-color: #510223;
   height: 100vh;
   width: 100vw;
   position: absolute;
@@ -51,7 +51,7 @@ canvas {
 }
 
 .a11y .hex {
-  --tile-color: #500505;
+  --tile-color: #a7700b;
 }
 
 #wrapper {
@@ -201,7 +201,7 @@ canvas {
   font-size: 80%;
 }
 .mine {
-  --tile-color: #001e44;
+  --tile-color: #002d63;
 }
 .mine:hover {
   --tile-color: #458ce9;
@@ -233,7 +233,6 @@ canvas {
   animation: dust 800ms alternate infinite;
   cursor: wait;
   transform: scale(1) !important;
-  --tile-color: red !important;
   opacity: 1;
 }
 .hex.dust span {
@@ -243,16 +242,16 @@ canvas {
 
 @keyframes dust {
   0% {
-    filter: blur(.3vh) saturate(0.5) brightness(0.5);
+    filter: blur(1.2vh);
   }
   20% {
-    filter: blur(.5vh) saturate(0.5) brightness(0.5);
+    filter: blur(1.3vh);
   }
   80% {
-    filter: blur(.3vh) saturate(0.5) brightness(0.5);
+    filter: blur(1.2vh);
   }
   100% {
-    filter: blur(.5vh) saturate(0.5) brightness(0.5);
+    filter: blur(1.3vh);
   }
 }
 
