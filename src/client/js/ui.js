@@ -124,12 +124,9 @@ export const showTileDialog = (target) => {
       renderDialog(
         tile,
         building.label,
-        `<p>Stock: ${tile.stock} ${resource}</p><ul>${[
-          [`Collect 1`, 'getone'],
-          [`Collect all`, 'getall'],
-        ].map(([label, id]) => 
-          `<li class="button" id="${id}">${label}</li>`
-        ).join('')}</ul>${
+        `<p>Producing ${resource} daily` +
+        `<br>Stock: ${tile.stock}</p>` +
+        `<ul><li class="button ${tile.stock == 0 ? 'off"' : '" id="getall"'}>Collect stock</li></ul>${
           building.count
           ? `${renderCap(tile, building)}<br>${renderActions(tile, building)}`
           : ''
