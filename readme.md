@@ -29,7 +29,7 @@ There's a chat function to communicate with other people online.
 
 ## Link to the game
 
-https://mars-planet-b.herokuapp.com/ (heroku takes a moment to warm up the first time)
+<https://mars-planet-b.herokuapp.com/> (it may take a moment to warm up the first time)
 
 ## Development
 
