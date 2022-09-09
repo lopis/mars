@@ -113,7 +113,7 @@ class Tile {
 			this.broadcast()
 			if (build.use) {
 				console.log('update use', build);
-				stats[build.use[0] + '_use'] += build.use[1]
+				stats[build.use[0] + '_use'] += build.use[1].length
 				console.log(stats);
 			}
 			// Initiate production
