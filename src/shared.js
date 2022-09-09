@@ -77,14 +77,14 @@ stats = {
   workforce: 0,
   consumption: 0,
   heating: 0,
-	minerals: 5,
-	food: 5,
-  energy: 5,
-	heat: 5,
-	water: 5,
+	minerals: 15,
+	food: 15,
+  energy: 15,
+	heat: 15,
+	water: 15,
 }
 
-solDuration = 60 * 1000 // 60 seconds
+solDuration = 0.2 * 60 * 1000 // 60 seconds
 initialPhase = 0.0
 
 getNeighbours = function (row, col) {

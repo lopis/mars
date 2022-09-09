@@ -4,7 +4,7 @@ import { buildAction } from './io'
 
 // let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, free}) => {
+export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, free, stop}) => {
   const tile = tiles[id] 
   if (!tile) return
 
@@ -16,12 +16,8 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, fre
     tile.$tile.classList.add('road')
   } else if (build && build != tile.build) {
     const $icon = document.createElement('span')
-    $icon.style.animationDelay = -700 * Math.random() + 'ms'
     // $icon.classList.add(build)
     $icon.classList.add(build)
-    if (['center', 'camp', 'mount'].includes(build)) {
-      $icon.classList.add('still')
-    }
     if (build === 'mount') {
       tile.$tile.classList.add('deco')
     }
@@ -40,8 +36,9 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, fre
 
   tile.$tile.classList.toggle('mine', !!mine)
   tile.$tile.classList.toggle('free', !!free)
+  tile.$tile.classList.toggle('stop', !!stop)
   tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
-  Object.assign(tile, {stock, willBe, ppl, dust, mine, free})
+  Object.assign(tile, {stock, willBe, ppl, dust, mine, free, stop})
   
   // if (dismissOnArrival) {
   //   dismissDialog()
@@ -162,7 +159,7 @@ export const showTileDialog = (target) => {
     const options = ['road'].concat(
       tile.row === 0 ? ['water']
       : tile.mine ? ['minery', 'nuclear']
-      : ['house', 'solar', 'greenery']
+      : ['house', 'solar', 'greenhouse']
     )
     const warning = tile.free ? '' : '<p class="red">This area isn\'t connected to your colony yet</p>'
     renderDialog(

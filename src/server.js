@@ -69,12 +69,24 @@ class Tile {
 		broadcast('tile', this)
 	}
 
-	produce (count) {
+	produce (build) {
 		safeTimeout(() => {
-			// The increment is defined by the number of emoji in the output label.
-			this.stock += count
+			// Check if there are enough resources to operate
+			const {out, use} = build
+			if (!use || use[1] <= stats[use[0]]) {
+				console.log(this.build, out, this.stock);
+				// The increment is defined by the number of emoji in the label.
+				this.stock += out[1].length
+				if (use) {
+					stats[use[0]] -= use[1].length
+				}
+				this.stop = false
+			} else {
+				this.stop = true
+			}
+
 			this.broadcast()
-			this.produce
+			this.produce(build)
 		}, this.interval)
 	}
 
@@ -100,7 +112,7 @@ class Tile {
 			if (build.cap) this.ppl = 0
 			this.broadcast()
 			// Initiate production
-			this.produce(build.cost[1].length)
+			this.produce(build)
 		}, build.days * solDuration)
 	}
 }

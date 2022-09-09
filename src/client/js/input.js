@@ -9,7 +9,7 @@ let houseDirection, houseNumber
 const updateHouseNumber = (ratio) => () => {
   houseNumber = Math.round(Math.max(10, Math.min(1e5, houseNumber*ratio)))
   _val.innerText = houseNumber > 1e3
-  ? Math.round(houseNumber / 1e3) + 'k'
+  ? (Math.round(houseNumber / 1e2) / 10) + 'k'
   : houseNumber
 }
 

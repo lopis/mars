@@ -158,7 +158,8 @@ canvas {
   font-size: 30%;
 }
 
-.new span::after {
+.new span::after,
+.stop span::after {
 	content: "";
 	display: inline-block;
 	background: #0093ff;
@@ -168,12 +169,13 @@ canvas {
 	border: 1px solid #363636;
 }
 
-.hex .wip {
-  animation: bounce 120ms alternate infinite;
+.stop span::after {
+	border-radius: 0vh;
+	background: #ff7b00;
 }
 
-.still {
-  animation: none;
+.hex .wip {
+  animation: bounce 120ms alternate infinite;
 }
 
 .bad span {
