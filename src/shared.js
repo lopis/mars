@@ -67,7 +67,6 @@ buildings = {
   road: {
     label: 'Path',
     icon: '✖️',
-    out: [],
     cost: [1, 'minerals'],
     days: 0.1,
   }

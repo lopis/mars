@@ -152,7 +152,7 @@ export const showTileDialog = (target) => {
       const details = [
         `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
         `builds in ${days} sols`,
-        out.length
+        out?.length
           ? `in: ${out[1]} daily`
           : 'connects sectors',
         use ? `<span>out: ${use[1]} daily</span>` : '',
