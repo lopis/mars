@@ -101,11 +101,14 @@ canvas {
   transform-origin: center;
 }
 .hex::after {
-  content: attr(data-n);
-  color: transparent;
-  transform: rotate(-60deg);
-  text-align: center;
-  font-size: 3vmin;
+	content: attr(data-n);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 0;
+	color: transparent;
+	transform: rotate(-60deg);
+	font-size: 3vmin;
 }
 .hex:hover::after{
   color: white;
@@ -242,16 +245,16 @@ canvas {
 
 @keyframes dust {
   0% {
-    filter: blur(1.2vh);
+    filter: blur(1.2vh) contrast(0.8) brightness(0.8);
   }
   20% {
-    filter: blur(1.3vh);
+    filter: blur(1.3vh) contrast(0.8) brightness(0.8);
   }
   80% {
-    filter: blur(1.2vh);
+    filter: blur(1.2vh) contrast(0.8) brightness(0.8);
   }
   100% {
-    filter: blur(1.3vh);
+    filter: blur(1.3vh) contrast(0.8) brightness(0.8);
   }
 }
 

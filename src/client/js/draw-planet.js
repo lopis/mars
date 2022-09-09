@@ -1,10 +1,11 @@
+import { BLACK, PLATNET_SCALE, TILT } from './data'
 import { updateSol } from './game'
 import { context, gradient } from './graphics'
 
-export let planetSize = planetScale * canvas.clientHeight
+export let planetSize = PLATNET_SCALE * canvas.clientHeight
 
 export const updatePlanetSize = () => {
-  planetSize = planetScale * Math.min(canvas.width, canvas.height)
+  planetSize = PLATNET_SCALE * Math.min(canvas.width, canvas.height)
 }
 
 const drawCircle = (x, y, radius) => {
@@ -39,7 +40,7 @@ const halfCircle = (radius, start, end) => {
     canvas.height / 2, // y
     planetSize, // radius x
     planetSize * radius, // radiux y
-    Math.PI / 2 + tilt, // rotation
+    Math.PI / 2 + TILT, // rotation
     Math.PI * end, // start angle
     Math.PI * start // end angle
   );

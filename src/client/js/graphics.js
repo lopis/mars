@@ -1,4 +1,6 @@
+import { RED, TILT } from "./data"
 import { planetSize, updatePlanetSize } from "./draw-planet"
+
 
 export let context, gradient
 export const initContext = () => {
@@ -28,11 +30,11 @@ const createGradient = () => {
   const fade = 0.03
 
   gradient = context.createRadialGradient(
-    zero.x + gradientRadius * Math.sin(tilt), // x0
-    zero.y - gradientRadius * Math.cos(tilt), // y0
+    zero.x + gradientRadius * Math.sin(TILT), // x0
+    zero.y - gradientRadius * Math.cos(TILT), // y0
     0,
-    zero.x - gradientRadius * Math.sin(tilt), // x1
-    zero.y + gradientRadius * Math.cos(tilt), // y1
+    zero.x - gradientRadius * Math.sin(TILT), // x1
+    zero.y + gradientRadius * Math.cos(TILT), // y1
     gradientRadius * 2,
   )
 

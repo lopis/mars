@@ -1,7 +1,7 @@
-RED = "#881f1a"
-BLACK = "#0f0b0b"
-tilt = 0.43 // rads
-planetScale = 0.4
+export const TILT = 0.43 // rads
+export const PLATNET_SCALE = 0.4
+export const BLACK = "#0f0b0b"
+export const RED = "#881f1a"
 
 mobile = false
 
@@ -10,9 +10,6 @@ tiles = {}
 stats = {}
 
 $selectedTile = null
-
-MAX_ZOOM = 6
-SCROLL_SPEED = 0.5
 
 msg = {
   convoy1: 'Refugee convoy departed from Earth and will arrive on sol %s.',
