@@ -59,7 +59,7 @@ function removeElement(array, element) {
 }
 
 class Tile {
-	interval = 1000//solDuration
+	interval = solDuration
 
 	constructor(row, col, id) {
 		Object.assign(this, { row, col, id, stock: 0 })
@@ -73,8 +73,7 @@ class Tile {
 		safeTimeout(() => {
 			// Check if there are enough resources to operate
 			const {out, use} = build
-			if (!use || use[1] <= stats[use[0]]) {
-				console.log(this.build, out, this.stock);
+			if (!use || use[1].length <= stats[use[0]]) {
 				// The increment is defined by the number of emoji in the label.
 				this.stock += out[1].length
 				if (use) {
@@ -112,6 +111,11 @@ class Tile {
 			this.willBe = null
 			if (build.cap) this.ppl = 0
 			this.broadcast()
+			if (build.use) {
+				console.log('update use', build);
+				stats[build.use[0] + '_use'] += build.use[1]
+				console.log(stats);
+			}
 			// Initiate production
 			this.produce(build)
 		}, build.days * solDuration)
@@ -457,7 +461,6 @@ module.exports = {
 			if (count < 100 || count > 1e5 || tiles[id].build != 'house') return
 
 			const n = Math.min(count, action == 'movein' ? tiles[CAMP].ppl : tiles[id].ppl)
-			console.log(id, action, count, n);
 			tiles[id].ppl += n * (action == 'movein' ? +1 : -1)
 			tiles[CAMP].ppl += n * (action == 'movein' ? -1 : +1)
 			tiles[id].broadcast()

@@ -39,6 +39,9 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, fre
   tile.$tile.classList.toggle('stop', !!stop)
   tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
   Object.assign(tile, {stock, willBe, ppl, dust, mine, free, stop})
+  if (tile.$tile === $selectedTile) {
+    showTileDialog($selectedTile)
+  }
   
   // if (dismissOnArrival) {
   //   dismissDialog()

@@ -2,7 +2,7 @@ buildings = {
   greenhouse: {
     label: 'Greenhouse',
     icon: '🌳',
-    out: ['food', '🥔'],
+    out: ['food', '🥔🥔'],
     use: ['waste', '💩'],
     cost: [5, 'water'],
     days: 2,
@@ -75,13 +75,18 @@ buildings = {
 stats = {
 	population: 0,
   workforce: 0,
-  consumption: 0,
-  heating: 0,
 	minerals: 15,
 	food: 15,
   energy: 15,
 	heat: 15,
 	water: 15,
+  waste: 15,
+	minerals_use: 0,
+	food_use: 0,
+  energy_use: 0,
+	heat_use: 0,
+	water_use: 0,
+  waste_use: 0,
 }
 
 solDuration = 0.2 * 60 * 1000 // 60 seconds
