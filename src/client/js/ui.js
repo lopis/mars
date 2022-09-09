@@ -147,15 +147,15 @@ export const showTileDialog = (target) => {
 
   } else {
     // BUILD DIALOG
-    const renderChoice = tile => ([id, {out, label, icon, cost, days}]) => {
+    const renderChoice = tile => ([id, {out, use, label, icon, cost, days}]) => {
       const costClass = tile.free && stats[cost[1]] >= cost[0] ? '' : 'red'
       const details = [
-        out.length
-          ? `outputs ${out.join(' ')} daily`
-          : 'connects sectors',
         `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
-        `<span>uses ${cost[0]} ${cost[1]}</span>`,
-        `builds in ${days} sols`
+        `builds in ${days} sols`,
+        out.length
+          ? `in: ${out[1]} daily`
+          : 'connects sectors',
+        use ? `<span>out: ${use[1]} daily</span>` : '',
       ].join('<br>')
       return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
     }
@@ -232,10 +232,13 @@ export const showSolStats = () => {
     'Game stats',
     `<p>${[
       `<b>☀️ Sol:</b> ${Math.ceil(solCount / solDuration)}`,
-      `<b>🕐 Game start:</b> ${new Date(data.start).toDateString()}`,
       `<b>🎉 Events:</b> ${data.events}`,
       `<b>⚰️ Deaths:</b> ${data.deaths}`,
       `<b>👨‍👨‍👧‍👧 Total refugees:</b> ${data.saved}`,
+      `<br><b>🕐 Game start:</b><br>${
+        new Date(data.start).toLocaleString('pt', { timeZone: 'Europe/Lisbon'
+      })}`,
+      `(UTC+0 Earth Time)`,
     ].join('<br>')}</p>`
   )
 }

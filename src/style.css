@@ -68,15 +68,12 @@ canvas {
   width: calc(var(--hex-width) * var(--hex-size));
   height: calc(var(--hex-size-height) * var(--hex-size));
   margin: 0.8vmin 0.3vmin;
-  opacity: 0.5;
+  opacity: 0.8;
   transition: transform 500ms ease-in-out;
 }
 
-.hex.free {
-  opacity: 0.8;
-}
-
 .hex:not(.free):not(.deco) {
+  opacity: 0.5;
 	transform: scale(0.6);
 }
 
@@ -452,7 +449,7 @@ li {
 
 ul small {
 	line-height: 1.8;
-  opacity: 0.6;
+  color: #d1c1bd;
   font-weight: bold;
 }
 
@@ -463,9 +460,9 @@ ul small {
 	align-items: center;
 }
 
-.button:hover {
+.button:hover, .button:hover * {
   background: #999;
-  color: #131212;
+  color: #131212 !important;
   cursor: pointer;
 }
 
