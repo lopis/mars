@@ -1,2 +1,13 @@
 <!-- This file is not being used. Copy this onto the inline HTML link tag -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><filter id="css_hue_rotate"><feColorMatrix type="hueRotate" values="180"/></filter><text y=".9em" font-size="90">🌒</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <filter id="css_hue_rotate">
+    <feColorMatrix
+      type="matrix"
+      values=" 1.000  0.200  0.200  0.000 -0.100 
+               0.100  0.100  0.100  0.000 -0.100 
+               0.100  0.100  0.100  0.000 -0.100 
+               0.000  0.000  0.000  1.000  0.000">
+    </feColorMatrix>
+  </filter>
+  <text filter="url(#css_hue_rotate)" y=".9em" font-size="90">🌒</text>
+</svg>
