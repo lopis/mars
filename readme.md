@@ -4,7 +4,7 @@
 
 We fucked up. Earth is dead. Time for planet B.
 
-We carbon-creditted our environment to death. We let AI make all decisions. We out-farmmed ourselves out of arable land. Our sky is full of space junk. The water, the ice, the heat and the cold are all in the wrong places and most people are dying.
+We carbon-credited our environment to death. We let AI make all decisions. We out-farmed ourselves out of arable land. Our sky is full of space junk. The water, the ice, the heat and the cold are all in the wrong places and most people are dying.
 
 Somehow in the last years the world governments managed to put aside their differences and join forces to move Humanity to mars. The ultra rich wanted it all for themselves until they realized you can't run a city with just CEOs.
 
