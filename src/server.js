@@ -79,6 +79,7 @@ class Tile {
 				this.stock += out[1].length
 				if (use) {
 					stats[use[0]] -= use[1].length
+					broadcastStats()
 				}
 				this.stop = false
 			} else {
