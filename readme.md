@@ -12,7 +12,7 @@ Somehow in the last years the world governments managed to put aside their diffe
 
 ℹ️ The game UI is not optimized for mobile phones. A landscape screen with at least 1280x800 is recommended.
 
-In this glocal co-op game you're one of Mars' managers.
+In this global co-op game you're one of Mars' managers.
 Any number of players can join simultaneously to help deal with every day tasks like:
 
 - Build houses for the refugees
