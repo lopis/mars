@@ -112,12 +112,15 @@ class Tile {
 			if (build.cap) this.ppl = 0
 			this.broadcast()
 			if (build.use) {
+				// Initiate deduction
 				console.log('update use', build);
 				stats[build.use[0] + '_use'] += build.use[1].length
 				console.log(stats);
 			}
-			// Initiate production
-			this.produce(build)
+			if (build.out) {
+				// Initiate production
+				this.produce(build)
+			}
 		}, build.days * solDuration)
 	}
 }
