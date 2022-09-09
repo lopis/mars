@@ -10,6 +10,8 @@ Somehow in the last years the world governments managed to put aside their diffe
 
 ## Game mechanics
 
+ℹ️ The game UI is not optimized for mobile phones. A landscape screen with at least 1280x800 is recommended.
+
 In this glocal co-op game you're one of Mars' managers.
 Any number of players can join simultaneously to help deal with every day tasks like:
 
@@ -33,15 +35,15 @@ There's a chat function to communicate with other people online.
 
 The map represents the planet Mars. There are 3 types of areas:
 
- - Red tiles, aka "Open Plains" where you can build houses and solar plants
- - Blue tiles around the mountains, or "Rocky areas" where you can build mines and nuclear plants
- - White tiles, or "Glaciar" where you can harvest water
+- Red tiles, aka "Open Plains" where you can build houses and solar plants
+- Blue tiles around the mountains, or "Rocky areas" where you can build mines and nuclear plants
+- White tiles, or "Glaciar" where you can harvest water
 
 There are the mountains where you can't build anything.
 
 ## Ready to play?
 
-[![image](https://user-images.githubusercontent.com/2715751/189384391-bff972ce-673c-4b16-8036-b905ead261df.png)](https://mars-planet-b.herokuapp.com/) 
+[![image](https://user-images.githubusercontent.com/2715751/189384391-bff972ce-673c-4b16-8036-b905ead261df.png)](https://mars-planet-b.herokuapp.com/)
 
 (it may take a moment to warm up the first time)
 
