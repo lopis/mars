@@ -39,9 +39,11 @@ The map represents the planet Mars. There are 3 types of areas:
 
 There are the mountains where you can't build anything.
 
-## Link to the game
+## Ready to play?
 
-<https://mars-planet-b.herokuapp.com/> (it may take a moment to warm up the first time)
+[![image](https://user-images.githubusercontent.com/2715751/189384391-bff972ce-673c-4b16-8036-b905ead261df.png)](https://mars-planet-b.herokuapp.com/) 
+
+(it may take a moment to warm up the first time)
 
 ## Development
 
