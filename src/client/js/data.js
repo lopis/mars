@@ -3,7 +3,7 @@ export const PLATNET_SCALE = 0.4
 export const BLACK = "#0f0b0b"
 export const RED = "#881f1a"
 
-mobile = false
+// mobile = false
 
 phase = null
 tiles = {}

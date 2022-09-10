@@ -7,7 +7,7 @@ export const initContext = () => {
   context = canvas.getContext('2d')
   canvas.width = innerWidth
   canvas.height = innerHeight
-  mobile = window.matchMedia('(max-width: 810px)').matches
+  // mobile = window.matchMedia('(max-width: 810px)').matches
 
   updatePlanetSize()
   createGradient()
@@ -15,7 +15,7 @@ export const initContext = () => {
   window.addEventListener('resize', () => {
     canvas.width = innerWidth
     canvas.height = innerHeight
-    mobile = window.matchMedia('(max-width: 810px)').matches
+    // mobile = window.matchMedia('(max-width: 810px)').matches
     updatePlanetSize()
     createGradient()
   })

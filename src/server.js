@@ -73,11 +73,11 @@ class Tile {
 		safeTimeout(() => {
 			// Check if there are enough resources to operate
 			const {out, use} = build
-			if (!use || use[1].length <= stats[use[0]]) {
+			if (!use || stats[use[0]] >= 1) {
 				// The increment is defined by the number of emoji in the label.
-				this.stock += out[1].length
+				this.stock += 1
 				if (use) {
-					stats[use[0]] -= use[1].length
+					stats[use[0]] -= 1
 					broadcastStats()
 				}
 				this.stop = false
@@ -114,7 +114,7 @@ class Tile {
 			if (build.use) {
 				// Initiate deduction
 				console.log('update use', build);
-				stats[build.use[0] + '_use'] += build.use[1].length
+				stats[build.use[0] + '_use'] += 1 // Use is always 1
 				console.log(stats);
 			}
 			if (build.out) {

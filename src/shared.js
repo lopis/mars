@@ -2,7 +2,7 @@ buildings = {
   greenhouse: {
     label: 'Greenhouse',
     icon: '🌳',
-    out: ['food', '🥔🥔'],
+    out: ['food', '🥔🥔', 2],
     use: ['waste', '💩'],
     cost: [5, 'water'],
     days: 2,
@@ -26,7 +26,7 @@ buildings = {
     label: 'Nuclear Plant',
     icon: '⚛️',
     cost: [20, 'water'],
-    out: ['energy', '🔋🔋🔋'],
+    out: ['energy', '🔋🔋🔋', 3],
     use: ['minerals', '🪨'],
     days: 8
   },

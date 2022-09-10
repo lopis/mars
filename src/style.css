@@ -617,11 +617,12 @@ h1 {
 
 [i]::before {
   content: attr(i);
+  font-size: 1.5em;
   justify-self: start;
   margin-right: 0.5ch;
 }
 
-@media screen and (max-width: 810px) {
+/* @media screen and (max-width: 810px) {
   #_stats {
     gap: 1px;
     padding: 2vh 0;
@@ -661,7 +662,7 @@ h1 {
     z-index: 9;
     box-shadow: 0 15vh 1vh 20vh #0009;
   }
-}
+} */
 
 
 /* NOTIFICATIONS */

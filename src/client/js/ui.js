@@ -40,7 +40,12 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, fre
   tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
   Object.assign(tile, {stock, willBe, ppl, dust, mine, free, stop})
   if (tile.$tile === $selectedTile) {
-    showTileDialog($selectedTile)
+    if (dust) {
+      clearSelectedTile()
+      dismissDialog()
+    } else {
+      showTileDialog($selectedTile)
+    }
   }
   
   // if (dismissOnArrival) {
@@ -116,7 +121,7 @@ export const showTileDialog = (target) => {
     return
   }
   
-  if (tile.build) {
+  if (tile.build && tile.build != 'road') {
     const building = buildings[tile.build]
     if (building.out) {
       // RESOURCE DIALOG
@@ -124,8 +129,9 @@ export const showTileDialog = (target) => {
       renderDialog(
         tile,
         building.label,
-        `<p>Producing ${resource} daily` +
-        `<br>Stock: ${tile.stock}</p>` +
+        `<p>Producing ${resource} daily</p>` +
+        (tile.stop ? `<p class="red">Not enough ${building.use.join(' ')}<br>Production halted.</p>` : '') +
+        `<p>Stock: ${tile.stock}</p>` +
         `<ul><li class="button ${tile.stock == 0 ? 'off"' : '" id="getall"'}>Collect stock</li></ul>${
           building.count
           ? `${renderCap(tile, building)}<br>${renderActions(tile, building)}`
@@ -153,9 +159,9 @@ export const showTileDialog = (target) => {
         `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
         `builds in ${days} sols`,
         out?.length
-          ? `in: ${out[1]} daily`
+          ? `out: ${out[1]} daily`
           : 'connects sectors',
-        use ? `<span>out: ${use[1]} daily</span>` : '',
+        use ? `<span>in: ${use[1]} daily</span>` : '',
       ].join('<br>')
       return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
     }
@@ -167,7 +173,7 @@ export const showTileDialog = (target) => {
     const warning = tile.free ? '' : '<p class="red">This area isn\'t connected to your colony yet</p>'
     renderDialog(
       tile,
-      'Choose build',
+      tile.build ? 'Replace path with:' : 'Choose new building',
       `${warning}<ul>${
         Object.entries(buildings).filter(
           ([id, type]) => options.includes(id)
@@ -182,20 +188,20 @@ export const showTileDialog = (target) => {
 }
 
 export const updateMap = (translate, scale) => {
-  if (mobile) {
-    wrapper.style.transform = `translateY(-${ scale > 1 ? 20 : 10}vh) scale(${scale}) translate(${translate[0]}px, ${translate[1]}px)` 
-  } else {
+  // if (mobile) {
+  //   wrapper.style.transform = `translateY(-${ scale > 1 ? 20 : 10}vh) scale(${scale}) translate(${translate[0]}px, ${translate[1]}px)` 
+  // } else {
     wrapper.style.transform = `scale(${scale}) translate(${translate[0]}px, ${translate[1]}px)` 
-  }
+  // }
 }
 
 const moveMapTo = (target) => {
   if (!isZoomed) {
     isZoomed = true
     let {left, top} = target.getBoundingClientRect()
-    if (mobile) {
+    // if (mobile) {
       top += innerHeight * 0.1
-    }
+    // }
     updateMap([
       -(left - (innerWidth / 2)),
       -(top - (innerHeight / 2)),
