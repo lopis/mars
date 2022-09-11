@@ -1,5 +1,5 @@
 import { updateUsers, updateChat, updateSol, updateStats } from './game'
-import { dismissDialog, showComms, updateTile } from './ui';
+import { dismissDialog, renderDialog, showComms, updateTile } from './ui';
 import { updateEvent, updateEvents } from './ui-events';
 
 let socket //Socket.IO client
@@ -11,6 +11,9 @@ function bind() {
   window.emit = socket.emit
 
   Object.entries({
+    'disconnect': () => {
+      renderDialog(null, '<br>Server Side Error', '<p class="red">Unfortunately, the server has crashed.</p>')
+    },
     'users': ({id, users}) => {
       updateUsers(id, users)
       localStorage.setItem('u', id)
