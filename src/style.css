@@ -587,7 +587,8 @@ h1 {
   margin-bottom: 0.8vmin;
   padding: 1.5vh;
   min-width: 20ch;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* STATS */
