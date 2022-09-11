@@ -71,7 +71,7 @@ buildings = {
     days: 0.1,
   }
 }
-
+// initial stats
 stats = {
 	population: 0,
   workforce: 0,
@@ -89,7 +89,7 @@ stats = {
   waste_use: 0,
 }
 
-solDuration = 0.2 * 60 * 1000 // 60 seconds
+SOL_DURATION = 0.2 * 60 * 1000 // 60 seconds
 initialPhase = 0.0
 
 getNeighbours = function (row, col) {

@@ -96,7 +96,7 @@ const drawSun = (phase) => {
 }
 
 export const tick = (dt) => {
-  phase += dt / solDuration
+  phase += dt / SOL_DURATION
   while (phase > 1) {
     phase -= 1
     updateSol()

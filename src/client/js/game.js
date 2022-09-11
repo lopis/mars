@@ -46,14 +46,16 @@ export const updateSol = (gameData) => {
     data = gameData
     solCount = data.sol
   }
-  else solCount += solDuration
-  _sol.dataset.count = Math.ceil(solCount / solDuration)
+  else solCount += SOL_DURATION
+  _sol.dataset.count = Math.ceil(solCount / SOL_DURATION)
 }
 
 export const updateStats = (newStats) => {
   stats = newStats
   Object.entries(newStats).forEach(([key, value]) => {
-    value = value > 1e3 ? Math.floor(value / 1e3) + 'K' : value
+    value = value > 1e3 ? Math.floor(value / 1e3) + 'k'
+      : value > 1e6 ? Math.floor(value / 1e6) + 'M'
+      : value
     if (document.getElementById(key)) {
       document.getElementById(key).dataset.count = value
     }

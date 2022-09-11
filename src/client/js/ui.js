@@ -37,7 +37,7 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, fre
   tile.$tile.classList.toggle('mine', !!mine)
   tile.$tile.classList.toggle('free', !!free)
   tile.$tile.classList.toggle('stop', !!stop)
-  tile.$tile.classList.toggle('bad', build === 'camp' && !!riot)
+  tile.$tile.classList.toggle('bad', !!riot)
   Object.assign(tile, {stock, willBe, ppl, dust, mine, free, stop})
   if (tile.$tile === $selectedTile) {
     if (dust) {
@@ -237,7 +237,7 @@ export const showSolStats = () => {
     null,
     'Game stats',
     `<p>${[
-      `<b>☀️ Sol:</b> ${Math.ceil(solCount / solDuration)}`,
+      `<b>☀️ Sol:</b> ${Math.ceil(solCount / SOL_DURATION)}`,
       `<b>🎉 Events:</b> ${data.events}`,
       `<b>⚰️ Deaths:</b> ${data.deaths}`,
       `<b>👨‍👨‍👧‍👧 Total refugees:</b> ${data.saved}`,

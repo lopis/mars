@@ -476,6 +476,13 @@ ul small {
 	text-align: center;
 }
 
+.button:only-child {
+	grid-column: 1 / 3;
+	text-align: center;
+	font-size: 1.1em;
+	padding: 1vh;
+}
+
 .radio {
   border: none;
 }
@@ -577,8 +584,10 @@ h1 {
 }
 
 #intro .button {
-	margin-bottom: 0.8vmin;
+  margin-bottom: 0.8vmin;
   padding: 1.5vh;
+  min-width: 20ch;
+  text-align: center;
 }
 
 /* STATS */

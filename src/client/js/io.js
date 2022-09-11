@@ -26,7 +26,7 @@ function bind() {
       }
     },
     'sol': (data) => {
-      phase = (data.sol % solDuration) / solDuration
+      phase = (data.sol % SOL_DURATION) / SOL_DURATION
       updateSol(data)
     },
     'world': ({tiles, stats}) => {
