@@ -1,12 +1,14 @@
 ![image](https://user-images.githubusercontent.com/2715751/188812893-c452ed60-5f4d-45e6-9b7a-b5de22c44337.png)
 
-# Planet B <sup>alpha</sup>
+# Planet B
 
 We fucked up. Earth is dead. Time for planet B.
 
 We carbon-credited our environment to death. We let AI make all decisions. We out-farmed ourselves out of arable land. Our sky is full of space junk. The water, the ice, the heat and the cold are all in the wrong places and most people are dying.
 
 Somehow in the last years the world governments managed to put aside their differences and join forces to move Humanity to mars. The ultra rich wanted it all for themselves until they realized you can't run a city with just CEOs.
+
+![image](https://user-images.githubusercontent.com/2715751/189550248-9a7d5005-c79b-4b1f-ac22-52773554664e.png)
 
 ## Game mechanics
 
