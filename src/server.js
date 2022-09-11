@@ -420,6 +420,47 @@ class User {
 		this.id = socket.id.substr(0, 6)
 		this.game = game
 	}
+
+	join = mode => {
+		if (mode === 'solo') {
+			this.game = new Game()
+			this.game.init()
+		} else {
+			this.game = globalGame
+		}
+
+		if (!this.game.timeStarted) {
+			this.game.timeStarted = Date.now()
+		}
+
+		this.game.gameRunning = true
+		if (this.game.users.length === 0) {
+			this.game.lastTime = Date.now()
+		}
+		this.game.users.push(this)
+
+		this.socket.on('msg', (msg) => {
+			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
+			this.game.broadcast('msg', { user: user.name, msg: safeString })
+		})
+
+		this.socket.on('build', ({ id, choice }) => {
+			this.game.build(id, choice, this)
+		})
+
+		this.socket.on('collect', ({ id }) => {
+			this.game.collect(id, this)
+		})
+
+		this.socket.on('move', ({id, action, count}) => {
+			this.game.move(id, action, count)
+		})
+
+		this.game.broadcastUsers()
+		this.game.broadcastStats()
+		this.socket.emit('world', { tiles: this.game.tiles, stats: this.game.stats })
+		this.socket.emit('events',  this.game.events.filter(e => e.old))
+	}
 }
 
 class Event {
@@ -440,17 +481,13 @@ globalGame.init()
 module.exports = {
 
 	io: (socket) => {
-		if (!globalGame.timeStarted) {
-			globalGame.timeStarted = Date.now()
-		}
-
-		globalGame.gameRunning = true
+		console.info('Connected: ' + socket.id)
 		const user = new User(socket, globalGame)
-		if (user.game.users.length === 0) {
-			user.game.lastTime = Date.now()
-		}
-		// allUsers.push(user)
-		user.game.users.push(user)
+
+		socket.on('join', mode => {
+			console.info('Player: ' + user.name + ' joined.', mode)
+			user.join(mode)
+		})
 
 		socket.on('disconnect', () => {
 			console.info('Disconnected: ' + user.name)
@@ -462,31 +499,6 @@ module.exports = {
 				user.game.lastTime = Date.now()
 			}
 		})
-
-		socket.on('msg', (msg) => {
-			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
-			// console.info(`# ${user.name}: ${safeString}`)
-			user.game.broadcast('msg', { user: user.name, msg: safeString })
-		})
-
-		socket.on('build', ({ id, choice }) => {
-			user.game.build(id, choice, user)
-		})
-
-		socket.on('collect', ({ id }) => {
-			user.game.collect(id, user)
-		})
-
-		socket.on('move', ({id, action, count}) => {
-			user.game.move(id, action, count)
-		})
-
-		console.info('Connected: ' + socket.id)
-
-		user.game.broadcastUsers()
-		user.game.broadcastStats()
-		user.socket.emit('world', { tiles: user.game.tiles, stats: user.game.stats })
-		user.socket.emit('events',  user.game.events.filter(e => e.old))
 	},
 
 	// stat: (req, res) => {

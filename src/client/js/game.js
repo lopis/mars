@@ -4,7 +4,7 @@ import {
   tick,
 } from './draw-planet'
 import { renderTiles, updateTiles } from './draw-tiles'
-import { bindIo } from './io'
+import { bindIo, joinGame } from './io'
 import { initAudio } from './audio'
 
 export let userList = []
@@ -67,6 +67,7 @@ export const playOffline = () => {
     gameStarted = true
     intro.classList.add('gone')
     bindIo()
+    joinGame('solo')
     renderTiles()
   }
 }
@@ -77,6 +78,7 @@ export const playGlobal = () => {
     initAudio()
     intro.classList.add('gone')
     bindIo()
+    joinGame()
     renderTiles()
   }
 }

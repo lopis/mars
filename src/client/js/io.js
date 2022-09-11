@@ -51,6 +51,10 @@ export const bindIo = () => {
   }
 }
 
+export const joinGame = (mode) => {
+  socket.emit('join', mode)
+}
+
 export const sendMessage = msg => {
   socket.emit('msg', msg)
 }
