@@ -94,7 +94,9 @@ app.set('port', (process.env.PORT || 3000))
 
 storage.init(app.get('storage')).then(() => {
     const sandbox = createSandbox();
+    console.log('🤖 Running server in VM');
     require('vm').runInNewContext(shared + '\n' + code, sandbox);
+    console.log('🤖 Server ready');
     if (typeof sandbox.module.exports == 'function') {
         io.on('connection', sandbox.module.exports);
     } else if (typeof sandbox.module.exports == 'object') {

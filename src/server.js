@@ -171,7 +171,7 @@ class Game {
 		while (mountTiles.length < MOUNT_COUNT) {
 			const index = Math.floor(Math.random() * (Object.values(this.tiles).length - 1))
 			const tile = Object.values(this.tiles)[index]
-			if (!mountTiles.includes(tile.id)) {
+			if (!tile.free && !tile.build && !mountTiles.includes(tile.id)) {
 				tile.build = 'mount'
 				getNeighbourTiles(tile, this.tiles).forEach(tile => {
 					tile.mine = true
@@ -220,6 +220,15 @@ class Game {
 			saved: this.totalPopulation,
 		})
 		this.broadcast('stats', this.stats)
+	}
+
+	broadcastUsers = () => {
+		this.users.forEach(user => {
+			this.broadcast('users', {
+				id: user.id,
+				users: this.users.map(u => ({ id: u.id, name: u.name }))
+			})
+		})
 	}
 
 	initScheduler = () => {
@@ -353,6 +362,40 @@ class Game {
 		}, 1000)
 	}
 
+	collect = (id, user) => {
+		if (this.tiles[id] && this.tiles[id].stock > 0) {
+			console.log(id, this.tiles[id].build);
+			const name = buildings[this.tiles[id].build].out[0]
+			const delta = this.tiles[id].stock
+			this.stats[name] += delta
+			this.tiles[id].stock = 0
+			this.tiles[id].broadcast()
+			this.broadcastStats()
+		} else {
+			// TODO: this isn't being used
+			user.socket.emit('collect-fail')
+		}
+	}
+
+	build = (id, build, user) => {
+		if (this.tiles[id] && !this.tiles[id].build && buildings[build]) {
+			this.tiles[id].setBuild(build, buildings[build])
+		} else {
+			// TODO: this isn't being used
+			user.socket.emit('build-fail')
+		}
+	}
+
+	move = (id, action, count) => {
+		if (count < 100 || count > 1e5 || this.tiles[id].build != 'house') return
+
+			const n = Math.min(count, action == 'movein' ? this.tiles[CAMP].ppl : this.tiles[id].ppl)
+			this.tiles[id].ppl += n * (action == 'movein' ? +1 : -1)
+			this.tiles[CAMP].ppl += n * (action == 'movein' ? -1 : +1)
+			this.tiles[id].broadcast()
+			this.tiles[CAMP].broadcast()
+	}
+
 	/**
 	 */
 	constructor() {
@@ -422,51 +465,25 @@ module.exports = {
 
 		socket.on('msg', (msg) => {
 			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
-			console.info(`# ${user.name}: ${safeString}`)
+			// console.info(`# ${user.name}: ${safeString}`)
 			user.game.broadcast('msg', { user: user.name, msg: safeString })
 		})
 
 		socket.on('build', ({ id, choice }) => {
-			if (user.game.tiles[id] && !user.game.tiles[id].build && buildings[choice]) {
-				user.game.tiles[id].setBuild(choice, buildings[choice])
-			} else {
-				user.socket.emit('build-fail')
-			}
+			user.game.build(id, choice, user)
 		})
 
 		socket.on('collect', ({ id }) => {
-			if (user.game.tiles[id] && user.game.tiles[id].stock > 0) {
-				console.log(id, user.game.tiles[id].build);
-				const name = buildings[user.game.tiles[id].build].out[0]
-				const delta = user.game.tiles[id].stock
-				user.game.stats[name] += delta
-				user.game.tiles[id].stock = 0
-				user.game.tiles[id].broadcast()
-				user.game.broadcastStats()
-			} else {
-				console.log('fail', id);
-				user.socket.emit('collect-fail')
-			}
+			user.game.collect(id, user)
 		})
 
 		socket.on('move', ({id, action, count}) => {
-			if (count < 100 || count > 1e5 || user.game.tiles[id].build != 'house') return
-
-			const n = Math.min(count, action == 'movein' ? user.game.tiles[CAMP].ppl : user.game.tiles[id].ppl)
-			user.game.tiles[id].ppl += n * (action == 'movein' ? +1 : -1)
-			user.game.tiles[CAMP].ppl += n * (action == 'movein' ? -1 : +1)
-			user.game.tiles[id].broadcast()
-			user.game.tiles[CAMP].broadcast()
+			user.game.move(id, action, count)
 		})
 
 		console.info('Connected: ' + socket.id)
-		user.game.users.forEach(user => {
-			user.socket.emit('users', {
-				id: user.id,
-				users: user.game.users.map(u => ({ id: u.id, name: u.name }))
-			})
-		})
 
+		user.game.broadcastUsers()
 		user.game.broadcastStats()
 		user.socket.emit('world', { tiles: user.game.tiles, stats: user.game.stats })
 		user.socket.emit('events',  user.game.events.filter(e => e.old))
@@ -498,5 +515,3 @@ module.exports = {
 	// 	}
 	// }
 }
-
-console.log('🤖 Ready');
