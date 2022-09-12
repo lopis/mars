@@ -65,6 +65,7 @@ export const updateStats = (newStats) => {
 export const playOffline = () => {
   if (!gameStarted) {
     gameStarted = true
+    initAudio()
     intro.classList.add('gone')
     bindIo()
     joinGame('solo')
