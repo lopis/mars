@@ -15,7 +15,7 @@ const webpackClientConfig = (isProduction) => ({
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'client.js',
-    publicPath: '/',
+    publicPath: '',
   },
   watch: !isProduction,
   module: {
