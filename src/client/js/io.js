@@ -12,7 +12,7 @@ function bind() {
 
   Object.entries({
     'disconnect': () => {
-      renderDialog(null, '<br>Server Side Error', '<p class="red">Unfortunately, the server has crashed.</p>')
+      renderDialog(null, '<br>Server Side Error', '<p class="red">Unfortunately, the server<br>has crashed or restarted.<br>Please refresh the page.</p>')
     },
     'users': ({id, users}) => {
       updateUsers(id, users)
@@ -70,11 +70,8 @@ export const relocateAction = (action, count) => {
   socket.emit('move', { id: $selectedTile.dataset.n, action, count })
 }
 
-export const collect = (count) => () => {
+export const collect = () => {
   const id = $selectedTile.dataset.n
-  socket.emit('collect', { 
-    id,
-    count,
-  })
   dismissDialog()
+  socket.emit('collect', id)
 }

@@ -30,14 +30,15 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, fre
       tile.$tile.appendChild(r)
     }
   }
-  if ((stock && stock > tile.stock) || (ppl && ppl > tile.ppl)) {
-    tile.$tile.classList.add('new')
-  }
+  
+  [
+    ['new', stock > 0],
+    ['mine', !!mine],
+    ['free', !!free],
+    ['stop', !!stop],
+    ['bad', !!riot],
+  ].forEach(([className, value]) => tile.$tile.classList.toggle(className, value))
 
-  tile.$tile.classList.toggle('mine', !!mine)
-  tile.$tile.classList.toggle('free', !!free)
-  tile.$tile.classList.toggle('stop', !!stop)
-  tile.$tile.classList.toggle('bad', !!riot)
   Object.assign(tile, {stock, willBe, ppl, dust, mine, free, stop})
   if (tile.$tile === $selectedTile) {
     if (dust) {
@@ -115,7 +116,6 @@ export const showTileDialog = (target) => {
   clearSelectedTile()
 
   $selectedTile = target
-  target.classList.remove('new')
   const tile = tiles[target.dataset.n]
   if (tile.dust) {
     return
@@ -130,9 +130,11 @@ export const showTileDialog = (target) => {
         tile,
         building.label,
         `<p>Producing ${count > 3 ? Math.ceil(tile.ppl / count) : (count || 1)} ${icon} daily</p>` +
-        (tile.stop ? `<p class="red">Not enough ${building.use.join(' ')}<br>Production halted.</p>` : '') +
+        (tile.stop ? `<p class="red">Not enough ${building.use[0]} ${building.use[1]}.<br>Production halted.</p>` : '') +
         `<p>Stock: ${tile.stock}</p>` +
-        `<ul><li class="button ${tile.stock == 0 ? 'off"' : '" id="getall"'}>Collect stock</li></ul>${
+        `<ul><li class="button ${tile.stock == 0 ? 'off"' : '" id="getall"'}>` +
+        'Collect stock<br><small>or ctrl + click the tile</small>' +
+        `</li></ul>${
           building.count
           ? `${renderCap(tile, building)}<br>${renderActions(tile, building)}`
           : ''

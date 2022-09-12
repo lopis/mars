@@ -59,7 +59,6 @@ class Tile {
 			if (!use || this.#game.stats[use[0]] >= 1) {
 				// The increment is defined by the number of emoji in the label.
 				const delta = out[2] > 3 ? Math.ceil(this.ppl / out[2]) : (out[2] || 1)
-				console.log(this.build, delta);
 				this.stock += delta
 				if (use) {
 					this.#game.stats[use[0]] -= out[2] > 3 ? Math.ceil(this.ppl / out[2]) : 1
@@ -300,12 +299,13 @@ class Game {
 		this.safeTimeout(() => {
 			Object.values(this.tiles)
 				// Only houses and the camp have ppl
-				.filter(tile => typeof tile.ppl !== 'undefined')
-				.forEach(house => {
-					const chanceOfRiot = (house.ppl / buildings[house.build].cap) - 0.99
+				.filter(tile => typeof tile.ppl !== 'undefined' && tile.ppl > 0)
+				.forEach(tile => {
+					const chanceOfRiot = (tile.ppl / buildings[tile.build].cap) + (tile.stop ? -0.5 : -1)
+					// console.log(tile.build, tile.ppl, buildings[tile.build].cap, tile.stop, chanceOfRiot);
 					if (chanceOfRiot > Math.random()) {
 						// Always 1% of people die in a riot
-						const casualities = Math.ceil(house.ppl * 0.01)
+						const casualities = Math.ceil(tile.ppl * 0.02)
 						this.createEvent(
 							'riot',
 							'⚠️',
@@ -313,23 +313,23 @@ class Game {
 							0,
 							casualities,
 							null,
-							house.id
+							tile.id
 						)
-						house.ppl -= casualities
-						house.riot = true
-						house.broadcast()
+						tile.ppl -= casualities
+						tile.riot = true
+						tile.broadcast()
 						this.stats.population -= casualities
 						this.stats.workforce -= Math.round(casualities * 0.4)
 						this.broadcastStats()
 						this.deaths += casualities
-					} else if(house.riot && chanceOfRiot <= 0) {
-						house.riot = false
-						house.broadcast()
+					} else if(tile.riot && chanceOfRiot <= 0) {
+						tile.riot = false
+						tile.broadcast()
 					}
 				})
 	
 			this.initRiotSchedule()
-		}, 5000)
+		}, 10000)
 	}
 
 	initStormSchedule = () => {
@@ -391,7 +391,6 @@ class Game {
 
 	collect = (id, user) => {
 		if (this.tiles[id] && this.tiles[id].stock > 0) {
-			console.log(id, this.tiles[id].build);
 			const name = buildings[this.tiles[id].build].out[0]
 			const delta = this.tiles[id].stock
 			this.stats[name] += delta
@@ -475,7 +474,7 @@ class User {
 			this.game.build(id, choice, this)
 		})
 
-		this.socket.on('collect', ({ id }) => {
+		this.socket.on('collect', (id) => {
 			this.game.collect(id, this)
 		})
 

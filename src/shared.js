@@ -90,7 +90,7 @@ stats = {
   waste_use: 0,
 }
 
-SOL_DURATION = 60 * 1000 // 60 seconds
+SOL_DURATION = 0.1 * 60 * 1000 // 60 seconds
 initialPhase = 0.0
 
 getNeighbours = function (row, col) {

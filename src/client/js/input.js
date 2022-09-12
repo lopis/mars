@@ -42,11 +42,17 @@ export default () => {
     }
   })
 
-  addEventListener('click', ({target}) => {
+  addEventListener('click', ({target, ctrlKey}) => {
     if(target?.dataset?.n) {
-      showTileDialog(target)
-      houseDirection = null
-      houseNumber = 120
+      if (ctrlKey) {
+        $selectedTile = target
+        collect()
+        clearSelectedTile()
+      } else {
+        showTileDialog(target)
+        houseDirection = null
+        houseNumber = 120
+      }
       return
     }
 
@@ -69,8 +75,7 @@ export default () => {
       _users: showUsers,
       _comms: showComms,
       _sol: showSolStats,
-      getone: collect(1),
-      getall: collect(),
+      getall: collect,
       dismiss: dismissDialog,
     })[target.id]
     if (listener) {
