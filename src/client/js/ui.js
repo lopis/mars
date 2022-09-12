@@ -4,7 +4,7 @@ import { buildAction } from './io'
 
 // let dismissOnArrival
 let isZoomed
-export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, free, stop}) => {
+export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, free, stop, until}) => {
   const tile = tiles[id] 
   if (!tile) return
 
@@ -39,7 +39,7 @@ export const updateTile = ({id, build, stock, willBe, ppl, dust, riot, mine, fre
     ['bad', !!riot],
   ].forEach(([className, value]) => tile.$tile.classList.toggle(className, value))
 
-  Object.assign(tile, {stock, willBe, ppl, dust, mine, free, stop})
+  Object.assign(tile, {stock, willBe, ppl, dust, mine, free, stop, until})
   if (tile.$tile === $selectedTile) {
     if (dust) {
       clearSelectedTile()
@@ -147,7 +147,7 @@ export const showTileDialog = (target) => {
         buildings[tile.willBe]?.label || building.label,
         `<p>${
           building.count ? renderCap(tile, building)
-          : tile.willBe ? '🚧 Under construction'
+          : tile.willBe ? `🚧 Under construction until sol ${tile.until}`
           : `Waiting for new convoy arrival`
         }</p>`
       )

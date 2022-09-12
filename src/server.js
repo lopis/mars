@@ -84,6 +84,7 @@ class Tile {
 
 		this.build = 'wip'
 		this.willBe = buildID
+		this.until = Math.ceil(this.#game.getSol() / SOL_DURATION + build.days)
 		this.broadcast()
 		getNeighbourTiles(this, this.#game.tiles)
 		.forEach(tile => {
