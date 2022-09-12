@@ -228,10 +228,11 @@ class Game {
 	}
 
 	broadcastUsers = () => {
+		const users = this.users.map(u => ({ id: u.id, name: u.name }))
 		this.users.forEach(user => {
-			this.broadcast('users', {
+			user.socket.emit('users', {
 				id: user.id,
-				users: this.users.map(u => ({ id: u.id, name: u.name }))
+				users: users
 			})
 		})
 	}

@@ -31,6 +31,7 @@ const update = (dt) => {
 }
 
 export const updateUsers = (userId, users) => {
+  console.log(userId, users);
   userList = users.map(({id, name}) => id === userId ? `${name} (you)` : name)
 }
 
