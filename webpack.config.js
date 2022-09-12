@@ -5,6 +5,7 @@ const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").def
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require("terser-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const path = require('path');
 const mangle = true
@@ -77,13 +78,18 @@ const webpackClientConfig = (isProduction) => ({
         collapseWhitespace: true
       },
       minifyCSS: true,
-      favicon: path.resolve(__dirname, 'src/client/assets/favicon.svg'),
+      //favicon: path.resolve(__dirname, 'src/client/assets/favicon.svg'),
     }),
     new MiniCssExtractPlugin(),
     new HTMLInlineCSSWebpackPlugin(),
     // new BundleAnalyzerPlugin({
     //   analyzerPort: 8003
     // })
+    new CopyPlugin({
+      patterns: [
+        'src/manifest.json',
+      ],
+    }),
   ],
   // stats: 'errors-warnings',
 })

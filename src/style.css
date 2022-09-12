@@ -632,49 +632,6 @@ h1 {
   margin-right: 0.5ch;
 }
 
-/* @media screen and (max-width: 810px) {
-  #_stats {
-    gap: 1px;
-    padding: 2vh 0;
-    grid-template-rows: repeat(5, 1fr);
-  }
-
-  #_stats div {
-    text-align: left;
-    grid-template-columns: auto 1fr;
-  }
-
-  [i]:not(:empty)::before {
-    content: unset;
-  }
-
-  .button:not(:empty) {
-    grid-row: 2;
-    grid-column: span 2;
-  }
-
-  #toolbar {
-    width: 100%;
-    box-sizing: border-box;
-    bottom: 27vh;
-    top: unset;
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-  .button {
-    padding: 2vmin 1vmin;
-  }
-
-  #_dialog.show {
-    top: 50%;
-    max-width: none;
-    left: 5vh;
-    z-index: 9;
-    box-shadow: 0 15vh 1vh 20vh #0009;
-  }
-} */
-
-
 /* NOTIFICATIONS */
 #_notices {
 	position: fixed;
@@ -718,5 +675,11 @@ p[i]::before {
   to {
     top: 0;
     opacity: 1;
+  }
+}
+
+@media screen and (max-width: 812px) {
+  body {
+    font-size: 1.3vw;
   }
 }

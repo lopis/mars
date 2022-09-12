@@ -36,6 +36,7 @@ archive.append(fs.createReadStream('./public/index.html'), { name: 'index.html' 
 archive.append(fs.createReadStream('./public/server.js'), { name: 'server.js' })
 archive.append(fs.createReadStream('./public/shared.js'), { name: 'shared.js' })
 archive.append(fs.createReadStream('./public/client.js'), { name: 'client.js' })
+archive.append(fs.createReadStream('./public/manifest.json'), { name: 'manifest.json' })
 // fs.unlinkSync('./dist/index.html')
 // fs.unlinkSync('./dist/index.js')
 // fs.unlinkSync('./dist/main.css')
