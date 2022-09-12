@@ -10,6 +10,8 @@ Somehow in the last years the world governments managed to put aside their diffe
 
 ![image](https://user-images.githubusercontent.com/2715751/189550248-9a7d5005-c79b-4b1f-ac22-52773554664e.png)
 
+The goal of the game is to create a functioning colony while constantly receiving more refugees from Earth.
+
 ## Game mechanics
 
 ℹ️ The game UI is not optimized for mobile phones. A landscape screen with at least 1280x800 is recommended.
@@ -21,17 +23,18 @@ Any number of players can join simultaneously to help deal with every day tasks 
 - Welcome refugee ships and move them to houses
 - Build varied buildings and collect resources from them
   - Buildings can only be built next to your colony, or connected by paths
-- Move resources where they are needed.
+  - Most buildings have a construction cost, a maintenance cost, and daily production value
+- Collect resources so they are available to be used where they are needed.
 
 You will face several problems:
 
 - The more people are crammed together, the more likely riots emerge. When riots start, people will die.
-- Without enough resources, people will also riot.
+- Without enough food, people will also riot and kill eachother.
 - Natural disasters can occur that disrupt comms or destroy infrastructure
   - Dust storms will cut communication off with that area
-- You might need to decide to let some people out to save your residents...
+- You might need to decide to let some people out to save your residents
 
-There's a chat function to communicate with other people online.
+There's a chat function to communicate with other people currently online.
 
 ### Game map
 
@@ -41,7 +44,7 @@ The map represents the planet Mars. There are 3 types of areas:
 - Blue tiles around the mountains, or "Rocky areas" where you can build mines and nuclear plants
 - White tiles, or "Glaciar" where you can harvest water
 
-There are the mountains where you can't build anything.
+There are also the mountains where you can't build anything.
 
 ## Ready to play?
 
