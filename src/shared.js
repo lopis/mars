@@ -10,7 +10,7 @@ buildings = {
   minery: {
     label: 'Minery',
     icon: '🏭',
-    out: ['minerals', '🪨'],
+    out: ['minerals', '🌑'],
     use: ['energy', '🔋'],
     cost: [5, 'energy'],
     days: 3,
@@ -27,7 +27,7 @@ buildings = {
     icon: '⚛️',
     cost: [20, 'water'],
     out: ['energy', '🔋x4', 4],
-    use: ['minerals', '🪨'],
+    use: ['minerals', '🌑'],
     days: 8
   },
   house: {
