@@ -1,84 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-  <link rel="manifest" href="manifest.json">
-  <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='css_hue_rotate'%3E%3CfeColorMatrix type='matrix' values=' 1.000 0.200 0.200 0.000 -0.100 0.100 0.100 0.100 0.000 -0.100 0.100 0.100 0.100 0.000 -0.100 0.000 0.000 0.000 1.000 0.000'%3E%3C/feColorMatrix%3E%3C/filter%3E%3Ctext filter='url(%23css_hue_rotate)' y='.9em' font-size='90'%3E🌒%3C/text%3E%3C/svg%3E" type="image/x-icon">
-  <title>Planet B</title>
-  <style>html { background: black} body { display: none }</style>
-</head>
-<body>
-  <div id="intro">
-    <h1>Planet B <span>🌓</span></h1>
-    <div class="button" id="offline" i="👤">Solo (no save)</div>
-    <div class="button" id="global" i="👥">Global Co-Op</div>
-  </div>
-  <svg id="stars" width="100%" height="100%" >
-    <filter id="filter">
-        <feTurbulence baseFrequency="0.1"/>
-        <feColorMatrix values="0 0 0 7 -4 0 0 0 7 -4 0 0 0 7 -4 0 0 0 0 1"/>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#filter)"/>
-  </svg>
-  <div id="wrapper">
-    <canvas class="hidden" id="canvas"></canvas>
-    <div class="hidden" id="tileset"></div>
-  </div>
-  <svg class="noise" width="100%" height="100%" version="1.1">
-    <defs>
-      <filter id='noise'>
-        <feTurbulence 
-          type='fractalNoise' 
-          baseFrequency='6.29' 
-          numOctaves='2' 
-          stitchTiles='stitch'/>
-        <feColorMatrix
-          values="0 0 0 1 -0.6 0 0 0 1 -0.6 0 0 0 1 -0.6 0 0 0 0 1" />
-      </filter>
-    </defs>
-    <rect width="100%" height="100%" fill="indianred" filter="url(#noise)"/>
-  </svg>
-  <div class="hidden" id="earth">
-    <div class="icon"></div>
-    <div id="rocket">🚀</div>
-  </div>
-  <div id="_dialog">
-    <div id="_prompt"></div>
-    <div id="dismiss" class="button" title="Close dialog [Esc]">
-      ⨉
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="shortcut icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='css_hue_rotate'%3E%3CfeColorMatrix type='matrix' values=' 1.000 0.200 0.200 0.000 -0.100 0.100 0.100 0.100 0.000 -0.100 0.100 0.100 0.100 0.000 -0.100 0.000 0.000 0.000 1.000 0.000'%3E%3C/feColorMatrix%3E%3C/filter%3E%3Ctext filter='url(%23css_hue_rotate)' y='.9em' font-size='90'%3E🌒%3C/text%3E%3C/svg%3E"
+      type="image/x-icon"
+    />
+    <title>Planet B</title>
+    <style>
+      html {
+        background: black;
+      }
+      body {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="intro">
+      <h1>Planet B <span>🌓</span></h1>
+      <div class="button" id="offline" i="👤">Solo (no save)</div>
+      <div class="button" id="global" i="👥">Global Co-Op</div>
     </div>
-    <section id="_choices"></section>
-  </div>
-  <div class="hidden" id="toolbar">
-    <div id="_sound" class="button" title="Sounds" i="🔉"></div>
-    <div id="_music" class="button" title="Music" i="🎵"></div>
-    <div id="_fast" class="button off" title="Performance" i="🐇"></div>
-    <div id="_a11y" class="button off" title="Color blindness" i="👁"></div>
+    <svg id="stars" width="100%" height="100%">
+      <filter id="filter">
+        <feTurbulence baseFrequency="0.1" />
+        <feColorMatrix values="0 0 0 7 -4 0 0 0 7 -4 0 0 0 7 -4 0 0 0 0 1" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#filter)" />
+    </svg>
+    <div id="wrapper">
+      <canvas class="hidden" id="canvas"></canvas>
+      <div class="hidden" id="tileset"></div>
+    </div>
+    <svg class="noise" width="100%" height="100%" version="1.1">
+      <defs>
+        <filter id="noise">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="6.29"
+            numOctaves="2"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix
+            values="0 0 0 1 -0.6 0 0 0 1 -0.6 0 0 0 1 -0.6 0 0 0 0 1"
+          />
+        </filter>
+      </defs>
+      <rect width="100%" height="100%" fill="indianred" filter="url(#noise)" />
+    </svg>
+    <div class="hidden" id="earth">
+      <div class="icon"></div>
+      <div id="rocket">🚀</div>
+    </div>
+    <div id="_dialog">
+      <div id="_prompt"></div>
+      <div id="dismiss" class="button" title="Close dialog [Esc]">⨉</div>
+      <section id="_choices"></section>
+    </div>
+    <div class="hidden" id="toolbar">
+      <div id="_sound" class="button" title="Sounds" i="🔉"></div>
+      <div id="_music" class="button" title="Music" i="🎵"></div>
+      <div id="_fast" class="button off" title="Performance" i="🐇"></div>
+      <div id="_a11y" class="button off" title="Color blindness" i="👁"></div>
 
-    <div id="_sol" class="button" i="🗓">Sol</div>
-    <div id="_users" class="button" i="👥">Players</div>
-    <div id="_comms" class="button" i="💬">Comms</div>
-  </div>
-  <div class="hidden" id="_stats">
-    <div id="food" data-count="0" i="🥔">Food</div>
-    <div id="waste" data-count="0" i="💩">Waste</div>
-    <div id="minerals" data-count="0" i="🪨">Minerals</div>
-    <div id="energy" data-count="0" i="🔋">Energy </div>
-    <div id="water" data-count="0" i="💧">Water</div>
+      <div id="_sol" class="button" i="🗓">Sol</div>
+      <div id="_users" class="button" i="👥">Players</div>
+      <div id="_comms" class="button" i="💬">Comms</div>
+    </div>
+    <div class="hidden" id="_stats">
+      <div id="food" data-count="0" i="🥔">Food</div>
+      <div id="waste" data-count="0" i="💩">Waste</div>
+      <div id="minerals" data-count="0" i="🌑">Minerals</div>
+      <div id="energy" data-count="0" i="🔋">Energy</div>
+      <div id="water" data-count="0" i="💧">Water</div>
 
-    <div id="energy_use" data-count="0" i="🔌">Energy use</div>
-    <div id="minerals_use" data-count="0" i="☢️">Minerals use</div>
-    <div id="waste_use" data-count="0" i="🌱">Waste use</div>
-    <div id="workforce" data-count="0" i="👷‍♂️">Available<br>Workforce</div>
-    <div id="population" data-count="0" i="👨‍👨‍👦">Population</div>
-  </div>
-  <div class="hidden" id="_notices">
-  </div>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="shared.js"></script>
-</body>
-
+      <div id="energy_use" data-count="0" i="🔌">Energy use</div>
+      <div id="minerals_use" data-count="0" i="☢️">Minerals use</div>
+      <div id="waste_use" data-count="0" i="🌱">Waste use</div>
+      <div id="workforce" data-count="0" i="👷‍♂️">Available<br />Workforce</div>
+      <div id="population" data-count="0" i="👨‍👨‍👦">Population</div>
+    </div>
+    <div class="hidden" id="_notices"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="shared.js"></script>
+  </body>
 </html>

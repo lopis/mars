@@ -163,8 +163,8 @@ class Game {
 		this.tiles[CENTER].build = 'center'
 		// Set the location of the refugee camp
 		this.tiles[CAMP].build = 'camp'
-		this.tiles['G3'].build = 'house' //TODO: remove this!
-		this.tiles['G3'].ppl = 0 //TODO: remove this!
+		// this.tiles['G3'].build = 'house' //TODO: remove this!
+		// this.tiles['G3'].ppl = 0 //TODO: remove this!
 		this.tiles[CAMP].ppl = 0
 		getNeighbourTiles(this.tiles[CENTER], this.tiles)
 		.concat(getNeighbourTiles(this.tiles[CAMP], this.tiles))
@@ -278,7 +278,7 @@ class Game {
 		const solCount = this.getSol()
 		this.createEvent('convoy1', 'ℹ️', solCount, 1)
 		// FIrst convoy always brings 9000 people
-		this.createEvent('convoy2', 'ℹ️', solCount + SOL_DURATION, 0, 99000, fn(99000))
+		this.createEvent('convoy2', 'ℹ️', solCount + SOL_DURATION, 0, 9000, fn(9000))
 		this.convoyCount = 0
 
 		// Scheduler runs a loop on a variable timeout
