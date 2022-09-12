@@ -18,7 +18,7 @@ buildings = {
   solar: {
     label: 'Solar Plant',
     icon: '🔲',
-    out: ['energy', '🔋'],
+    out: ['energy', '🔋🔋'],
     cost: [5, 'minerals'],
     days: 4,
   },
@@ -26,7 +26,7 @@ buildings = {
     label: 'Nuclear Plant',
     icon: '⚛️',
     cost: [20, 'water'],
-    out: ['energy', '🔋🔋🔋', 3],
+    out: ['energy', '🔋x4', 4],
     use: ['minerals', '🪨'],
     days: 8
   },
