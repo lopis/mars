@@ -125,11 +125,11 @@ export const showTileDialog = (target) => {
     const building = buildings[tile.build]
     if (building.out) {
       // RESOURCE DIALOG
-      const resource = building.out.join(' ')
+      const [name, icon, count] = building.out
       renderDialog(
         tile,
         building.label,
-        `<p>Producing ${resource} daily</p>` +
+        `<p>Producing ${count > 3 ? Math.ceil(tile.ppl / count) : (count || 1)} ${icon} daily</p>` +
         (tile.stop ? `<p class="red">Not enough ${building.use.join(' ')}<br>Production halted.</p>` : '') +
         `<p>Stock: ${tile.stock}</p>` +
         `<ul><li class="button ${tile.stock == 0 ? 'off"' : '" id="getall"'}>Collect stock</li></ul>${
@@ -159,9 +159,9 @@ export const showTileDialog = (target) => {
         `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
         `builds in ${days} sols`,
         out?.length
-          ? `out: ${out[1]} daily`
+          ? `out: ${out[1]} ` + (out[2] > 3 ? ' per 25k daily' : 'daily')
           : 'connects sectors',
-        use ? `<span>in: ${use[1]} daily</span>` : '',
+        use ? `<span>in: ${use[1]} ${use[2] > 3 ? ' per 25k daily' : 'daily'}</span>` : '',
       ].join('<br>')
       return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
     }
@@ -245,6 +245,7 @@ export const showSolStats = () => {
         new Date(data.start).toLocaleString('pt', { timeZone: 'Europe/Lisbon'
       })}`,
       `(UTC+0 Earth Time)`,
+      '<br>Feedback welcome 🐦 @mrlopis'
     ].join('<br>')}</p>`
   )
 }

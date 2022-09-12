@@ -46,7 +46,7 @@ export default () => {
     if(target?.dataset?.n) {
       showTileDialog(target)
       houseDirection = null
-      houseNumber = 100
+      houseNumber = 120
       return
     }
 

@@ -58,9 +58,11 @@ class Tile {
 			const {out, use} = build
 			if (!use || this.#game.stats[use[0]] >= 1) {
 				// The increment is defined by the number of emoji in the label.
-				this.stock += out[3] || 1
+				const delta = out[2] > 3 ? Math.ceil(this.ppl / out[2]) : (out[2] || 1)
+				console.log(this.build, delta);
+				this.stock += delta
 				if (use) {
-					this.#game.stats[use[0]] -= 1
+					this.#game.stats[use[0]] -= out[2] > 3 ? Math.ceil(this.ppl / out[2]) : 1
 					this.#game.broadcastStats()
 				}
 				this.stop = false
@@ -135,6 +137,7 @@ class Game {
 		this.initConvoySchedule()
 		this.initRiotSchedule()
 		this.initStormSchedule()
+		// this.initAsteroidSchedule()
 	}
 
 	// Generate all tiles
@@ -362,6 +365,30 @@ class Game {
 		}, 1000)
 	}
 
+	// initAsteroidSchedule = () => {
+	// 	const CHANCE_OF_ASTEROID = 0.001
+	// 	this.safeTimeout(() => {
+	// 		const r = Math.random()
+	// 		if (r < CHANCE_OF_ASTEROID) {
+	// 			const idx = Math.floor(Object.values(this.tiles).length * r / CHANCE_OF_ASTEROID)
+	// 			const tile = Object.values(this.tiles)[idx]
+	// 			tile.hit = false
+	// 			tile.broadcast()
+
+	// 			// 6000 is the time the animation takes
+	// 			this.createEvent('hit', '⚠️', this.getSol() + 6000, 0, stormDuration, () => {
+	// 				tile.dust = false
+	// 				tile.broadcast()
+	// 				neighbours.forEach(tile => {
+	// 					tile.dust = false
+	// 					tile.broadcast()
+	// 				})
+	// 			}, tile.id)
+	// 			tile.broadcast()
+	// 		}
+	// 	}, 1000)
+	// }
+
 	collect = (id, user) => {
 		if (this.tiles[id] && this.tiles[id].stock > 0) {
 			console.log(id, this.tiles[id].build);
@@ -441,7 +468,7 @@ class User {
 
 		this.socket.on('msg', (msg) => {
 			const safeString = msg.replace(/[&/\\#,+()$~%.^'":*<>{}]/g, " ").substr(0, 22)
-			this.game.broadcast('msg', { user: user.name, msg: safeString })
+			this.game.broadcast('msg', { user: this.name, msg: safeString })
 		})
 
 		this.socket.on('build', ({ id, choice }) => {
@@ -471,8 +498,9 @@ class Event {
 }
 
 // Create global game
-const globalGame = new Game()
+let globalGame = new Game()
 globalGame.init()
+
 
 /**
  * Socket.IO on connect event
@@ -482,7 +510,8 @@ module.exports = {
 
 	io: (socket) => {
 		console.info('Connected: ' + socket.id)
-		const user = new User(socket, globalGame)
+		let user = new User(socket, globalGame)
+		allUsers.push(user)
 
 		socket.on('join', mode => {
 			console.info('Player: ' + user.name + ' joined.', mode)
@@ -492,12 +521,14 @@ module.exports = {
 		socket.on('disconnect', () => {
 			console.info('Disconnected: ' + user.name)
 			// removeElement(allUsers, user)
-			removeElement(user.game.users, user)
 			if (user.game.users.length === 0) {
 				user.game.gameRunning = false
 				user.game.solCount += Date.now() - user.game.lastTime
 				user.game.lastTime = Date.now()
 			}
+			removeElement(allUsers, user)
+			removeElement(user.game.users, user)
+			user = null
 		})
 	},
 
@@ -513,17 +544,16 @@ module.exports = {
 	// 	)
 	// },
 
-	// reset: (req, res) => {
-	// 	const html = `<form method="POST"><input name="pwd" type=text/><button type="submit">Reset Game</button>`
-	// 	if (req.method === 'POST') {
-	// 		const correct = hashCode(req.body.pwd) === hash
-	// 		broadcast('restart')
-	// 		res.send(correct + html)
-	// 		generateTiles()
-	// 		initTime()
-	// 		Event.init()
-	// 	} else {
-	// 		res.send(html)
-	// 	}
-	// }
+	reset: (req, res) => {
+		const html = `<form method="POST"><input name="pwd" type=text/><button type="submit">Reset Game</button>`
+		if (req.method === 'POST') {
+			const correct = hashCode(req.body.pwd) === hash
+			allUsers.forEach(user => user.emit('restart'))
+			res.send(correct + html)
+			globalGame = new Game()
+			globalGame.init()
+		} else {
+			res.send(html)
+		}
+	}
 }
