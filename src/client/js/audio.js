@@ -47,8 +47,8 @@ const playNote = (note, time, frequency) => {
     gain.connect(a.destination)
     gain.gain.setValueAtTime(0.01, time)
     gain.gain.exponentialRampToValueAtTime(musicVolume, time + duration*0.08)
-    gain.gain.setValueAtTime(musicVolume, time + duration*0.1)
-    gain.gain.exponentialRampToValueAtTime(0.01, time + duration*2);
+    gain.gain.setValueAtTime(musicVolume, time + duration*0.3)
+    gain.gain.exponentialRampToValueAtTime(0.01, time + duration*1.5);
     osc.frequency.value = frequency / 1.06 ** note
     osc.start(time)
     osc.stop(time + duration*1.5)
@@ -101,8 +101,8 @@ const notes = [
   10,8,10,13,18,13,
   10,8,10,13,17,12,
 ]
-const duration = 1.00
-const musicVolume = 0.3
+const duration = 0.9
+const musicVolume = 0.5
 // let crossFade = 0
 const variations = [420, 400, 420, 440, 460, 480, 460, 440]
 let variation = variations.pop()
