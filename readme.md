@@ -60,4 +60,4 @@ Access the game client via <http://localhost:3000/>.
 
 To build a production release, run `yarn build` and then run it with `yarn start`.
 
-To create a zip of the game run `yarn postbuild`.
+To create a zip of the game run `yarn build`.

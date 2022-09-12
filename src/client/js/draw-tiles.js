@@ -24,7 +24,7 @@ export const renderTiles = () => {
     const colNum = (row === 0 || row === rows -1 || cols === 13 - 1) ? cols - 2 : cols
     for(let col=0; col < colNum; col++) {
       const $tile = document.createElement('div')
-      $tile.className = 'hex'
+      $tile.className = 'T'
       const id = `${String.fromCharCode(65 + row)}${col}`
       $tile.dataset.n = id
       $group.appendChild($tile)

@@ -20,8 +20,8 @@
   <body>
     <div id="intro">
       <h1>Planet B <span>🌓</span></h1>
-      <div class="button" id="offline" i="👤">Solo (no save)</div>
-      <div class="button" id="global" i="👥">Global Co-Op</div>
+      <btn id="offline" i="👤">Solo (no save)</btn>
+      <btn id="global" i="👥">Global Co-Op</btn>
     </div>
     <svg id="stars" width="100%" height="100%">
       <filter id="filter">
@@ -56,18 +56,18 @@
     </div>
     <div id="_dialog">
       <div id="_prompt"></div>
-      <div id="dismiss" class="button" title="Close dialog [Esc]">⨉</div>
+      <btn id="dismiss" title="Close dialog [Esc]">⨉</btn>
       <section id="_choices"></section>
     </div>
     <div class="hidden" id="toolbar">
-      <div id="_sound" class="button" title="Sounds" i="🔉"></div>
-      <div id="_music" class="button" title="Music" i="🎵"></div>
-      <div id="_fast" class="button off" title="Performance" i="🐇"></div>
-      <div id="_a11y" class="button off" title="Color blindness" i="👁"></div>
+      <btn id="_sound" title="Sounds" i="🔉"></btn>
+      <btn id="_music" title="Music" i="🎵"></btn>
+      <btn id="_fast" class="off" title="Performance" i="🐇"></btn>
+      <btn id="_a11y" class="off" title="Color blindness" i="👁"></btn>
 
-      <div id="_sol" class="button" i="🗓">Sol</div>
-      <div id="_users" class="button" i="👥">Players</div>
-      <div id="_comms" class="button" i="💬">Comms</div>
+      <btn id="_sol" i="🗓">Sol</btn>
+      <btn id="_users" i="👥">Players</btn>
+      <btn id="_comms" i="💬">Comms</btn>
     </div>
     <div class="hidden" id="_stats">
       <div id="food" data-count="0" i="🥔">Food</div>

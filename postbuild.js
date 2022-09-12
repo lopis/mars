@@ -10,12 +10,13 @@ const MAX = 13 * 1024 // 13kb
 
 output.on('close', function () {
   const bytes = archive.pointer()
-  const kilobytes = Math.ceil((10 * bytes / 1024)) / 10
+  const kilobytes = Math.floor(bytes / 1024)
+  const bytesLeft = bytes % 1024
   const percent = (bytes / MAX * 100).toFixed(2)
   if (bytes > MAX) {
-    console.error(`Game size overflow: ${kilobytes}KB (${percent}%)`)
+    console.error(`Game size overflow: ${kilobytes}KB and ${bytesLeft}B (${percent}%)`)
   } else {
-    console.log(`Game size: ${kilobytes}KB (${percent}%)`)
+    console.log(`Game size: ${Math.floor(100 * bytes / 1024) / 100}KB (${percent}%)`)
   }
 })
 

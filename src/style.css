@@ -1,6 +1,6 @@
 :root {
-  --hex-width: 2;
-  --hex-size-height: 1.1547;
+  --T-width: 2;
+  --T-size-height: 1.1547;
 }
 
 html, body {
@@ -50,7 +50,7 @@ canvas {
   transform: rotate(25deg);
 }
 
-.a11y .hex {
+.a11y .T {
   --tile-color: #a7700b;
 }
 
@@ -59,37 +59,37 @@ canvas {
   height: 100vh;
 }
 
-.hex {
-  --hex-size: 2.8vmin;
+.T {
+  --T-size: 2.8vmin;
   --fade-time: 300ms;
   font-size: 1.4vmin;
   position: relative;
   display: inline-flex;
-  width: calc(var(--hex-width) * var(--hex-size));
-  height: calc(var(--hex-size-height) * var(--hex-size));
+  width: calc(var(--T-width) * var(--T-size));
+  height: calc(var(--T-size-height) * var(--T-size));
   margin: 0.8vmin 0.3vmin;
   opacity: 0.8;
   transition: transform 500ms ease-in-out;
 }
 
-.hex:not(.free):not(.deco) {
+.T:not(.free):not(.deco) {
   opacity: 0.5;
 	transform: scale(0.6);
 }
 
 /* polar */
-.row:first-child .hex {
+.row:first-child .T {
 	--tile-color: #00474e;
 }
-.a11y .row:first-child .hex {
+.a11y .row:first-child .T {
 	--tile-color: #cccccc;
 }
 
-.hex.night:not(:empty) {
+.T.night:not(:empty) {
   --tile-color: #ffe479;
 }
 
-.hex::before, .hex::after {
+.T::before, .T::after {
   content: "";
   position: absolute;
   height: 100%;
@@ -97,7 +97,7 @@ canvas {
   transform: rotate(60deg);
   transform-origin: center;
 }
-.hex::after {
+.T::after {
 	content: attr(data-n);
 	display: flex;
 	align-items: center;
@@ -107,10 +107,10 @@ canvas {
 	transform: rotate(-60deg);
 	font-size: 3vmin;
 }
-.hex:hover::after{
+.T:hover::after{
   color: white;
 }
-.hex, .hex::after, .hex::before {
+.T, .T::after, .T::before {
   transition: all var(--fade-time) ease;
   background: var(--tile-color);
   box-sizing: border-box;
@@ -119,27 +119,27 @@ canvas {
 .night, .night::after, .night::before {
   box-shadow: 0 0 3vh -0.5vh var(--tile-color);
 }
-.hex:hover {
+.T:hover {
   --tile-color: #e9a745;
   cursor: pointer;
 }
-.row:first-child .hex:hover {
+.row:first-child .T:hover {
 	--tile-color: #45ade9;
 }
-.hex.selected {
+.T.selected {
   --fade-time: 50ms;
   --tile-color: rgb(255, 253, 253) !important;
   /* transform: scale(3); */
   opacity: 1;
   z-index: 1;
 }
-.hex.selected,
-.hex.selected::after,
-.hex.selected::before {
+.T.selected,
+.T.selected::after,
+.T.selected::before {
   transition-duration: 500ms;
 }
 
-.hex span {
+.T span {
   position: absolute;
   font-size: 4.5vh;
   z-index: 1;
@@ -151,7 +151,7 @@ canvas {
   animation-timing-function: ease-in;
   pointer-events: none;
 }
-.hex span::after {
+.T span::after {
   position: absolute;
   top: 20%;
   right: 10px;
@@ -174,7 +174,7 @@ canvas {
 	background: #ff7b00;
 }
 
-.hex .wip {
+.T .wip {
   animation: bounce 120ms alternate infinite;
 }
 
@@ -218,7 +218,7 @@ canvas {
 }
 
 .road, .road::after, .road::before {
-  height: calc(var(--hex-size-height) * var(--hex-size) - 2vh);
+  height: calc(var(--T-size-height) * var(--T-size) - 2vh);
   border-radius: 0
 }
 
@@ -231,13 +231,13 @@ canvas {
   }
 }
 
-.hex.dust {
+.T.dust {
   animation: dust 800ms alternate infinite;
   cursor: wait;
   transform: scale(1) !important;
   opacity: 1;
 }
-.hex.dust span {
+.T.dust span {
   opacity: 0.3;
   animation-duration: 999s;
 }
@@ -257,7 +257,7 @@ canvas {
   }
 }
 
-.crater::before {
+/* .crater::before {
   content: '✹';
   position: absolute;
   left: 0;
@@ -266,7 +266,7 @@ canvas {
   text-align: center;
   transform: scale(2.5);
   line-height: 1
-}
+} */
 
 svg {
   position: fixed;
@@ -298,6 +298,7 @@ svg {
 	overflow: hidden;
 	left: 1vh;
 	border: 1px solid #003461;
+  /* box-shadow: -0vh -0vh 3.5vh -1vh #0754e9 inset; */
   animation: screen 1s alternate infinite;
 }
 
@@ -417,7 +418,7 @@ aside {
 aside p {
 	grid-column: 1 / 3;
 }
-aside .button {
+aside btn {
 	display: flex;
 	align-content: center;
 	justify-content: center;
@@ -455,28 +456,28 @@ ul small {
   font-weight: bold;
 }
 
-.button {
+btn {
 	padding: 0.7vmin;
 	border: 1px solid currentColor;
 	background: #131212;
 	align-items: center;
 }
 
-.button:hover, .button:hover * {
+btn:hover, btn:hover * {
   background: #999;
   color: #131212 !important;
   cursor: pointer;
 }
 
-.button, #_dialog {
+btn, #_dialog {
   border-radius: 3px;
 }
 
-.button:empty {
+btn:empty {
 	text-align: center;
 }
 
-.button:only-child {
+btn:only-child {
 	grid-column: 1 / 3;
 	text-align: center;
 	font-size: 1.1em;
@@ -583,7 +584,7 @@ h1 {
   transition: all 1s ease-out, top 0s 1s;
 }
 
-#intro .button {
+#intro btn {
   margin-bottom: 0.8vmin;
   padding: 1.5vh;
   min-width: 20ch;

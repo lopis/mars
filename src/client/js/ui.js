@@ -103,12 +103,12 @@ const renderCap = (tile, building) => {
 const renderActions = () => {
   return `<aside>
 <p>Move residents ↕️</p>
-<li class="button radio" id="movein">From camp</li>
-<li class="button radio" id="moveout">To camp</li>
-<li class="button" id="div">÷ 5</li>
-<li class="button" id="mul">× 5</li>
+<btn class="radio" id="movein">From camp</btn>
+<btn class="radio" id="moveout">To camp</btn>
+<btn id="div">÷ 5</btn>
+<btn id="mul">× 5</btn>
 <span id="_val">100</span>
-<li class="button" id="ok">MOVE&nbsp;➡️</li>
+<btn id="ok">MOVE&nbsp;➡️</btn>
 </aside>`
 }
 
@@ -132,9 +132,9 @@ export const showTileDialog = (target) => {
         `<p>Producing ${count > 10 ? Math.ceil(tile.ppl / count) : (count || 1)} ${icon} daily</p>` +
         (tile.stop ? `<p class="red">Not enough ${building.use[0]} ${building.use[1]}.<br>Production halted.</p>` : '') +
         `<p>Stock: ${tile.stock}</p>` +
-        `<ul><li class="button ${tile.stock == 0 ? 'off"' : '" id="getall"'}>` +
+        `<ul><btn class="${tile.stock == 0 ? 'off"' : '" id="getall"'}>` +
         'Collect stock<br><small>or ctrl + click the tile</small>' +
-        `</li></ul>${
+        `</btn></ul>${
           building.count
           ? `${renderCap(tile, building)}<br>${renderActions(tile, building)}`
           : ''
@@ -165,7 +165,7 @@ export const showTileDialog = (target) => {
           : 'connects sectors',
         use ? `<span>in: ${use[1]} ${use[2] > 10 ? ' per 25k daily' : 'daily'}</span>` : '',
       ].join('<br>')
-      return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
+      return `<btn i="${icon}" id="${costClass ? '' : id}">${label}<br><small>${details}</small></btn>`
     }
     const options = ['road'].concat(
       tile.row === 0 ? ['water']

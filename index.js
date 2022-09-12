@@ -112,18 +112,18 @@ storage.init(app.get('storage')).then(() => {
     }
     server.listen(app.get('port'), () => {
         console.log(chalk.blue(`Server started in ${runMode} mode at port ${app.get('port')}`));
-        createZip()
-        .then(()=> {
-            if (isDevelopment) {
-                let pct = packageSize / limit * 100;
-                let color = pct <= 100 ? chalk.green : chalk.red;
-                console.log(color(`Package: ${packageSize} byte / ${pct.toFixed(2)}%`));
-                recurrentLogStorageSize();
-            }
-        })
-        .catch((err)=> {
-            console.error(err.message)
-        });
+        // createZip()
+        // .then(()=> {
+            // if (isDevelopment) {
+            //     let pct = packageSize / limit * 100;
+            //     let color = pct <= 100 ? chalk.green : chalk.red;
+            //     console.log(color(`Package: ${packageSize} byte / ${pct.toFixed(2)}%`));
+            //     recurrentLogStorageSize();
+            // }
+        // })
+        // .catch((err)=> {
+        //     console.error(err.message)
+        // });
     });
 }).catch(err => {
     console.error(err);

@@ -554,7 +554,7 @@ module.exports = {
 	// },
 
 	reset: (req, res) => {
-		const html = `<form method="POST"><input name="pwd" type=text/><button type="submit">Reset Game</button>`
+		const html = `<form method="POST"><input name="pwd" type=text/><button>Reset Game</button>`
 		if (req.method === 'POST') {
 			const correct = hashCode(req.body.pwd) === hash
 			allUsers.forEach(user => user.socket.emit('restart'))
