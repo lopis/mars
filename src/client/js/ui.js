@@ -129,7 +129,7 @@ export const showTileDialog = (target) => {
       renderDialog(
         tile,
         building.label,
-        `<p>Producing ${count > 3 ? Math.ceil(tile.ppl / count) : (count || 1)} ${icon} daily</p>` +
+        `<p>Producing ${count > 10 ? Math.ceil(tile.ppl / count) : (count || 1)} ${icon} daily</p>` +
         (tile.stop ? `<p class="red">Not enough ${building.use[0]} ${building.use[1]}.<br>Production halted.</p>` : '') +
         `<p>Stock: ${tile.stock}</p>` +
         `<ul><li class="button ${tile.stock == 0 ? 'off"' : '" id="getall"'}>` +
@@ -161,9 +161,9 @@ export const showTileDialog = (target) => {
         `<span class="${costClass}">costs ${cost[0]} ${cost[1]}</span>`,
         `builds in ${days} sols`,
         out?.length
-          ? `out: ${out[1]} ` + (out[2] > 3 ? ' per 25k daily' : 'daily')
+          ? `out: ${out[1]} ` + (out[2] > 10 ? ' per 25k daily' : 'daily')
           : 'connects sectors',
-        use ? `<span>in: ${use[1]} ${use[2] > 3 ? ' per 25k daily' : 'daily'}</span>` : '',
+        use ? `<span>in: ${use[1]} ${use[2] > 10 ? ' per 25k daily' : 'daily'}</span>` : '',
       ].join('<br>')
       return `<li i="${icon}" class="button" id="${costClass ? '' : id}">${label}<br><small>${details}</small></li>`
     }

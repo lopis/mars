@@ -58,10 +58,10 @@ class Tile {
 			const {out, use} = build
 			if (!use || this.#game.stats[use[0]] >= 1) {
 				// The increment is defined by the number of emoji in the label.
-				const delta = out[2] > 3 ? Math.ceil(this.ppl / out[2]) : (out[2] || 1)
+				const delta = out[2] > 10 ? Math.ceil(this.ppl / out[2]) : (out[2] || 1)
 				this.stock += delta
 				if (use) {
-					this.#game.stats[use[0]] -= out[2] > 3 ? Math.ceil(this.ppl / out[2]) : 1
+					this.#game.stats[use[0]] -= out[2] > 10 ? Math.ceil(this.ppl / out[2]) : 1
 					this.#game.broadcastStats()
 				}
 				this.stop = false
@@ -163,6 +163,8 @@ class Game {
 		this.tiles[CENTER].build = 'center'
 		// Set the location of the refugee camp
 		this.tiles[CAMP].build = 'camp'
+		this.tiles['G3'].build = 'house' //TODO: remove this!
+		this.tiles['G3'].ppl = 0 //TODO: remove this!
 		this.tiles[CAMP].ppl = 0
 		getNeighbourTiles(this.tiles[CENTER], this.tiles)
 		.concat(getNeighbourTiles(this.tiles[CAMP], this.tiles))
@@ -276,12 +278,15 @@ class Game {
 		const solCount = this.getSol()
 		this.createEvent('convoy1', 'ℹ️', solCount, 1)
 		// FIrst convoy always brings 9000 people
-		this.createEvent('convoy2', 'ℹ️', solCount + SOL_DURATION, 0, 9000, fn(9000))
+		this.createEvent('convoy2', 'ℹ️', solCount + SOL_DURATION, 0, 99000, fn(99000))
+		this.convoyCount = 0
 
 		// Scheduler runs a loop on a variable timeout
 		const scheduleNext = () => {
-			// From 5 to 15 sols
-			const nextConvoy = Math.round(Math.random() * 5 + 10)
+			// Next from convoyCount to convoyCount + 10
+			const nextConvoy = this.convoyCount + Math.random() * 10
+			this.convoyCount ++ 
+			console.log('next convoy: sol', nextConvoy);
 			const count = Math.round(Math.random() * 5000 + 1000) * 10
 			this.safeTimeout(() => {
 				const solCount = this.getSol()
@@ -295,38 +300,40 @@ class Game {
 		scheduleNext()
 	}
 
+	updateRiot = tile => {
+		const chanceOfRiot = tile.ppl == 0 ? 0 : (tile.ppl / buildings[tile.build].cap) + (tile.stop ? -0.5 : -1)
+		// console.log(tile.build, tile.ppl, buildings[tile.build].cap, tile.stop, chanceOfRiot);
+		if (chanceOfRiot > Math.random()) {
+			// Always 2% of people die in a riot
+			const casualities = Math.ceil(tile.ppl * 0.02)
+			this.createEvent(
+				'riot',
+				'⚠️',
+				this.getSol(),
+				0,
+				casualities,
+				null,
+				tile.id
+			)
+			tile.ppl -= casualities
+			tile.riot = true
+			tile.broadcast()
+			this.stats.population -= casualities
+			this.stats.workforce -= Math.round(casualities * 0.4)
+			this.broadcastStats()
+			this.deaths += casualities
+		} else if(tile.riot && chanceOfRiot <= 0) {
+			tile.riot = false
+			tile.broadcast()
+		}
+	}
+
 	initRiotSchedule = () => {
 		this.safeTimeout(() => {
 			Object.values(this.tiles)
 				// Only houses and the camp have ppl
-				.filter(tile => typeof tile.ppl !== 'undefined' && tile.ppl > 0)
-				.forEach(tile => {
-					const chanceOfRiot = (tile.ppl / buildings[tile.build].cap) + (tile.stop ? -0.5 : -1)
-					// console.log(tile.build, tile.ppl, buildings[tile.build].cap, tile.stop, chanceOfRiot);
-					if (chanceOfRiot > Math.random()) {
-						// Always 1% of people die in a riot
-						const casualities = Math.ceil(tile.ppl * 0.02)
-						this.createEvent(
-							'riot',
-							'⚠️',
-							this.getSol(),
-							0,
-							casualities,
-							null,
-							tile.id
-						)
-						tile.ppl -= casualities
-						tile.riot = true
-						tile.broadcast()
-						this.stats.population -= casualities
-						this.stats.workforce -= Math.round(casualities * 0.4)
-						this.broadcastStats()
-						this.deaths += casualities
-					} else if(tile.riot && chanceOfRiot <= 0) {
-						tile.riot = false
-						tile.broadcast()
-					}
-				})
+				.filter(tile => typeof tile.ppl !== 'undefined')
+				.forEach(this.updateRiot)
 	
 			this.initRiotSchedule()
 		}, 10000)
@@ -420,6 +427,8 @@ class Game {
 			this.tiles[CAMP].ppl += n * (action == 'movein' ? -1 : +1)
 			this.tiles[id].broadcast()
 			this.tiles[CAMP].broadcast()
+			this.updateRiot(this.tiles[id])
+			this.updateRiot(this.tiles[CAMP])
 	}
 
 	/**
@@ -547,7 +556,7 @@ module.exports = {
 		const html = `<form method="POST"><input name="pwd" type=text/><button type="submit">Reset Game</button>`
 		if (req.method === 'POST') {
 			const correct = hashCode(req.body.pwd) === hash
-			allUsers.forEach(user => user.emit('restart'))
+			allUsers.forEach(user => user.socket.emit('restart'))
 			res.send(correct + html)
 			globalGame = new Game()
 			globalGame.init()

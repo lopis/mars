@@ -24,8 +24,8 @@ const submitAction = () => {
   if (!houseDirection) return
 
   relocateAction(houseDirection, houseNumber)
-  dismissDialog()
-  clearSelectedTile()
+  // dismissDialog()
+  // clearSelectedTile()
 }
 
 export default () => {
@@ -57,25 +57,25 @@ export default () => {
     }
 
     // House buttons
-    const houseDialogListern = ({
+    const houseDialogListener = ({
       movein: updateDirection,
       moveout:  updateDirection,
       div: updateHouseNumber(0.2),
       mul: updateHouseNumber(5),
       ok: submitAction
     })[target.id]
-    if (houseDialogListern) {
-      houseDialogListern(target)
+    if (houseDialogListener) {
+      houseDialogListener(target)
       return
     }
 
+    // These will clear the tile after clicking
     const listener = ({
       offline: playOffline,
       global: playGlobal,
       _users: showUsers,
       _comms: showComms,
       _sol: showSolStats,
-      getall: collect,
       dismiss: dismissDialog,
     })[target.id]
     if (listener) {
@@ -83,11 +83,13 @@ export default () => {
       clearSelectedTile()
     }
 
+    // These won't clear the tile after clicking
     ({
       _sound: toggleSoundEffects,
       _music: toggleMusic,
       _fast: toggleEffects,
       _a11y: toggleColorBlindness,
+      getall: collect,
     })[target.id]?.()
 
   })

@@ -72,6 +72,6 @@ export const relocateAction = (action, count) => {
 
 export const collect = () => {
   const id = $selectedTile.dataset.n
-  dismissDialog()
+  // dismissDialog()
   socket.emit('collect', id)
 }
