@@ -5,7 +5,7 @@ buildings = {
     out: ['food', '🥔🥔', 2],
     use: ['waste', '💩'],
     cost: [3, 'water'],
-    days: 2,
+    days: 0.2,
   },
   minery: {
     label: 'Minery',
@@ -13,14 +13,14 @@ buildings = {
     out: ['minerals', '🌑'],
     use: ['energy', '🔋'],
     cost: [5, 'energy'],
-    days: 3,
+    days: 0.3,
   },
   solar: {
     label: 'Solar Plant',
     icon: '🔲',
     out: ['energy', '🔋🔋'],
     cost: [5, 'minerals'],
-    days: 2,
+    days: 0.2,
   },
   nuclear: {
     label: 'Nuclear Plant',
@@ -28,7 +28,7 @@ buildings = {
     cost: [20, 'water'],
     out: ['energy', '🔋x4', 4],
     use: ['minerals', '🌑'],
-    days: 8
+    days: 0.8
   },
   house: {
     label: 'Housing',
@@ -36,7 +36,7 @@ buildings = {
     out: ['waste', '💩', 25000],
     use: ['food', '🥔', 25000],
     cost: [5, 'water'],
-    days: 1,
+    days: 0.1,
     count: ['residents', '👩‍👩‍👦‍👦'],
     cap: 75000,
   },
@@ -47,7 +47,7 @@ buildings = {
     cost: [2, 'minerals'],
     use: ['energy', '🔋'],
     polar: true,
-    days: 3,
+    days: 0.3,
   },
   wip: {
     icon: '🏗',
@@ -76,12 +76,12 @@ buildings = {
 stats = {
 	population: 0,
   workforce: 0,
-	minerals: 13,
-	food: 13,
-  energy: 13,
-	heat: 13,
-	water: 13,
-  waste: 13,
+	minerals: 130,
+	food: 130,
+  energy: 130,
+	heat: 130,
+	water: 130,
+  waste: 130,
 	minerals_use: 0,
 	food_use: 0,
   energy_use: 0,
@@ -90,7 +90,7 @@ stats = {
   waste_use: 0,
 }
 
-SOL_DURATION = 60 * 1000 // 60 seconds
+SOL_DURATION = 0.1 * 60 * 1000 // 60 seconds
 initialPhase = 0.0
 
 getNeighbours = function (row, col) {
